@@ -69,9 +69,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Build production plugin package
+        run: bash bin/build-plugin.sh
+
       - name: Run official WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
+          build-dir: ./build/kairoseth-ai-transparency
           wp-version: latest
           categories: |
             plugin_repo

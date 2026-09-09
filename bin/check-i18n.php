@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-const KAIROSETH_I18N_DOMAIN = 'kairoseth-ai-transparency';
+const AI_TRANSPARENCY_I18N_DOMAIN = 'ai-transparency';
 
 $root = dirname(__DIR__);
 $source_files = array($root . '/ai-transparency.php');
@@ -39,7 +39,7 @@ foreach ($source_files as $source_file) {
             $msgid = stripcslashes($match[2]);
             $domain = stripcslashes($match[4]);
             $messages[$msgid] = true;
-            if (KAIROSETH_I18N_DOMAIN !== $domain) {
+            if (AI_TRANSPARENCY_I18N_DOMAIN !== $domain) {
                 $errors[] = sprintf('Wrong text domain in %s for "%s": %s', $source_file, $msgid, $domain);
             }
         }
@@ -50,14 +50,14 @@ foreach ($source_files as $source_file) {
             $msgid = stripcslashes($match[2]);
             $domain = stripcslashes($match[6]);
             $messages[$msgid] = true;
-            if (KAIROSETH_I18N_DOMAIN !== $domain) {
+            if (AI_TRANSPARENCY_I18N_DOMAIN !== $domain) {
                 $errors[] = sprintf('Wrong text domain in %s for "%s": %s', $source_file, $msgid, $domain);
             }
         }
     }
 }
 
-$catalog = parse_po($root . '/languages/kairoseth-ai-transparency-es_ES.po');
+$catalog = parse_po($root . '/languages/ai-transparency-es_ES.po');
 foreach (array_keys($messages) as $msgid) {
     if (!array_key_exists($msgid, $catalog)) {
         $errors[] = 'Missing Spanish translation: ' . $msgid;

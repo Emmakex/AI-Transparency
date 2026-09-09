@@ -60,11 +60,11 @@ Exit: bootstrap foundation merged with required public CI evidence. Engineering/
 
 ## Phase 2 — Persistent AI Systems Registry
 
-Status: **closure candidate — implementation and real WordPress acceptance complete in PR #5; documentation synchronization, merge and post-merge verification remain before the phase is declared closed.**
+Status: **closed — accepted, merged and verified on `main` on 9 September 2026.**
 
 Goal: let an administrator explicitly maintain a trustworthy local inventory.
 
-Implemented and accepted in the current Phase 2 workstream:
+Implemented and accepted:
 
 - [x] versioned registry schema (`schema_version = 1`)
 - [x] site-local WordPress Options persistence adapter
@@ -91,12 +91,20 @@ Implemented and accepted in the current Phase 2 workstream:
 - [x] real WordPress Multisite blog isolation smoke
 - [x] runtime test credentials generated ephemerally and masked before command execution
 - [x] material Phase 2 CI/UX regressions recorded in engineering failure memory
+- [x] PR #5 merged to `main`
+- [x] post-merge `main` verification green
+- [x] blockers = 0
 
 Closure evidence:
 
 ```text
-CI run: #53 / 34367111247
+Functional acceptance CI: #53 / 34367111247
 Accepted implementation SHA: e5927a8a2b4526f01a4649c4ba5d3a25ae3c0353
+Final PR-head CI: #60 / 34368216414
+Merged PR: #5
+Main merge commit: c83fbb11ffcfba7816a0beb71068e228a65ece77
+Post-merge main CI: #61 / 34368648895
+
 PHP quality: green
 EN/ES 100% coverage: green
 PHP 7.4 / 8.1 / 8.3 / 8.5 syntax: green
@@ -110,27 +118,13 @@ WordPress runtime acceptance: green
   Multisite isolation: green
 ```
 
-Required before Phase 2 is declared closed:
-
-- [x] final functional CI green on accepted Phase 2 implementation SHA
-- [x] real WordPress add/edit/archive smoke
-- [x] unauthorized-role rejection in WordPress runtime
-- [x] real Multisite isolation smoke
-- [x] responsive admin acceptance
-- [x] keyboard/accessibility acceptance
-- [x] real upgrade/migration acceptance on WordPress
-- [x] documentation/acceptance evidence synchronized in PR #5
-- [x] blockers = 0 at implementation/acceptance level
-- [ ] PR #5 merged to `main`
-- [ ] post-merge `main` verification green
-
 Implementation details and acceptance evidence: [`PHASE2_REGISTRY_IMPLEMENTATION.md`](PHASE2_REGISTRY_IMPLEMENTATION.md).
 
-Exit: registry CRUD and persistence accepted without external telemetry, with EN/ES coverage gate green, blockers 0, PR merged and `main` verified. **Phase 3 must not begin until the remaining merge/post-merge gates above are complete.**
+Exit: **complete.** Registry CRUD and persistence are accepted without external telemetry, EN/ES coverage is green, blockers are 0, PR #5 is merged and `main` is verified.
 
 ## Phase 3 — Deterministic discovery
 
-Status: **not started — blocked by final Phase 2 merge/post-merge verification.**
+Status: **not started — unblocked by Phase 2 closure.**
 
 Goal: discover only integrations for which we can produce explainable evidence.
 

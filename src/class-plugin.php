@@ -9,6 +9,7 @@ namespace Kairoseth\AITransparency;
 
 use Kairoseth\AITransparency\Admin\AdminPage;
 use Kairoseth\AITransparency\Admin\DiscoveryPage;
+use Kairoseth\AITransparency\Admin\ReadinessPage;
 
 /**
  * Coordinates plugin bootstrapping and WordPress hooks.
@@ -58,6 +59,7 @@ final class Plugin {
 		if ( is_admin() ) {
 			( new AdminPage() )->register();
 			( new DiscoveryPage() )->register();
+			( new ReadinessPage() )->register();
 		}
 	}
 

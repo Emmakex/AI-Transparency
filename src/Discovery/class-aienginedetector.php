@@ -48,9 +48,9 @@ final class AiEngineDetector {
 
 		$evidence = array(
 			'detector_contract_version' => self::CONTRACT_VERSION,
-			'observation_type'           => 'active_wordpress_plugin_inventory',
-			'supported_version'          => self::SUPPORTED_VERSION,
-			'plugin'                     => $observation->to_array(),
+			'observation_type'          => 'active_wordpress_plugin_inventory',
+			'supported_version'         => self::SUPPORTED_VERSION,
+			'plugin'                    => $observation->to_array(),
 		);
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode -- Pure detector intentionally has no WordPress runtime dependency.

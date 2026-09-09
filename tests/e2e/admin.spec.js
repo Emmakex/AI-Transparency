@@ -20,17 +20,25 @@ async function login(page, username, password) {
   ]);
 }
 
+function rowForSystem(page, systemName) {
+  return page.getByRole('cell', { name: systemName, exact: true }).locator('..');
+}
+
 test.describe.configure({ mode: 'serial' });
 
 test.describe('Phase 2 WordPress runtime acceptance', () => {
   test('administrator can add, edit, review and archive a registry record', async ({ page }) => {
+    const runId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+    const systemName = `Phase 2 Runtime Assistant ${runId}`;
+    const updatedName = `${systemName} Updated`;
+
     await login(page, adminUser, adminPass);
     await page.goto('/wp-admin/tools.php?page=ai-transparency');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Kairoseth AI Transparency' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'AI Systems Registry' })).toBeVisible();
 
-    await page.getByLabel('System name').fill('Phase 2 Runtime Assistant');
+    await page.getByLabel('System name').fill(systemName);
     await page.getByLabel('System type').selectOption('assistant');
     await page.getByLabel('Interaction context').fill('Customer support assistant on the public help flow.');
     await page.getByLabel('Review status').selectOption('reviewed');
@@ -39,25 +47,25 @@ test.describe('Phase 2 WordPress runtime acceptance', () => {
 
     await expect(page.locator('.notice-success')).toContainText('AI system saved.');
 
-    let row = page.locator('tbody tr').filter({ hasText: 'Phase 2 Runtime Assistant' });
+    let row = rowForSystem(page, systemName);
     await expect(row).toContainText('Assistant');
     await expect(row).toContainText('Reviewed');
     await expect(row).toContainText('Active');
 
     await row.getByRole('link', { name: 'Edit' }).click();
     await expect(page.getByRole('heading', { name: 'Edit AI system' })).toBeVisible();
-    await page.getByLabel('System name').fill('Phase 2 Runtime Assistant Updated');
+    await page.getByLabel('System name').fill(updatedName);
     await page.getByLabel('Review status').selectOption('pending');
     await page.getByRole('button', { name: 'Update AI system' }).click();
 
-    row = page.locator('tbody tr').filter({ hasText: 'Phase 2 Runtime Assistant Updated' });
+    row = rowForSystem(page, updatedName);
     await expect(row).toContainText('Pending review');
     await expect(row).toContainText('Active');
 
     await row.getByRole('button', { name: 'Archive' }).click();
     await expect(page.locator('.notice-success')).toContainText('AI system archived.');
 
-    row = page.locator('tbody tr').filter({ hasText: 'Phase 2 Runtime Assistant Updated' });
+    row = rowForSystem(page, updatedName);
     await expect(row).toContainText('Archived');
     await expect(row.getByRole('button', { name: 'Archive' })).toHaveCount(0);
   });

@@ -43,6 +43,7 @@ jobs:
         with:
           name: php-quality-diagnostics
           path: .ci-diagnostics/
+          include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 14
 
@@ -74,6 +75,7 @@ jobs:
         with:
           name: bilingual-coverage-diagnostics
           path: .ci-diagnostics/
+          include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 14
 
@@ -106,6 +108,7 @@ jobs:
         with:
           name: php-${{ matrix.php }}-syntax-diagnostics
           path: .ci-diagnostics/
+          include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 14
 
@@ -136,5 +139,6 @@ jobs:
         with:
           name: wordpress-package-diagnostics
           path: .ci-diagnostics/
+          include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 14

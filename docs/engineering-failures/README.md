@@ -31,6 +31,7 @@ Root cause must not repeat the symptom. If evidence is incomplete, mark it `prob
 
 - [`2026-09-09-wpcs-class-file-conventions.md`](2026-09-09-wpcs-class-file-conventions.md) — initial PSR-style class filenames/method naming conflicted with the repository's WordPress Coding Standards gate.
 - [`2026-09-09-plugin-check-production-package-scope.md`](2026-09-09-plugin-check-production-package-scope.md) — Plugin Check must validate the distributable WordPress package, not the development repository root.
+- [`2026-09-09-hidden-ci-diagnostics-artifacts.md`](2026-09-09-hidden-ci-diagnostics-artifacts.md) — `upload-artifact` excluded the hidden `.ci-diagnostics/` directory until hidden-file upload was explicitly enabled.
 
 ---
 
@@ -59,3 +60,4 @@ La causa raíz no puede limitarse a repetir el síntoma. Si no existe evidencia 
 
 - [`2026-09-09-wpcs-class-file-conventions.md`](2026-09-09-wpcs-class-file-conventions.md) — los nombres de archivo/método estilo PSR iniciales chocaron con el gate WordPress Coding Standards del repositorio.
 - [`2026-09-09-plugin-check-production-package-scope.md`](2026-09-09-plugin-check-production-package-scope.md) — Plugin Check debe validar el paquete WordPress distribuible y no la raíz del repositorio de desarrollo.
+- [`2026-09-09-hidden-ci-diagnostics-artifacts.md`](2026-09-09-hidden-ci-diagnostics-artifacts.md) — `upload-artifact` excluía el directorio oculto `.ci-diagnostics/` hasta habilitar explícitamente la subida de archivos ocultos.

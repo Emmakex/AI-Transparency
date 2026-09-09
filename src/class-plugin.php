@@ -66,7 +66,7 @@ final class Plugin {
 	 */
 	public function load_textdomain(): void {
 		load_plugin_textdomain(
-			'kairoseth-ai-transparency',
+			'ai-transparency',
 			false,
 			dirname( plugin_basename( KAIROSETH_AI_TRANSPARENCY_FILE ) ) . '/languages'
 		);

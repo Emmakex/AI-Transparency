@@ -1,6 +1,6 @@
 # Playwright retry reused residual registry state
 
-Status: resolved; prevention extended during Phase 4  
+Status: resolved; prevention extended and verified during Phase 4  
 First observed: 9 September 2026  
 Affected area: WordPress browser acceptance / test determinism  
 Severity: medium
@@ -59,7 +59,7 @@ The Discovery acceptance is retry-safe:
 - when `Add to registry` exists, it exercises the explicit persistence action;
 - when a retry finds `Already in registry`, it accepts that state and continues verifying the resulting record.
 
-The Readiness acceptance now scopes findings to the **AI Engine** subject before asserting exactly two expected findings. It no longer interprets unrelated, valid registry findings created by migration acceptance as a Phase 4 failure.
+The Readiness acceptance scopes findings to the **AI Engine** subject before asserting exactly two expected findings. It no longer interprets unrelated, valid registry findings created by migration acceptance as a Phase 4 failure.
 
 ## Prevention
 
@@ -80,7 +80,9 @@ Phase 4 recurrence was diagnosed in CI run `#73` (`34380922915`) with browser di
 2cbedebbaab67fa9c91c1e34d5d433b286d85bd6851c7733ff7f60edbb71e4bc
 ```
 
-Final Phase 4 verification must be recorded after the corrected PR head passes the full runtime suite.
+The corrected acceptance passed the complete required suite on the final PR head in CI `#75` (`34381590429`) at SHA `926a154930042e53af0b082795be155389cc6916`.
+
+The exact merged `main` commit `836abfeca4c199930b74ba32547f9037f7fcb4de` repeated the full suite successfully in post-merge CI `#76` (`34382057838`), including browser acceptance and Multisite isolation.
 
 ## Related evidence
 
@@ -88,5 +90,7 @@ Final Phase 4 verification must be recorded after the corrected PR head passes t
 - CI run #50 browser acceptance retry failure
 - PR #9
 - CI run #73 runtime browser acceptance failure
+- CI run #75 final PR-head verification
+- CI run #76 post-merge verification
 - `tests/e2e/admin.spec.js`
 - `tests/runtime/single-site-smoke.php`

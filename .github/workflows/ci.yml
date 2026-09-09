@@ -67,7 +67,7 @@ jobs:
         run: bash bin/run-with-diagnostics.sh "Bilingual production package" -- bash bin/build-plugin.sh
 
       - name: Verify compiled Spanish catalog
-        run: test -s build/kairoseth-ai-transparency/languages/kairoseth-ai-transparency-es_ES.mo
+        run: test -s build/ai-transparency/languages/ai-transparency-es_ES.mo
 
       - name: Upload bilingual diagnostics
         if: failure()
@@ -125,7 +125,7 @@ jobs:
       - name: Run official WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: ./build/kairoseth-ai-transparency
+          build-dir: ./build/ai-transparency
           wp-version: latest
           categories: |
             plugin_repo

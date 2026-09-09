@@ -1,7 +1,9 @@
 vendor/
+node_modules/
 .phpunit.result.cache
 .phpunit.cache/
 composer.lock
+package-lock.json
 .DS_Store
 .idea/
 .vscode/
@@ -9,3 +11,7 @@ composer.lock
 build/
 dist/
 .ci-diagnostics/
+playwright-report/
+test-results/
+.wp-env.override.json
+.wp-env.*.override.json

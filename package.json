@@ -1,0 +1,13 @@
+{
+  "name": "ai-transparency-runtime-acceptance",
+  "private": true,
+  "scripts": {
+    "test:e2e": "playwright test tests/e2e",
+    "wp-env": "wp-env"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@wordpress/env": "11.14.0"
+  }
+}

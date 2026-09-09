@@ -17,6 +17,7 @@ cp "${ROOT_DIR}/ai-transparency.php" "${PLUGIN_DIR}/"
 cp "${ROOT_DIR}/readme.txt" "${PLUGIN_DIR}/"
 cp "${ROOT_DIR}/LICENSE" "${PLUGIN_DIR}/"
 cp -R "${ROOT_DIR}/src" "${PLUGIN_DIR}/src"
+cp -R "${ROOT_DIR}/assets" "${PLUGIN_DIR}/assets"
 cp "${ROOT_DIR}/languages/ai-transparency.pot" "${LANGUAGE_DIR}/"
 cp "${ROOT_DIR}/languages/ai-transparency-es_ES.po" "${LANGUAGE_DIR}/"
 
@@ -27,6 +28,11 @@ php \
 
 if [[ ! -s "${LANGUAGE_DIR}/ai-transparency-es_ES.mo" ]]; then
   echo "Spanish MO catalog was not created or is empty." >&2
+  exit 1
+fi
+
+if [[ ! -s "${PLUGIN_DIR}/assets/admin.css" ]]; then
+  echo "Plugin admin stylesheet is missing from the production package." >&2
   exit 1
 fi
 

@@ -60,11 +60,11 @@ Exit: bootstrap foundation merged with required public CI evidence. Engineering/
 
 ## Phase 2 — Persistent AI Systems Registry
 
-Status: **active — first functional increment implemented in PR #3; acceptance still pending.**
+Status: **closure candidate — implementation and real WordPress acceptance complete in PR #5; documentation synchronization, merge and post-merge verification remain before the phase is declared closed.**
 
 Goal: let an administrator explicitly maintain a trustworthy local inventory.
 
-Implemented in the current Phase 2 workstream:
+Implemented and accepted in the current Phase 2 workstream:
 
 - [x] versioned registry schema (`schema_version = 1`)
 - [x] site-local WordPress Options persistence adapter
@@ -73,31 +73,64 @@ Implemented in the current Phase 2 workstream:
 - [x] source/origin metadata
 - [x] review status and timestamps
 - [x] interaction context and configured disclosure state
-- [x] **100% EN/ES admin UX in the same PR**
+- [x] **100% EN/ES admin UX in the same workstream**
 - [x] capability + nonce enforcement for mutations
 - [x] deterministic persistence/export shape
 - [x] legacy migration tests
 - [x] simulated per-blog/site isolation contract test
 - [x] Multisite storage decision: current blog/site scope, no network-wide registry in v1
 - [x] diagnostics artifact regression fixed and recorded in failure memory
+- [x] exact production package mounted into real WordPress runtime acceptance
+- [x] real WordPress plugin activation
+- [x] real legacy migration through `wp_options` with schema v1 write-back
+- [x] real administrator add/edit/archive browser flow
+- [x] real non-administrator access rejection
+- [x] responsive admin acceptance at 390 px
+- [x] keyboard-focusable registry table region
+- [x] axe serious/critical accessibility gate
+- [x] real WordPress Multisite blog isolation smoke
+- [x] runtime test credentials generated ephemerally and masked before command execution
+- [x] material Phase 2 CI/UX regressions recorded in engineering failure memory
 
-Required before Phase 2 closure:
+Closure evidence:
 
-- [ ] final CI green on the closing Phase 2 SHA
-- [ ] real WordPress add/edit/archive smoke
-- [ ] unauthorized-role mutation rejection in WordPress runtime
-- [ ] real Multisite isolation smoke
-- [ ] responsive admin acceptance
-- [ ] keyboard/accessibility acceptance
-- [ ] real upgrade/migration acceptance on WordPress
-- [ ] documentation/acceptance evidence synchronized
-- [ ] blockers = 0
+```text
+CI run: #53 / 34367111247
+Accepted implementation SHA: e5927a8a2b4526f01a4649c4ba5d3a25ae3c0353
+PHP quality: green
+EN/ES 100% coverage: green
+PHP 7.4 / 8.1 / 8.3 / 8.5 syntax: green
+WordPress Plugin Check: green
+WordPress runtime acceptance: green
+  activation: green
+  migration: green
+  administrator CRUD: green
+  unauthorized-role rejection: green
+  responsive/accessibility: green
+  Multisite isolation: green
+```
 
-Implementation details and acceptance status: [`PHASE2_REGISTRY_IMPLEMENTATION.md`](PHASE2_REGISTRY_IMPLEMENTATION.md).
+Required before Phase 2 is declared closed:
 
-Exit: registry CRUD and persistence accepted without external telemetry, with EN/ES coverage gate green and blockers 0.
+- [x] final functional CI green on accepted Phase 2 implementation SHA
+- [x] real WordPress add/edit/archive smoke
+- [x] unauthorized-role rejection in WordPress runtime
+- [x] real Multisite isolation smoke
+- [x] responsive admin acceptance
+- [x] keyboard/accessibility acceptance
+- [x] real upgrade/migration acceptance on WordPress
+- [x] documentation/acceptance evidence synchronized in PR #5
+- [x] blockers = 0 at implementation/acceptance level
+- [ ] PR #5 merged to `main`
+- [ ] post-merge `main` verification green
+
+Implementation details and acceptance evidence: [`PHASE2_REGISTRY_IMPLEMENTATION.md`](PHASE2_REGISTRY_IMPLEMENTATION.md).
+
+Exit: registry CRUD and persistence accepted without external telemetry, with EN/ES coverage gate green, blockers 0, PR merged and `main` verified. **Phase 3 must not begin until the remaining merge/post-merge gates above are complete.**
 
 ## Phase 3 — Deterministic discovery
+
+Status: **not started — blocked by final Phase 2 merge/post-merge verification.**
 
 Goal: discover only integrations for which we can produce explainable evidence.
 

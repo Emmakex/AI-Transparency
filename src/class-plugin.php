@@ -10,6 +10,7 @@ namespace Kairoseth\AITransparency;
 use Kairoseth\AITransparency\Admin\AdminPage;
 use Kairoseth\AITransparency\Admin\DisclosurePage;
 use Kairoseth\AITransparency\Admin\DiscoveryPage;
+use Kairoseth\AITransparency\Admin\EvidenceExportPage;
 use Kairoseth\AITransparency\Admin\ReadinessPage;
 use Kairoseth\AITransparency\Disclosure\DisclosureShortcode;
 
@@ -64,6 +65,7 @@ final class Plugin {
 			( new DiscoveryPage() )->register();
 			( new ReadinessPage() )->register();
 			( new DisclosurePage() )->register();
+			( new EvidenceExportPage() )->register();
 		}
 	}
 

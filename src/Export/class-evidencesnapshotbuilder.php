@@ -56,7 +56,7 @@ final class EvidenceSnapshotBuilder {
 	 * @param array<string, mixed> $site Authoritative server-resolved site identity.
 	 * @param string               $generated_at UTC ISO-8601 generation timestamp.
 	 * @return EvidenceSnapshot
-	 * @throws InvalidArgumentException|RuntimeException When generation metadata is invalid or canonical JSON encoding fails.
+	 * @throws InvalidArgumentException When required generation metadata is invalid.
 	 */
 	public function build( AiSystemsRegistry $registry, string $plugin_version, array $site, string $generated_at ): EvidenceSnapshot {
 		$plugin_version = trim( $plugin_version );

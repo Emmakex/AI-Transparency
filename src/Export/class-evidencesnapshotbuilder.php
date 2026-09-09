@@ -44,8 +44,8 @@ final class EvidenceSnapshotBuilder {
 	 * @param DisclosureEngine|null $disclosure_engine Optional disclosure engine for testing.
 	 */
 	public function __construct( FindingEngine $finding_engine = null, DisclosureEngine $disclosure_engine = null ) {
-		$this->finding_engine    = $finding_engine ?: new FindingEngine();
-		$this->disclosure_engine = $disclosure_engine ?: new DisclosureEngine();
+		$this->finding_engine    = null !== $finding_engine ? $finding_engine : new FindingEngine();
+		$this->disclosure_engine = null !== $disclosure_engine ? $disclosure_engine : new DisclosureEngine();
 	}
 
 	/**
@@ -56,8 +56,7 @@ final class EvidenceSnapshotBuilder {
 	 * @param array<string, mixed> $site Authoritative server-resolved site identity.
 	 * @param string               $generated_at UTC ISO-8601 generation timestamp.
 	 * @return EvidenceSnapshot
-	 * @throws InvalidArgumentException When required generation metadata is invalid.
-	 * @throws RuntimeException When canonical JSON encoding fails.
+	 * @throws InvalidArgumentException|RuntimeException When generation metadata is invalid or canonical JSON encoding fails.
 	 */
 	public function build( AiSystemsRegistry $registry, string $plugin_version, array $site, string $generated_at ): EvidenceSnapshot {
 		$plugin_version = trim( $plugin_version );

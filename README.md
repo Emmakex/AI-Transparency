@@ -30,7 +30,8 @@ Kairoseth AI Transparency is a WordPress plugin for maintaining a reviewable tec
 The current development line includes:
 
 - a local **AI Systems Registry** under **Tools > AI Transparency**;
-- deterministic **AI Discovery** under **Tools > AI Discovery**.
+- deterministic **AI Discovery** under **Tools > AI Discovery**;
+- deterministic technical **AI Readiness** findings under **Tools > AI Readiness**.
 
 An authorized administrator can:
 
@@ -38,9 +39,18 @@ An authorized administrator can:
 - record system type and interaction context;
 - configure whether the recorded workflow requires an AI interaction disclosure;
 - detect a supported active AI integration from explainable WordPress evidence;
-- explicitly add a supported discovery result to the registry for manual review.
+- explicitly add a supported discovery result to the registry for manual review;
+- review reproducible technical findings generated from current registry state.
 
-The first validated detector supports **AI Engine 3.7.7**. It observes only the WordPress plugin basename, plugin name, version, text domain and activation state. A different AI Engine version is reported as outside the currently validated detector boundary and is not automatically accepted.
+Readiness findings keep three concepts separate:
+
+- **Fact** — a technical condition observed in the current registry;
+- **Administrator declaration** — an explicit state configured by an administrator, when relevant;
+- **Guidance** — what should be reviewed or completed technically.
+
+The first finding rules cover active systems pending administrator review, active systems with no recorded interaction context, and workflows that an administrator has explicitly configured as requiring an interaction disclosure. Findings are computed on demand and are not persisted separately from the registry.
+
+The first validated discovery detector supports **AI Engine 3.7.7**. It observes only the WordPress plugin basename, plugin name, version, text domain and activation state. A different AI Engine version is reported as outside the currently validated detector boundary and is not automatically accepted.
 
 Discovery does not infer which provider, model, chatbot, prompt or workflow is being used. It does not read AI provider credentials or AI Engine internal configuration.
 
@@ -48,13 +58,13 @@ Registry data is stored locally using the WordPress Options API with a versioned
 
 ### Privacy and data handling
 
-The current registry and discovery workflow do not automatically send their data to any external service. Core state stays inside the WordPress installation.
+The current registry, discovery and readiness workflows do not automatically send their data to any external service. Core state stays inside the WordPress installation.
 
 ### Important limitation
 
 This plugin provides technical readiness, workflow and evidence tooling. It does **not** certify or guarantee legal compliance with the EU AI Act or any other law.
 
-It also does not attempt generic probabilistic detection of whether arbitrary text was written by AI.
+Readiness findings are technical review signals, not legal decisions. The plugin also does not attempt generic probabilistic detection of whether arbitrary text was written by AI.
 
 ### Installation
 
@@ -62,6 +72,7 @@ It also does not attempt generic probabilistic detection of whether arbitrary te
 2. Activate **Kairoseth AI Transparency** from the WordPress Plugins screen.
 3. Open **Tools > AI Transparency** to maintain the local registry.
 4. Open **Tools > AI Discovery** to review supported deterministic integration evidence.
+5. Open **Tools > AI Readiness** to review current technical findings.
 
 ### Development
 
@@ -91,7 +102,8 @@ The repository currently validates:
 - real WordPress runtime activation, registry migration, CRUD and permission checks;
 - responsive/accessibility browser acceptance;
 - Multisite registry isolation;
-- deterministic discovery against an exact AI Engine runtime fixture.
+- deterministic discovery against an exact AI Engine runtime fixture;
+- deterministic readiness finding rules and browser rendering.
 
 ### Project documentation
 
@@ -99,6 +111,7 @@ The repository currently validates:
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
 - [`docs/PHASE3_DISCOVERY_IMPLEMENTATION.md`](docs/PHASE3_DISCOVERY_IMPLEMENTATION.md)
+- [`docs/PHASE4_FINDINGS_IMPLEMENTATION.md`](docs/PHASE4_FINDINGS_IMPLEMENTATION.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)
@@ -128,7 +141,8 @@ Kairoseth AI Transparency es un plugin para WordPress orientado a mantener un in
 La línea actual de desarrollo incluye:
 
 - un **AI Systems Registry** local en **Herramientas > AI Transparency**;
-- **AI Discovery** determinista en **Herramientas > AI Discovery**.
+- **AI Discovery** determinista en **Herramientas > AI Discovery**;
+- hallazgos técnicos deterministas de **AI Readiness** en **Herramientas > AI Readiness**.
 
 Un administrador autorizado puede:
 
@@ -136,7 +150,16 @@ Un administrador autorizado puede:
 - registrar el tipo de sistema y el contexto de interacción;
 - indicar si el flujo registrado requiere un aviso de interacción con IA;
 - detectar una integración de IA compatible y activa a partir de evidencia WordPress explicable;
-- añadir explícitamente un resultado compatible al registro para revisión manual.
+- añadir explícitamente un resultado compatible al registro para revisión manual;
+- revisar hallazgos técnicos reproducibles generados desde el estado actual del registro.
+
+Los hallazgos de readiness mantienen separados tres conceptos:
+
+- **Hecho** — una condición técnica observada en el registro actual;
+- **Declaración del administrador** — un estado configurado explícitamente por un administrador, cuando corresponda;
+- **Orientación** — lo que debe revisarse o completarse técnicamente.
+
+Las primeras reglas cubren sistemas activos pendientes de revisión, sistemas activos sin contexto de interacción registrado y flujos que un administrador ha configurado explícitamente como requiriendo un aviso de interacción. Los hallazgos se calculan bajo demanda y no se guardan por separado del registro.
 
 El primer detector validado soporta **AI Engine 3.7.7**. Observa únicamente el basename del plugin, nombre, versión, text domain y estado de activación. Otra versión de AI Engine se muestra como fuera del alcance actualmente validado y no se acepta automáticamente.
 
@@ -146,13 +169,13 @@ Los datos del registro se guardan localmente mediante la API Options de WordPres
 
 ### Privacidad y tratamiento de datos
 
-El registro y el flujo de discovery actuales no envían automáticamente sus datos a ningún servicio externo. El estado principal permanece dentro de la instalación WordPress.
+Los flujos actuales de registro, discovery y readiness no envían automáticamente sus datos a ningún servicio externo. El estado principal permanece dentro de la instalación WordPress.
 
 ### Límite importante
 
 Este plugin proporciona readiness técnico, workflow y herramientas de evidencia. **No certifica ni garantiza cumplimiento legal** del Reglamento de IA de la UE ni de ninguna otra norma.
 
-Tampoco intenta detectar probabilísticamente y de forma genérica si cualquier texto fue escrito por IA.
+Los hallazgos de readiness son señales de revisión técnica, no decisiones legales. Tampoco intenta detectar probabilísticamente y de forma genérica si cualquier texto fue escrito por IA.
 
 ### Instalación
 
@@ -160,6 +183,7 @@ Tampoco intenta detectar probabilísticamente y de forma genérica si cualquier 
 2. Activa **Kairoseth AI Transparency** desde la pantalla de Plugins de WordPress.
 3. Abre **Herramientas > AI Transparency** para mantener el registro local.
 4. Abre **Herramientas > AI Discovery** para revisar evidencia determinista de integraciones compatibles.
+5. Abre **Herramientas > AI Readiness** para revisar los hallazgos técnicos actuales.
 
 ### Desarrollo
 
@@ -189,7 +213,8 @@ El repositorio valida actualmente:
 - activación WordPress real, migración del registro, CRUD y permisos;
 - aceptación responsive/accesibilidad con navegador;
 - aislamiento Multisite del registro;
-- discovery determinista contra un fixture runtime exacto de AI Engine.
+- discovery determinista contra un fixture runtime exacto de AI Engine;
+- reglas deterministas de hallazgos de readiness y su renderizado en navegador.
 
 ### Documentación del proyecto
 
@@ -197,6 +222,7 @@ El repositorio valida actualmente:
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
 - [`docs/PHASE3_DISCOVERY_IMPLEMENTATION.md`](docs/PHASE3_DISCOVERY_IMPLEMENTATION.md)
+- [`docs/PHASE4_FINDINGS_IMPLEMENTATION.md`](docs/PHASE4_FINDINGS_IMPLEMENTATION.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)

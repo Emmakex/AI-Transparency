@@ -2,7 +2,7 @@
 
 [English](#english) · [Español](#español)
 
-Status: **closure candidate — real WordPress acceptance complete; PR #5 merge and post-merge `main` verification pending**  
+Status: **closed — accepted, merged and verified on `main` on 9 September 2026**  
 Last reviewed / Última revisión: **9 September 2026 / 9 de septiembre de 2026**
 
 ---
@@ -13,9 +13,9 @@ Last reviewed / Última revisión: **9 September 2026 / 9 de septiembre de 2026*
 
 Phase 2 turns the bootstrap in-memory registry into a useful local WordPress inventory that an authorized administrator can maintain without sending site data to Kairoseth.
 
-### Current implementation
+### Final implementation
 
-Implemented across the Phase 2 workstream and closing PR #5:
+Implemented across the Phase 2 workstream and closed in PR #5:
 
 ```text
 WordPress site/blog
@@ -25,7 +25,7 @@ WordPress site/blog
 → systems[]
 ```
 
-Each AI system can currently record:
+Each AI system can record:
 
 - stable local id;
 - name;
@@ -49,7 +49,7 @@ update_option()
 
 It intentionally does **not** use `get_site_option()` / `update_site_option()` and does not create a custom table.
 
-This means Multisite state follows the current WordPress blog/site context by default. Network-wide inventory is not introduced without a separate product contract.
+Multisite state therefore follows the current WordPress blog/site context. Network-wide inventory is not introduced without a separate product contract.
 
 ### CRUD behavior
 
@@ -78,7 +78,7 @@ manage_options
 
 Output is escaped for its HTML context. Browser state or request payloads never grant authorization.
 
-The real WordPress acceptance lane also creates disposable runtime users with random credentials. Those values are masked before any command can echo them and are never shared with production/customer credentials.
+The real WordPress acceptance lane creates disposable runtime users with random credentials. Those values are masked before any command can echo them and are never shared with production/customer credentials.
 
 ### Privacy boundary
 
@@ -88,7 +88,7 @@ Registry operations make no Kairoseth telemetry/network call. Data remains local
 
 `RegistrySchema::VERSION = 1` is the canonical persistence shape.
 
-Legacy bootstrap arrays are migrated into v1 defaults without discarding valid records. Invalid individual records are skipped rather than destroying the rest of the registry.
+Legacy bootstrap arrays migrate into v1 defaults without discarding valid records. Invalid individual records are skipped rather than destroying the rest of the registry.
 
 Future unknown schema versions fail safe instead of being interpreted as current data.
 
@@ -108,7 +108,7 @@ Unit/contract coverage includes:
 - simulated per-blog/site storage isolation;
 - lifecycle/archive metadata preservation.
 
-The closing runtime acceptance additionally validates the **real production plugin package** inside the official `@wordpress/env` Docker environment:
+The closing runtime acceptance validates the **real production plugin package** inside the official `@wordpress/env` Docker environment:
 
 ```text
 WordPress 7.1 / PHP 8.3
@@ -129,13 +129,16 @@ Accepted runtime evidence:
 - axe reports no `serious` or `critical` accessibility violations in the plugin admin surface;
 - Multisite creates separate blogs and proves registry state remains blog/site-local.
 
-### Closing CI evidence
-
-Functional acceptance is green on:
+### Final closure evidence
 
 ```text
-CI run: #53 / 34367111247
-accepted implementation SHA: e5927a8a2b4526f01a4649c4ba5d3a25ae3c0353
+Functional acceptance CI: #53 / 34367111247
+Accepted implementation SHA: e5927a8a2b4526f01a4649c4ba5d3a25ae3c0353
+Final PR-head CI: #60 / 34368216414
+Merged PR: #5
+Main merge commit: c83fbb11ffcfba7816a0beb71068e228a65ece77
+Post-merge main CI: #61 / 34368648895
+
 PHP quality: success
 EN/ES 100% coverage: success
 PHP 7.4 syntax: success
@@ -146,7 +149,7 @@ WordPress Plugin Check: success
 WordPress runtime acceptance: success
 ```
 
-The runtime job itself passed activation, migration, CRUD/permissions/responsive/accessibility and real Multisite isolation.
+The runtime jobs passed activation, migration, CRUD/permissions/responsive/accessibility and real Multisite isolation.
 
 ### Engineering failures learned during acceptance
 
@@ -159,9 +162,7 @@ The Phase 2 acceptance work produced durable prevention records for:
 
 See `docs/engineering-failures/README.md`.
 
-### Remaining before Phase 2 is declared closed
-
-Implementation and acceptance blockers are now zero. Only repository lifecycle closure remains:
+### Closure checklist
 
 ```text
 [x] CI green on accepted Phase 2 implementation SHA
@@ -171,13 +172,13 @@ Implementation and acceptance blockers are now zero. Only repository lifecycle c
 [x] responsive admin acceptance
 [x] keyboard/accessibility acceptance
 [x] upgrade/migration acceptance on a real WordPress install
-[x] documentation synchronized in PR #5
+[x] documentation synchronized
 [x] implementation/acceptance blockers = 0
-[ ] merge PR #5 to main
-[ ] post-merge main verification green
+[x] PR #5 merged to main
+[x] post-merge main verification green
 ```
 
-Phase 3 must not begin before those last two repository lifecycle gates are complete.
+**Phase 2 is closed. Phase 3 is unblocked but has not started yet.**
 
 ---
 
@@ -187,9 +188,9 @@ Phase 3 must not begin before those last two repository lifecycle gates are comp
 
 La Fase 2 convierte el registro en memoria del bootstrap en un inventario WordPress local y útil que un administrador autorizado puede mantener sin enviar datos del sitio a Kairoseth.
 
-### Implementación actual
+### Implementación final
 
-Implementado durante la Fase 2 y completado para aceptación en el PR #5:
+Implementado durante la Fase 2 y cerrado en el PR #5:
 
 ```text
 sitio/blog WordPress
@@ -199,7 +200,7 @@ sitio/blog WordPress
 → systems[]
 ```
 
-Cada sistema de IA puede guardar actualmente:
+Cada sistema de IA puede guardar:
 
 - id local estable;
 - nombre;
@@ -223,7 +224,7 @@ update_option()
 
 No utiliza `get_site_option()` / `update_site_option()` ni crea tablas propias.
 
-En Multisite, los datos siguen por defecto el contexto del blog/sitio WordPress actual. No se introduce un inventario global de red sin un contrato de producto separado.
+En Multisite, los datos siguen el contexto del blog/sitio WordPress actual. No se introduce un inventario global de red sin un contrato de producto separado.
 
 ### CRUD
 
@@ -252,7 +253,7 @@ manage_options
 
 La salida se escapa según el contexto HTML. El navegador o el payload nunca conceden autorización.
 
-La aceptación WordPress real crea además usuarios runtime desechables con credenciales aleatorias. Los valores se enmascaran antes de que cualquier comando pueda mostrarlos y nunca se mezclan con credenciales de producción o clientes.
+La aceptación WordPress real crea usuarios runtime desechables con credenciales aleatorias. Los valores se enmascaran antes de que cualquier comando pueda mostrarlos y nunca se mezclan con credenciales de producción o clientes.
 
 ### Privacidad
 
@@ -282,7 +283,7 @@ Los tests unitarios/de contrato cubren:
 - aislamiento simulado por blog/sitio;
 - preservación de metadata al archivar.
 
-La aceptación runtime de cierre valida además el **package real de producción** dentro del entorno Docker oficial `@wordpress/env`:
+La aceptación runtime de cierre valida el **package real de producción** dentro del entorno Docker oficial `@wordpress/env`:
 
 ```text
 WordPress 7.1 / PHP 8.3
@@ -303,13 +304,16 @@ Evidencia runtime aceptada:
 - axe no reporta violaciones `serious` ni `critical` dentro de la superficie admin del plugin;
 - Multisite crea blogs separados y demuestra que el registro permanece aislado por sitio/blog.
 
-### Evidencia CI de cierre
-
-La aceptación funcional está verde en:
+### Evidencia final de cierre
 
 ```text
-CI run: #53 / 34367111247
+CI aceptación funcional: #53 / 34367111247
 SHA de implementación aceptado: e5927a8a2b4526f01a4649c4ba5d3a25ae3c0353
+CI final del head del PR: #60 / 34368216414
+PR fusionado: #5
+Commit merge en main: c83fbb11ffcfba7816a0beb71068e228a65ece77
+CI post-merge main: #61 / 34368648895
+
 PHP quality: success
 EN/ES 100% coverage: success
 PHP 7.4 syntax: success
@@ -320,7 +324,7 @@ WordPress Plugin Check: success
 WordPress runtime acceptance: success
 ```
 
-El propio job runtime superó activación, migración, CRUD/permisos/responsive/accesibilidad y aislamiento Multisite real.
+Los jobs runtime superaron activación, migración, CRUD/permisos/responsive/accesibilidad y aislamiento Multisite real.
 
 ### Aprendizajes de ingeniería durante la aceptación
 
@@ -333,9 +337,7 @@ El cierre de Fase 2 generó memoria durable para prevenir:
 
 Ver `docs/engineering-failures/README.md`.
 
-### Pendiente antes de declarar cerrada Fase 2
-
-Los bloqueos de implementación y aceptación están en cero. Solo falta cerrar el ciclo de repositorio:
+### Checklist de cierre
 
 ```text
 [x] CI verde en SHA aceptado de implementación Fase 2
@@ -345,10 +347,10 @@ Los bloqueos de implementación y aceptación están en cero. Solo falta cerrar 
 [x] aceptación responsive del admin
 [x] aceptación teclado/accesibilidad
 [x] aceptación real de upgrade/migración en WordPress
-[x] documentación sincronizada en PR #5
+[x] documentación sincronizada
 [x] blockers de implementación/aceptación = 0
-[ ] merge PR #5 a main
-[ ] verificación post-merge verde en main
+[x] PR #5 fusionado a main
+[x] verificación post-merge verde en main
 ```
 
-La Fase 3 no puede comenzar antes de completar esos dos últimos gates del ciclo de repositorio.
+**La Fase 2 está cerrada. La Fase 3 está desbloqueada, pero todavía no ha comenzado.**

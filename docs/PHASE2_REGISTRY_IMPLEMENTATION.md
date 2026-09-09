@@ -2,7 +2,7 @@
 
 [English](#english) · [Español](#español)
 
-Status: **active implementation**  
+Status: **closure candidate — real WordPress acceptance complete; PR #5 merge and post-merge `main` verification pending**  
 Last reviewed / Última revisión: **9 September 2026 / 9 de septiembre de 2026**
 
 ---
@@ -15,7 +15,7 @@ Phase 2 turns the bootstrap in-memory registry into a useful local WordPress inv
 
 ### Current implementation
 
-Implemented in PR #3:
+Implemented across the Phase 2 workstream and closing PR #5:
 
 ```text
 WordPress site/blog
@@ -78,6 +78,8 @@ manage_options
 
 Output is escaped for its HTML context. Browser state or request payloads never grant authorization.
 
+The real WordPress acceptance lane also creates disposable runtime users with random credentials. Those values are masked before any command can echo them and are never shared with production/customer credentials.
+
 ### Privacy boundary
 
 Registry operations make no Kairoseth telemetry/network call. Data remains local to the current WordPress site/blog.
@@ -92,9 +94,9 @@ Future unknown schema versions fail safe instead of being interpreted as current
 
 ### EN/ES
 
-The full registry UI ships in English and Spanish in the same workstream. The existing blocking `EN/ES 100% coverage` CI gate validates all runtime gettext strings and the compiled Spanish `.mo` in the production package.
+The full registry UI ships in English and Spanish in the same workstream. The blocking `EN/ES 100% coverage` CI gate validates all runtime gettext strings and the compiled Spanish `.mo` in the production package.
 
-### Validation added
+### Validation
 
 Unit/contract coverage includes:
 
@@ -106,23 +108,76 @@ Unit/contract coverage includes:
 - simulated per-blog/site storage isolation;
 - lifecycle/archive metadata preservation.
 
-### Remaining before Phase 2 can close
-
-Phase 2 remains active until the following are accepted:
+The closing runtime acceptance additionally validates the **real production plugin package** inside the official `@wordpress/env` Docker environment:
 
 ```text
-[ ] CI green on final Phase 2 SHA
-[ ] real WordPress add/edit/archive smoke
-[ ] unauthorized-role mutation rejection in WordPress runtime
-[ ] real Multisite isolation smoke
-[ ] responsive admin acceptance
-[ ] keyboard/accessibility acceptance
-[ ] upgrade/migration acceptance on a real WordPress install
-[ ] documentation synchronized
-[ ] blockers = 0
+WordPress 7.1 / PHP 8.3
+build/ai-transparency mounted as the plugin
+single-site WordPress runtime
+Playwright Chromium browser acceptance
+separate Multisite runtime
 ```
 
-Phase 3 must not begin before those closure gates are complete.
+Accepted runtime evidence:
+
+- production package activates successfully in WordPress;
+- legacy `wp_options` payload migrates and writes back `schema_version = 1`;
+- administrator can add, edit, review and archive a registry record through wp-admin;
+- non-administrator cannot access the registry administration surface;
+- admin UI does not create document-level horizontal overflow at 390 px;
+- registry table overflow region is keyboard focusable;
+- axe reports no `serious` or `critical` accessibility violations in the plugin admin surface;
+- Multisite creates separate blogs and proves registry state remains blog/site-local.
+
+### Closing CI evidence
+
+Functional acceptance is green on:
+
+```text
+CI run: #53 / 34367111247
+accepted implementation SHA: e5927a8a2b4526f01a4649c4ba5d3a25ae3c0353
+PHP quality: success
+EN/ES 100% coverage: success
+PHP 7.4 syntax: success
+PHP 8.1 syntax: success
+PHP 8.3 syntax: success
+PHP 8.5 syntax: success
+WordPress Plugin Check: success
+WordPress runtime acceptance: success
+```
+
+The runtime job itself passed activation, migration, CRUD/permissions/responsive/accessibility and real Multisite isolation.
+
+### Engineering failures learned during acceptance
+
+The Phase 2 acceptance work produced durable prevention records for:
+
+- correct `wp-env run` command tokenization;
+- inherited destructive-action contrast below WCAG AA;
+- persisted WordPress state causing retry ambiguity in Playwright;
+- masking dynamically generated runtime credentials before first command use.
+
+See `docs/engineering-failures/README.md`.
+
+### Remaining before Phase 2 is declared closed
+
+Implementation and acceptance blockers are now zero. Only repository lifecycle closure remains:
+
+```text
+[x] CI green on accepted Phase 2 implementation SHA
+[x] real WordPress add/edit/archive smoke
+[x] unauthorized-role rejection in WordPress runtime
+[x] real Multisite isolation smoke
+[x] responsive admin acceptance
+[x] keyboard/accessibility acceptance
+[x] upgrade/migration acceptance on a real WordPress install
+[x] documentation synchronized in PR #5
+[x] implementation/acceptance blockers = 0
+[ ] merge PR #5 to main
+[ ] post-merge main verification green
+```
+
+Phase 3 must not begin before those last two repository lifecycle gates are complete.
 
 ---
 
@@ -134,7 +189,7 @@ La Fase 2 convierte el registro en memoria del bootstrap en un inventario WordPr
 
 ### Implementación actual
 
-Implementado en el PR #3:
+Implementado durante la Fase 2 y completado para aceptación en el PR #5:
 
 ```text
 sitio/blog WordPress
@@ -197,6 +252,8 @@ manage_options
 
 La salida se escapa según el contexto HTML. El navegador o el payload nunca conceden autorización.
 
+La aceptación WordPress real crea además usuarios runtime desechables con credenciales aleatorias. Los valores se enmascaran antes de que cualquier comando pueda mostrarlos y nunca se mezclan con credenciales de producción o clientes.
+
 ### Privacidad
 
 Las operaciones del registro no realizan llamadas de telemetría/red a Kairoseth. Los datos permanecen en el sitio/blog WordPress actual.
@@ -213,9 +270,9 @@ Una versión futura desconocida del schema falla de forma segura y no se interpr
 
 Toda la UI del registro se entrega en inglés y español en el mismo workstream. El gate bloqueante `EN/ES 100% coverage` comprueba las cadenas gettext runtime y el `.mo` español compilado dentro del package de producción.
 
-### Validación añadida
+### Validación
 
-Los tests cubren:
+Los tests unitarios/de contrato cubren:
 
 - orden determinista del schema;
 - migración legacy;
@@ -225,20 +282,73 @@ Los tests cubren:
 - aislamiento simulado por blog/sitio;
 - preservación de metadata al archivar.
 
-### Pendiente antes de cerrar Fase 2
-
-La Fase 2 sigue activa hasta completar:
+La aceptación runtime de cierre valida además el **package real de producción** dentro del entorno Docker oficial `@wordpress/env`:
 
 ```text
-[ ] CI verde en SHA final de Fase 2
-[ ] smoke real WordPress de alta/edición/archivo
-[ ] rechazo runtime de mutaciones por roles no autorizados
-[ ] smoke real de aislamiento Multisite
-[ ] aceptación responsive del admin
-[ ] aceptación teclado/accesibilidad
-[ ] aceptación real de upgrade/migración en WordPress
-[ ] documentación sincronizada
-[ ] blockers = 0
+WordPress 7.1 / PHP 8.3
+build/ai-transparency montado como plugin
+runtime WordPress single-site
+aceptación navegador Chromium con Playwright
+runtime Multisite separado
 ```
 
-La Fase 3 no puede comenzar antes de cerrar estos gates.
+Evidencia runtime aceptada:
+
+- el package de producción activa correctamente en WordPress;
+- un payload legacy en `wp_options` migra y se reescribe con `schema_version = 1`;
+- un administrador puede añadir, editar, revisar y archivar registros desde wp-admin;
+- un rol no administrador no puede acceder al panel de administración del registro;
+- la UI admin no genera overflow horizontal de documento a 390 px;
+- la región con overflow de la tabla es accesible por teclado;
+- axe no reporta violaciones `serious` ni `critical` dentro de la superficie admin del plugin;
+- Multisite crea blogs separados y demuestra que el registro permanece aislado por sitio/blog.
+
+### Evidencia CI de cierre
+
+La aceptación funcional está verde en:
+
+```text
+CI run: #53 / 34367111247
+SHA de implementación aceptado: e5927a8a2b4526f01a4649c4ba5d3a25ae3c0353
+PHP quality: success
+EN/ES 100% coverage: success
+PHP 7.4 syntax: success
+PHP 8.1 syntax: success
+PHP 8.3 syntax: success
+PHP 8.5 syntax: success
+WordPress Plugin Check: success
+WordPress runtime acceptance: success
+```
+
+El propio job runtime superó activación, migración, CRUD/permisos/responsive/accesibilidad y aislamiento Multisite real.
+
+### Aprendizajes de ingeniería durante la aceptación
+
+El cierre de Fase 2 generó memoria durable para prevenir:
+
+- tokenización incorrecta de comandos con `wp-env run`;
+- contraste heredado de acciones destructivas por debajo de WCAG AA;
+- ambigüedad en reintentos Playwright por estado WordPress persistente;
+- exposición en logs de credenciales runtime generadas dinámicamente antes de enmascararlas.
+
+Ver `docs/engineering-failures/README.md`.
+
+### Pendiente antes de declarar cerrada Fase 2
+
+Los bloqueos de implementación y aceptación están en cero. Solo falta cerrar el ciclo de repositorio:
+
+```text
+[x] CI verde en SHA aceptado de implementación Fase 2
+[x] smoke real WordPress de alta/edición/archivo
+[x] rechazo runtime de roles no autorizados
+[x] smoke real de aislamiento Multisite
+[x] aceptación responsive del admin
+[x] aceptación teclado/accesibilidad
+[x] aceptación real de upgrade/migración en WordPress
+[x] documentación sincronizada en PR #5
+[x] blockers de implementación/aceptación = 0
+[ ] merge PR #5 a main
+[ ] verificación post-merge verde en main
+```
+
+La Fase 3 no puede comenzar antes de completar esos dos últimos gates del ciclo de repositorio.

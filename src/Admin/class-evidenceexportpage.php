@@ -155,7 +155,7 @@ final class EvidenceExportPage {
 				),
 				$generated_at
 			);
-			$json = $this->encoder->encode( $snapshot );
+			$json     = $this->encoder->encode( $snapshot );
 		} catch ( Throwable $error ) {
 			wp_die(
 				esc_html__( 'The evidence export could not be generated. No file was created.', 'ai-transparency' ),

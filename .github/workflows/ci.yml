@@ -186,6 +186,8 @@ jobs:
           set -euo pipefail
           ADMIN_PASS="$(openssl rand -hex 18)"
           EDITOR_PASS="$(openssl rand -hex 18)"
+          echo "::add-mask::${ADMIN_PASS}"
+          echo "::add-mask::${EDITOR_PASS}"
           npm exec -- wp-env run cli -- wp user update admin --user_pass="${ADMIN_PASS}"
           npm exec -- wp-env run cli -- wp user create phase2_editor phase2-editor@example.test --role=editor --user_pass="${EDITOR_PASS}"
           {

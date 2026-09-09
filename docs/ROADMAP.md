@@ -161,7 +161,7 @@ Exit: **complete.**
 
 ## Phase 4 — Readiness findings and evidence
 
-Status: **closed — accepted, merged and verified on `main` on 9 September 2026.**
+Status: **closed — accepted, merged, documented and finally verified on `main` on 9 September 2026.**
 
 Goal: convert registry/discovery state into evidence-backed technical findings while preserving the boundary between observed facts, administrator declarations and guidance.
 
@@ -206,8 +206,10 @@ Accepted:
 - [x] inherited Phase 2/3 regression suite green
 - [x] Multisite isolation green
 - [x] PR #9 merged to `main`
-- [x] post-merge `main` verification green
+- [x] implementation post-merge `main` verification green
 - [x] engineering failure memory updated for the stateful Playwright recurrence
+- [x] closure documentation PR #10 merged
+- [x] final closure `main` CI #78 green
 - [x] blockers = 0
 
 Accepted real runtime path:
@@ -228,11 +230,16 @@ AI Engine 3.7.7
 Closure evidence:
 
 ```text
-Accepted PR head: 926a154930042e53af0b082795be155389cc6916
-Pre-merge CI: #75 / 34381590429
+Implementation accepted head: 926a154930042e53af0b082795be155389cc6916
+Implementation pre-merge CI: #75 / 34381590429
 Implementation PR: #9
 Implementation merge commit: 836abfeca4c199930b74ba32547f9037f7fcb4de
 Implementation post-merge CI: #76 / 34382057838
+Closure documentation head: 81ac2a71938de1e45216de7d83ebd85271efffff
+Closure documentation PR: #10
+Closure PR CI: #77 / 34390042410
+Closure documentation merge: 40d7aee73015c2e7185bde156349d106e72a4e18
+Final Phase 4 main CI: #78 / 34390407476
 Blockers: 0
 ```
 
@@ -253,21 +260,64 @@ Exit: **complete.**
 
 ## Phase 5 — Disclosure tooling
 
-Status: **not started — unblocked by Phase 4 closure.**
+Status: **active design/acceptance contract — production implementation not started.**
 
-Goal: provide accessible, explicit disclosure components for supported configured contexts.
+Goal: provide accessible, explicit disclosure components for supported administrator-configured contexts without inferring legal obligations or guessing placement.
 
-Planned:
+First supported workflow:
 
-- reusable disclosure model;
-- admin configuration;
-- block/shortcode or integration-specific renderer only where justified;
-- accessible markup;
-- locale-aware EN/ES copy with 100% coverage;
-- deterministic placement tests;
-- cache/theme compatibility acceptance.
+```text
+reviewed active AiSystem
++ non-empty interaction context
++ interaction_disclosure_required = true
+→ Tools → AI Disclosure reports Ready
+→ administrator manually places:
+   [kairoseth_ai_disclosure system="SYSTEM_ID"]
+→ server re-resolves exact site-local registry state
+→ accessible EN/ES inline disclosure on a public post/page
+```
 
-Exit: one real supported interaction-disclosure workflow passes bilingual, accessibility and frontend acceptance.
+Current contract decisions:
+
+- [x] first increment reuses Registry schema v1; no schema migration planned
+- [x] shortcode placement is explicit/manual
+- [x] normal singular post/page content is the first accepted placement
+- [x] Shortcode block is included through the same shortcode contract
+- [x] eligibility requires active + reviewed + configured disclosure + non-empty context
+- [x] source origin alone does not grant eligibility
+- [x] public output must not expose internal interaction-context text
+- [x] no automatic chatbot DOM injection
+- [x] no arbitrary page AI scanning
+- [x] no legal compliance/certification claim
+- [x] no automatic telemetry/cloud dependency
+- [x] cache/theme claims are bounded to tested evidence
+- [ ] immutable disclosure model/engine implemented
+- [ ] Tools → AI Disclosure implemented
+- [ ] public shortcode renderer implemented
+- [ ] EN/ES runtime strings implemented
+- [ ] frontend responsive/accessibility acceptance implemented
+- [ ] real Registry → Disclosure Admin → shortcode → anonymous frontend E2E green
+- [ ] disabling eligibility removes output
+- [ ] inherited Phase 2/3/4 regression suite green
+- [ ] implementation PR merged and post-merge verified
+- [ ] blockers = 0
+
+Planned public copy contract:
+
+```text
+EN: AI transparency notice
+This interaction uses the AI system “%s”. Review important information or outcomes before relying on them.
+
+ES: Aviso de transparencia de IA
+Esta interacción utiliza el sistema de IA «%s». Revisa la información o los resultados importantes antes de confiar en ellos.
+```
+
+The administrator-reviewed system name is the only registry value intended for public rendering. Internal context, source metadata, ids, timestamps, credentials, prompts and conversations remain private.
+
+Implementation contract: [`PHASE5_DISCLOSURE_IMPLEMENTATION.md`](PHASE5_DISCLOSURE_IMPLEMENTATION.md).  
+Acceptance checklist: [`PHASE5_ACCEPTANCE.md`](PHASE5_ACCEPTANCE.md).
+
+Exit: one real administrator-configured interaction-disclosure workflow passes deterministic domain tests, EN/ES, security/privacy, public frontend, responsive/accessibility, inherited regressions, merge and post-merge verification with blockers at zero.
 
 ## Phase 6 — Evidence export
 

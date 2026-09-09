@@ -9,7 +9,7 @@
 
 ## English
 
-Kairoseth AI Transparency is a WordPress plugin for maintaining a reviewable technical inventory of AI systems used on a website and, in later phases, supporting evidence-backed transparency and disclosure workflows.
+Kairoseth AI Transparency is a WordPress plugin for maintaining a reviewable technical inventory of AI systems used on a website and supporting evidence-backed transparency workflows.
 
 ### Plugin identity
 
@@ -27,22 +27,28 @@ Kairoseth AI Transparency is a WordPress plugin for maintaining a reviewable tec
 
 ### Current functionality
 
-The current development line includes a local **AI Systems Registry** under **Tools > AI Transparency**.
+The current development line includes:
+
+- a local **AI Systems Registry** under **Tools > AI Transparency**;
+- deterministic **AI Discovery** under **Tools > AI Discovery**.
 
 An authorized administrator can:
 
-- add AI systems;
-- edit AI systems;
-- record the system type and interaction context;
-- set review status;
+- add, edit, review and archive AI system records;
+- record system type and interaction context;
 - configure whether the recorded workflow requires an AI interaction disclosure;
-- archive records without deleting their history.
+- detect a supported active AI integration from explainable WordPress evidence;
+- explicitly add a supported discovery result to the registry for manual review.
+
+The first validated detector supports **AI Engine 3.7.7**. It observes only the WordPress plugin basename, plugin name, version, text domain and activation state. A different AI Engine version is reported as outside the currently validated detector boundary and is not automatically accepted.
+
+Discovery does not infer which provider, model, chatbot, prompt or workflow is being used. It does not read AI provider credentials or AI Engine internal configuration.
 
 Registry data is stored locally using the WordPress Options API with a versioned schema. In Multisite, storage follows the current site/blog context rather than creating a network-wide registry.
 
 ### Privacy and data handling
 
-The current registry does not automatically send its data to any external service. Core registry state stays inside the WordPress installation unless a future feature explicitly documents and requires an external connection.
+The current registry and discovery workflow do not automatically send their data to any external service. Core state stays inside the WordPress installation.
 
 ### Important limitation
 
@@ -54,8 +60,8 @@ It also does not attempt generic probabilistic detection of whether arbitrary te
 
 1. Upload the plugin directory to `/wp-content/plugins/` or install the packaged ZIP.
 2. Activate **Kairoseth AI Transparency** from the WordPress Plugins screen.
-3. Open **Tools > AI Transparency**.
-4. Add and maintain the site's AI systems in the local registry.
+3. Open **Tools > AI Transparency** to maintain the local registry.
+4. Open **Tools > AI Discovery** to review supported deterministic integration evidence.
 
 ### Development
 
@@ -81,13 +87,18 @@ The repository currently validates:
 - PHP syntax across the configured version matrix;
 - 100% EN/ES runtime-string coverage;
 - compiled Spanish gettext catalog;
-- official WordPress Plugin Check against the generated production package.
+- official WordPress Plugin Check against the generated production package;
+- real WordPress runtime activation, registry migration, CRUD and permission checks;
+- responsive/accessibility browser acceptance;
+- Multisite registry isolation;
+- deterministic discovery against an exact AI Engine runtime fixture.
 
 ### Project documentation
 
 - [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
+- [`docs/PHASE3_DISCOVERY_IMPLEMENTATION.md`](docs/PHASE3_DISCOVERY_IMPLEMENTATION.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)
@@ -96,7 +107,7 @@ The repository currently validates:
 
 ## Español
 
-Kairoseth AI Transparency es un plugin para WordPress orientado a mantener un inventario técnico y revisable de los sistemas de IA utilizados en una web y, en fases posteriores, facilitar flujos de transparencia y evidencia respaldados por datos observables.
+Kairoseth AI Transparency es un plugin para WordPress orientado a mantener un inventario técnico y revisable de los sistemas de IA utilizados en una web y facilitar flujos de transparencia respaldados por evidencia.
 
 ### Identidad del plugin
 
@@ -114,22 +125,28 @@ Kairoseth AI Transparency es un plugin para WordPress orientado a mantener un in
 
 ### Funcionalidad actual
 
-La línea actual de desarrollo incluye un **AI Systems Registry** local en **Herramientas > AI Transparency**.
+La línea actual de desarrollo incluye:
+
+- un **AI Systems Registry** local en **Herramientas > AI Transparency**;
+- **AI Discovery** determinista en **Herramientas > AI Discovery**.
 
 Un administrador autorizado puede:
 
-- añadir sistemas de IA;
-- editar sistemas de IA;
+- añadir, editar, revisar y archivar registros de sistemas de IA;
 - registrar el tipo de sistema y el contexto de interacción;
-- establecer el estado de revisión;
 - indicar si el flujo registrado requiere un aviso de interacción con IA;
-- archivar registros sin eliminar su historial.
+- detectar una integración de IA compatible y activa a partir de evidencia WordPress explicable;
+- añadir explícitamente un resultado compatible al registro para revisión manual.
+
+El primer detector validado soporta **AI Engine 3.7.7**. Observa únicamente el basename del plugin, nombre, versión, text domain y estado de activación. Otra versión de AI Engine se muestra como fuera del alcance actualmente validado y no se acepta automáticamente.
+
+Discovery no infiere qué proveedor, modelo, chatbot, prompt o flujo se está utilizando. Tampoco lee credenciales de proveedores de IA ni configuración interna de AI Engine.
 
 Los datos del registro se guardan localmente mediante la API Options de WordPress con un schema versionado. En Multisite, el almacenamiento sigue el contexto del sitio/blog actual y no crea un registro global de red.
 
 ### Privacidad y tratamiento de datos
 
-El registro actual no envía automáticamente sus datos a ningún servicio externo. El estado principal del registro permanece dentro de la instalación WordPress salvo que una función futura documente y requiera explícitamente una conexión externa.
+El registro y el flujo de discovery actuales no envían automáticamente sus datos a ningún servicio externo. El estado principal permanece dentro de la instalación WordPress.
 
 ### Límite importante
 
@@ -141,8 +158,8 @@ Tampoco intenta detectar probabilísticamente y de forma genérica si cualquier 
 
 1. Sube el directorio del plugin a `/wp-content/plugins/` o instala el ZIP generado.
 2. Activa **Kairoseth AI Transparency** desde la pantalla de Plugins de WordPress.
-3. Abre **Herramientas > AI Transparency**.
-4. Añade y mantén los sistemas de IA del sitio en el registro local.
+3. Abre **Herramientas > AI Transparency** para mantener el registro local.
+4. Abre **Herramientas > AI Discovery** para revisar evidencia determinista de integraciones compatibles.
 
 ### Desarrollo
 
@@ -168,13 +185,18 @@ El repositorio valida actualmente:
 - sintaxis PHP en la matriz de versiones configurada;
 - cobertura 100% EN/ES de las cadenas runtime;
 - catálogo gettext español compilado;
-- WordPress Plugin Check oficial sobre el paquete de producción generado.
+- WordPress Plugin Check oficial sobre el paquete de producción generado;
+- activación WordPress real, migración del registro, CRUD y permisos;
+- aceptación responsive/accesibilidad con navegador;
+- aislamiento Multisite del registro;
+- discovery determinista contra un fixture runtime exacto de AI Engine.
 
 ### Documentación del proyecto
 
 - [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
+- [`docs/PHASE3_DISCOVERY_IMPLEMENTATION.md`](docs/PHASE3_DISCOVERY_IMPLEMENTATION.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)

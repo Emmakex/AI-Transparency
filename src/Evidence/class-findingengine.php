@@ -127,7 +127,7 @@ final class FindingEngine {
 		);
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode -- Pure domain service intentionally has no WordPress runtime dependency.
-		$encoded = json_encode( $signature_payload, JSON_UNESCAPED_SLASHES );
+		$encoded   = json_encode( $signature_payload, JSON_UNESCAPED_SLASHES );
 		$signature = false === $encoded ? hash( 'sha256', $rule_id . '|' . $system->id() ) : hash( 'sha256', $encoded );
 
 		return new Finding(

@@ -8,8 +8,10 @@
 namespace Kairoseth\AITransparency;
 
 use Kairoseth\AITransparency\Admin\AdminPage;
+use Kairoseth\AITransparency\Admin\DisclosurePage;
 use Kairoseth\AITransparency\Admin\DiscoveryPage;
 use Kairoseth\AITransparency\Admin\ReadinessPage;
+use Kairoseth\AITransparency\Disclosure\DisclosureShortcode;
 
 /**
  * Coordinates plugin bootstrapping and WordPress hooks.
@@ -55,11 +57,13 @@ final class Plugin {
 		$this->booted = true;
 
 		add_action( 'init', array( $this, 'load_textdomain' ) );
+		( new DisclosureShortcode() )->register();
 
 		if ( is_admin() ) {
 			( new AdminPage() )->register();
 			( new DiscoveryPage() )->register();
 			( new ReadinessPage() )->register();
+			( new DisclosurePage() )->register();
 		}
 	}
 

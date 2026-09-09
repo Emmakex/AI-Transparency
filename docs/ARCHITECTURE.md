@@ -1,6 +1,6 @@
 # Kairoseth AI Transparency — Implementation Architecture
 
-Status: active development — Phase 3 closed; Phase 4 readiness findings active  
+Status: active development — Phase 4 closed; Phase 5 disclosure tooling unblocked and not started  
 Last reviewed: 9 September 2026
 
 ## Product boundary
@@ -224,7 +224,7 @@ This prevents plugin presence from being misrepresented as evidence that a chatb
 Accepted implementation/acceptance contract: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).  
 Runtime evidence: [`PHASE3_RUNTIME_EVIDENCE.md`](PHASE3_RUNTIME_EVIDENCE.md).
 
-### Readiness findings / evidence — Phase 4
+### Readiness findings / evidence — Phase 4 accepted
 
 **Tools → AI Readiness** renders technical findings generated from the current site-local registry.
 
@@ -238,7 +238,7 @@ WordPressOptionsRegistryRepository
 → ReadinessPage
 ```
 
-The first increment intentionally does **not** persist findings separately. The registry remains the source of truth and the engine recalculates findings on every evaluation.
+The accepted first increment intentionally does **not** persist findings separately. The registry remains the source of truth and the engine recalculates findings on every evaluation.
 
 #### Finding model
 
@@ -265,7 +265,7 @@ GUIDANCE    — technical review/completion action
 
 `generated_at` does not participate in stable identity/signature. The same rule against the same relevant evidence produces the same finding id and SHA-256 signature.
 
-#### First finding rules
+#### Accepted finding rules
 
 ```text
 registry_review_pending_v1
@@ -289,27 +289,39 @@ configured_disclosure_review_v1
 
 The disclosure rule does not infer that a legal duty exists. It reports the administrator's explicit configuration.
 
-Archived systems are ignored by the first readiness engine.
+Archived systems are ignored by the accepted readiness engine.
 
 #### Readiness authority boundary
 
-Readiness is read-only in this increment and requires `manage_options`.
+Readiness is read-only in the accepted Phase 4 increment and requires `manage_options`.
 
 Browser query/form values do not supply finding evidence. Registry state is loaded server-side and findings are generated server-side. Because viewing findings does not mutate state, there is no mutation nonce solely for the read-only page.
 
 Implementation contract: [`PHASE4_FINDINGS_IMPLEMENTATION.md`](PHASE4_FINDINGS_IMPLEMENTATION.md).  
-Acceptance checklist: [`PHASE4_ACCEPTANCE.md`](PHASE4_ACCEPTANCE.md).
+Acceptance checklist: [`PHASE4_ACCEPTANCE.md`](PHASE4_ACCEPTANCE.md).  
+Runtime evidence: [`PHASE4_RUNTIME_EVIDENCE.md`](PHASE4_RUNTIME_EVIDENCE.md).
 
-### Future disclosure tooling
+Accepted Phase 4 implementation evidence:
 
-Disclosure components will only act on explicitly configured/supported workflows. The plugin will not alter arbitrary site content based on an AI guess.
+```text
+PR: #9
+Accepted head: 926a154930042e53af0b082795be155389cc6916
+Pre-merge CI: #75 / 34381590429
+Merge: 836abfeca4c199930b74ba32547f9037f7fcb4de
+Post-merge CI: #76 / 34382057838
+Blockers: 0
+```
+
+### Disclosure tooling — Phase 5 not started
+
+Phase 5 is now unblocked by Phase 4 closure but has not started. Disclosure components will only act on explicitly configured/supported workflows. The plugin will not alter arbitrary site content based on an AI guess.
 
 ## WordPress compatibility baseline
 
 - Requires WordPress: 6.6+
 - Tested-up-to target: 7.1
 - Requires PHP: 7.4+
-- Accepted Phase 3 AI Engine runtime fixture: AI Engine 3.7.7, which itself requires PHP 8.1+
+- Accepted Phase 3/4 AI Engine runtime fixture: AI Engine 3.7.7, which itself requires PHP 8.1+
 
 The plugin remains PHP 7.4 compatible; the AI Engine discovery/readiness runtime fixture runs in the dedicated WordPress 7.1 / PHP 8.3 acceptance lane.
 
@@ -328,11 +340,11 @@ The public plugin must never contain or silently collect:
 
 Registry, discovery and readiness operations make no automatic external Kairoseth request.
 
-Readiness rules operate only on bounded local registry fields in this increment; they do not crawl arbitrary content or inspect AI provider configuration.
+Readiness rules operate only on bounded local registry fields in the accepted increment; they do not crawl arbitrary content or inspect AI provider configuration.
 
 ## CI / release gates
 
-Current blocking gates:
+Current blocking gates for changed contracts remain:
 
 ```text
 PHP quality
@@ -372,6 +384,6 @@ Repository-controlled failures use `bin/run-with-diagnostics.sh` and upload `.ci
 - Phase 1: closed.
 - Phase 2 Persistent AI Systems Registry: closed and verified on `main`.
 - Phase 3 Deterministic Discovery: closed and verified on `main`.
-- Phase 4 Readiness Findings & Evidence: active implementation; first registry-driven rules implemented, acceptance pending.
-- Phase 5 Disclosure Tooling: blocked by Phase 4 closure.
+- Phase 4 Readiness Findings & Evidence: closed and verified on `main` via PR #9, CI #75 and post-merge CI #76.
+- Phase 5 Disclosure Tooling: unblocked, not started.
 - Later phases: not started.

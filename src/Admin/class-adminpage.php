@@ -46,10 +46,10 @@ final class AdminPage {
 	 */
 	public function register_menu(): void {
 		add_management_page(
-			__( 'Kairoseth AI Transparency', 'kairoseth-ai-transparency' ),
-			__( 'AI Transparency', 'kairoseth-ai-transparency' ),
+			__( 'Kairoseth AI Transparency', 'ai-transparency' ),
+			__( 'AI Transparency', 'ai-transparency' ),
 			'manage_options',
-			'kairoseth-ai-transparency',
+			'ai-transparency',
 			array( $this, 'render' )
 		);
 	}
@@ -68,25 +68,25 @@ final class AdminPage {
 		$editing = '' !== $edit_id ? $registry->find( $edit_id ) : null;
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html__( 'Kairoseth AI Transparency', 'kairoseth-ai-transparency' ); ?></h1>
-			<p><?php echo esc_html__( 'Maintain a local inventory of AI systems used by this WordPress site.', 'kairoseth-ai-transparency' ); ?></p>
-			<p><em><?php echo esc_html__( 'Registry data stays in this WordPress site and is not sent to Kairoseth automatically.', 'kairoseth-ai-transparency' ); ?></em></p>
+			<h1><?php echo esc_html__( 'Kairoseth AI Transparency', 'ai-transparency' ); ?></h1>
+			<p><?php echo esc_html__( 'Maintain a local inventory of AI systems used by this WordPress site.', 'ai-transparency' ); ?></p>
+			<p><em><?php echo esc_html__( 'Registry data stays in this WordPress site and is not sent to any external service automatically.', 'ai-transparency' ); ?></em></p>
 
 			<?php $this->render_notice(); ?>
 
-			<h2><?php echo esc_html__( 'AI Systems Registry', 'kairoseth-ai-transparency' ); ?></h2>
+			<h2><?php echo esc_html__( 'AI Systems Registry', 'ai-transparency' ); ?></h2>
 			<?php if ( 0 === $registry->count() ) : ?>
-				<p><?php echo esc_html__( 'No AI systems have been registered yet.', 'kairoseth-ai-transparency' ); ?></p>
+				<p><?php echo esc_html__( 'No AI systems have been registered yet.', 'ai-transparency' ); ?></p>
 			<?php else : ?>
 				<table class="widefat striped">
 					<thead>
 						<tr>
-							<th scope="col"><?php echo esc_html__( 'Name', 'kairoseth-ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Type', 'kairoseth-ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Review', 'kairoseth-ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Status', 'kairoseth-ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Updated', 'kairoseth-ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Actions', 'kairoseth-ai-transparency' ); ?></th>
+							<th scope="col"><?php echo esc_html__( 'Name', 'ai-transparency' ); ?></th>
+							<th scope="col"><?php echo esc_html__( 'Type', 'ai-transparency' ); ?></th>
+							<th scope="col"><?php echo esc_html__( 'Review', 'ai-transparency' ); ?></th>
+							<th scope="col"><?php echo esc_html__( 'Status', 'ai-transparency' ); ?></th>
+							<th scope="col"><?php echo esc_html__( 'Updated', 'ai-transparency' ); ?></th>
+							<th scope="col"><?php echo esc_html__( 'Actions', 'ai-transparency' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -94,7 +94,7 @@ final class AdminPage {
 							<?php
 							$edit_url = add_query_arg(
 								array(
-									'page'   => 'kairoseth-ai-transparency',
+									'page'   => 'ai-transparency',
 									'system' => $system->id(),
 								),
 								admin_url( 'tools.php' )
@@ -108,14 +108,14 @@ final class AdminPage {
 								<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
 								<td>
 									<a href="<?php echo esc_url( $edit_url ); ?>">
-										<?php echo esc_html__( 'Edit', 'kairoseth-ai-transparency' ); ?>
+										<?php echo esc_html__( 'Edit', 'ai-transparency' ); ?>
 									</a>
 									<?php if ( AiSystem::STATUS_ACTIVE === $system->status() ) : ?>
 										<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline">
 											<input type="hidden" name="action" value="kairoseth_ai_transparency_archive_system">
 											<input type="hidden" name="system_id" value="<?php echo esc_attr( $system->id() ); ?>">
 											<?php wp_nonce_field( 'kairoseth_ai_transparency_archive_' . $system->id(), '_kat_nonce' ); ?>
-											<button type="submit" class="button-link-delete"><?php echo esc_html__( 'Archive', 'kairoseth-ai-transparency' ); ?></button>
+											<button type="submit" class="button-link-delete"><?php echo esc_html__( 'Archive', 'ai-transparency' ); ?></button>
 										</form>
 									<?php endif; ?>
 								</td>
@@ -126,10 +126,10 @@ final class AdminPage {
 			<?php endif; ?>
 
 			<hr>
-			<h2><?php echo esc_html( $editing ? __( 'Edit AI system', 'kairoseth-ai-transparency' ) : __( 'Add AI system', 'kairoseth-ai-transparency' ) ); ?></h2>
+			<h2><?php echo esc_html( $editing ? __( 'Edit AI system', 'ai-transparency' ) : __( 'Add AI system', 'ai-transparency' ) ); ?></h2>
 			<?php $this->render_form( $editing ); ?>
 
-			<p><strong><?php echo esc_html__( 'Readiness boundary:', 'kairoseth-ai-transparency' ); ?></strong> <?php echo esc_html__( 'This registry records technical information and administrator declarations. It does not certify or guarantee legal compliance.', 'kairoseth-ai-transparency' ); ?></p>
+			<p><strong><?php echo esc_html__( 'Readiness boundary:', 'ai-transparency' ); ?></strong> <?php echo esc_html__( 'This registry records technical information and administrator declarations. It does not certify or guarantee legal compliance.', 'ai-transparency' ); ?></p>
 		</div>
 		<?php
 	}
@@ -256,11 +256,11 @@ final class AdminPage {
 
 			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><label for="kat-system-name"><?php echo esc_html__( 'System name', 'kairoseth-ai-transparency' ); ?></label></th>
+					<th scope="row"><label for="kat-system-name"><?php echo esc_html__( 'System name', 'ai-transparency' ); ?></label></th>
 					<td><input name="system_name" id="kat-system-name" type="text" class="regular-text" required value="<?php echo esc_attr( $name ); ?>"></td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="kat-system-type"><?php echo esc_html__( 'System type', 'kairoseth-ai-transparency' ); ?></label></th>
+					<th scope="row"><label for="kat-system-type"><?php echo esc_html__( 'System type', 'ai-transparency' ); ?></label></th>
 					<td>
 						<select name="system_type" id="kat-system-type">
 							<?php foreach ( AiSystem::supported_types() as $type_value ) : ?>
@@ -270,33 +270,33 @@ final class AdminPage {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="kat-interaction-context"><?php echo esc_html__( 'Interaction context', 'kairoseth-ai-transparency' ); ?></label></th>
+					<th scope="row"><label for="kat-interaction-context"><?php echo esc_html__( 'Interaction context', 'ai-transparency' ); ?></label></th>
 					<td>
 						<textarea name="interaction_context" id="kat-interaction-context" class="large-text" rows="3"><?php echo esc_textarea( $context ); ?></textarea>
-						<p class="description"><?php echo esc_html__( 'Describe where or how visitors, staff or customers interact with this AI system.', 'kairoseth-ai-transparency' ); ?></p>
+						<p class="description"><?php echo esc_html__( 'Describe where or how visitors, staff or customers interact with this AI system.', 'ai-transparency' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="kat-review-status"><?php echo esc_html__( 'Review status', 'kairoseth-ai-transparency' ); ?></label></th>
+					<th scope="row"><label for="kat-review-status"><?php echo esc_html__( 'Review status', 'ai-transparency' ); ?></label></th>
 					<td>
 						<select name="review_status" id="kat-review-status">
-							<option value="pending" <?php selected( $review, AiSystem::REVIEW_PENDING ); ?>><?php echo esc_html__( 'Pending review', 'kairoseth-ai-transparency' ); ?></option>
-							<option value="reviewed" <?php selected( $review, AiSystem::REVIEW_REVIEWED ); ?>><?php echo esc_html__( 'Reviewed', 'kairoseth-ai-transparency' ); ?></option>
+							<option value="pending" <?php selected( $review, AiSystem::REVIEW_PENDING ); ?>><?php echo esc_html__( 'Pending review', 'ai-transparency' ); ?></option>
+							<option value="reviewed" <?php selected( $review, AiSystem::REVIEW_REVIEWED ); ?>><?php echo esc_html__( 'Reviewed', 'ai-transparency' ); ?></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php echo esc_html__( 'Interaction disclosure', 'kairoseth-ai-transparency' ); ?></th>
+					<th scope="row"><?php echo esc_html__( 'Interaction disclosure', 'ai-transparency' ); ?></th>
 					<td>
 						<label>
 							<input name="interaction_disclosure_required" type="checkbox" value="1" <?php checked( $required ); ?>>
-							<?php echo esc_html__( 'This configured workflow requires an AI interaction disclosure.', 'kairoseth-ai-transparency' ); ?>
+							<?php echo esc_html__( 'This configured workflow requires an AI interaction disclosure.', 'ai-transparency' ); ?>
 						</label>
 					</td>
 				</tr>
 			</table>
 
-			<?php submit_button( $system ? __( 'Update AI system', 'kairoseth-ai-transparency' ) : __( 'Add AI system', 'kairoseth-ai-transparency' ) ); ?>
+			<?php submit_button( $system ? __( 'Update AI system', 'ai-transparency' ) : __( 'Add AI system', 'ai-transparency' ) ); ?>
 		</form>
 		<?php
 	}
@@ -310,11 +310,11 @@ final class AdminPage {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only notice selection after a protected redirect.
 		$notice = isset( $_GET['kat_notice'] ) ? sanitize_key( wp_unslash( $_GET['kat_notice'] ) ) : '';
 		$map    = array(
-			'saved'       => array( 'success', __( 'AI system saved.', 'kairoseth-ai-transparency' ) ),
-			'archived'    => array( 'success', __( 'AI system archived.', 'kairoseth-ai-transparency' ) ),
-			'invalid'     => array( 'error', __( 'Please provide a valid name, system type and review status.', 'kairoseth-ai-transparency' ) ),
-			'missing'     => array( 'error', __( 'The requested AI system could not be found.', 'kairoseth-ai-transparency' ) ),
-			'save_failed' => array( 'error', __( 'The AI systems registry could not be saved.', 'kairoseth-ai-transparency' ) ),
+			'saved'       => array( 'success', __( 'AI system saved.', 'ai-transparency' ) ),
+			'archived'    => array( 'success', __( 'AI system archived.', 'ai-transparency' ) ),
+			'invalid'     => array( 'error', __( 'Please provide a valid name, system type and review status.', 'ai-transparency' ) ),
+			'missing'     => array( 'error', __( 'The requested AI system could not be found.', 'ai-transparency' ) ),
+			'save_failed' => array( 'error', __( 'The AI systems registry could not be saved.', 'ai-transparency' ) ),
 		);
 
 		if ( ! isset( $map[ $notice ] ) ) {
@@ -332,7 +332,7 @@ final class AdminPage {
 	 */
 	private function require_permission(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'kairoseth-ai-transparency' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'ai-transparency' ) );
 		}
 	}
 
@@ -346,7 +346,7 @@ final class AdminPage {
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'       => 'kairoseth-ai-transparency',
+					'page'       => 'ai-transparency',
 					'kat_notice' => $notice,
 				),
 				admin_url( 'tools.php' )
@@ -363,12 +363,12 @@ final class AdminPage {
 	 */
 	private function type_label( string $type ): string {
 		$labels = array(
-			AiSystem::TYPE_CHATBOT     => __( 'Chatbot', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_ASSISTANT   => __( 'Assistant', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_GENERATOR   => __( 'Content generator', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_RECOMMENDER => __( 'Recommender', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_CLASSIFIER  => __( 'Classifier', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_OTHER       => __( 'Other', 'kairoseth-ai-transparency' ),
+			AiSystem::TYPE_CHATBOT     => __( 'Chatbot', 'ai-transparency' ),
+			AiSystem::TYPE_ASSISTANT   => __( 'Assistant', 'ai-transparency' ),
+			AiSystem::TYPE_GENERATOR   => __( 'Content generator', 'ai-transparency' ),
+			AiSystem::TYPE_RECOMMENDER => __( 'Recommender', 'ai-transparency' ),
+			AiSystem::TYPE_CLASSIFIER  => __( 'Classifier', 'ai-transparency' ),
+			AiSystem::TYPE_OTHER       => __( 'Other', 'ai-transparency' ),
 		);
 
 		return $labels[ $type ] ?? $type;
@@ -381,7 +381,7 @@ final class AdminPage {
 	 * @return string
 	 */
 	private function review_label( string $review ): string {
-		return AiSystem::REVIEW_REVIEWED === $review ? __( 'Reviewed', 'kairoseth-ai-transparency' ) : __( 'Pending review', 'kairoseth-ai-transparency' );
+		return AiSystem::REVIEW_REVIEWED === $review ? __( 'Reviewed', 'ai-transparency' ) : __( 'Pending review', 'ai-transparency' );
 	}
 
 	/**
@@ -391,6 +391,6 @@ final class AdminPage {
 	 * @return string
 	 */
 	private function status_label( string $status ): string {
-		return AiSystem::STATUS_ARCHIVED === $status ? __( 'Archived', 'kairoseth-ai-transparency' ) : __( 'Active', 'kairoseth-ai-transparency' );
+		return AiSystem::STATUS_ARCHIVED === $status ? __( 'Archived', 'ai-transparency' ) : __( 'Active', 'ai-transparency' );
 	}
 }

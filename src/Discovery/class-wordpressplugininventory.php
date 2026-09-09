@@ -14,6 +14,9 @@ final class WordPressPluginInventory {
 	/**
 	 * Observe all installed WordPress plugins in deterministic basename order.
 	 *
+	 * Malformed/incomplete third-party plugin headers are skipped instead of
+	 * breaking the entire discovery screen.
+	 *
 	 * @return PluginObservation[]
 	 */
 	public function observations(): array {
@@ -34,12 +37,19 @@ final class WordPressPluginInventory {
 
 		foreach ( $plugins as $plugin_file => $plugin_data ) {
 			$plugin_file = str_replace( '\\', '/', (string) $plugin_file );
-			$is_active   = in_array( $plugin_file, $active_plugins, true ) || in_array( $plugin_file, $network_plugins, true );
+			$name        = isset( $plugin_data['Name'] ) ? trim( (string) $plugin_data['Name'] ) : '';
+			$version     = isset( $plugin_data['Version'] ) ? trim( (string) $plugin_data['Version'] ) : '';
+
+			if ( '' === $plugin_file || '' === $name || '' === $version ) {
+				continue;
+			}
+
+			$is_active = in_array( $plugin_file, $active_plugins, true ) || in_array( $plugin_file, $network_plugins, true );
 
 			$observations[] = new PluginObservation(
 				$plugin_file,
-				isset( $plugin_data['Name'] ) ? (string) $plugin_data['Name'] : '',
-				isset( $plugin_data['Version'] ) ? (string) $plugin_data['Version'] : '',
+				$name,
+				$version,
 				isset( $plugin_data['TextDomain'] ) ? (string) $plugin_data['TextDomain'] : '',
 				$is_active
 			);

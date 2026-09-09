@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Domain: kairoseth-ai-transparency\n"
+"X-Domain: ai-transparency\n"
 
 msgid "Kairoseth AI Transparency"
 msgstr ""
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Maintain a local inventory of AI systems used by this WordPress site."
 msgstr ""
 
-msgid "Registry data stays in this WordPress site and is not sent to Kairoseth automatically."
+msgid "Registry data stays in this WordPress site and is not sent to any external service automatically."
 msgstr ""
 
 msgid "AI Systems Registry"

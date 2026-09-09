@@ -1,6 +1,6 @@
 # Kairoseth AI Transparency — Implementation Architecture
 
-Status: active development — Phase 2 closed, Phase 3 deterministic discovery active  
+Status: active development — Phase 3 deterministic discovery closed; Phase 4 unblocked  
 Last reviewed: 9 September 2026
 
 ## Product boundary
@@ -56,7 +56,7 @@ AI-Transparency/
 │   │   ├── class-discoveryresult.php
 │   │   ├── class-aienginedetector.php
 │   │   └── class-wordpressplugininventory.php
-│   ├── Evidence/                  later phase
+│   ├── Evidence/                  Phase 4
 │   ├── Disclosure/                later phase
 │   └── Export/                    later phase
 ├── assets/
@@ -191,7 +191,7 @@ Discovery never writes automatically.
 
 #### AI Engine detector v1
 
-First validated boundary:
+Accepted boundary:
 
 ```text
 plugin file: ai-engine/ai-engine.php
@@ -217,17 +217,22 @@ interaction_disclosure_required: false
 
 This prevents plugin presence from being misrepresented as evidence that a chatbot or other specific AI workflow is actually in use.
 
-Implementation/acceptance contract: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).
+Accepted implementation/acceptance contract: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).  
+Runtime evidence: [`PHASE3_RUNTIME_EVIDENCE.md`](PHASE3_RUNTIME_EVIDENCE.md).
 
-### Future evidence/findings
+### Readiness findings / evidence — Phase 4
 
-A future finding must distinguish:
+Phase 4 is unblocked but not yet implemented.
+
+Every finding must keep three evidence classes distinct:
 
 ```text
-FACT        — what was observed
-DECLARATION — what an administrator stated
+FACT        — what was technically observed
+DECLARATION — what an administrator explicitly stated
 GUIDANCE    — what should be reviewed or implemented
 ```
+
+The planned finding model will be deterministic, reference the relevant system/evidence source and never represent a finding as an automatic legal decision or certification.
 
 ### Future disclosure tooling
 
@@ -238,7 +243,7 @@ Disclosure components will only act on explicitly configured/supported workflows
 - Requires WordPress: 6.6+
 - Tested-up-to target: 7.1
 - Requires PHP: 7.4+
-- Phase 3 AI Engine runtime fixture: AI Engine 3.7.7, which itself requires PHP 8.1+
+- Accepted Phase 3 AI Engine runtime fixture: AI Engine 3.7.7, which itself requires PHP 8.1+
 
 The plugin remains PHP 7.4 compatible; the AI Engine discovery fixture runs in the dedicated WordPress 7.1 / PHP 8.3 acceptance lane.
 
@@ -297,5 +302,6 @@ Repository-controlled failures use `bin/run-with-diagnostics.sh` and upload `.ci
 
 - Phase 1: closed.
 - Phase 2 Persistent AI Systems Registry: closed and verified on `main`.
-- Phase 3 Deterministic Discovery: active; first AI Engine detector under acceptance.
+- Phase 3 Deterministic Discovery: closed and verified on `main`.
+- Phase 4 Readiness Findings & Evidence: unblocked, not started.
 - Later phases: not started.

@@ -23,41 +23,85 @@ final class Finding {
 	public const DECLARATION_NONE                = '';
 	public const DECLARATION_DISCLOSURE_REQUIRED = 'interaction_disclosure_required';
 
-	public const GUIDANCE_COMPLETE_REVIEW     = 'complete_system_review';
-	public const GUIDANCE_DOCUMENT_CONTEXT    = 'document_interaction_context';
-	public const GUIDANCE_VERIFY_DISCLOSURE   = 'verify_disclosure_implementation';
+	public const GUIDANCE_COMPLETE_REVIEW   = 'complete_system_review';
+	public const GUIDANCE_DOCUMENT_CONTEXT  = 'document_interaction_context';
+	public const GUIDANCE_VERIFY_DISCLOSURE = 'verify_disclosure_implementation';
 
-	/** @var string */
+	/**
+	 * Stable finding identifier.
+	 *
+	 * @var string
+	 */
 	private $id;
 
-	/** @var string */
+	/**
+	 * Stable rule identifier.
+	 *
+	 * @var string
+	 */
 	private $rule_id;
 
-	/** @var string */
+	/**
+	 * Finding category.
+	 *
+	 * @var string
+	 */
 	private $category;
 
-	/** @var string */
+	/**
+	 * Technical review priority.
+	 *
+	 * @var string
+	 */
 	private $priority;
 
-	/** @var string */
+	/**
+	 * Subject AI system identifier.
+	 *
+	 * @var string
+	 */
 	private $subject_system_id;
 
-	/** @var string */
+	/**
+	 * Subject AI system display name.
+	 *
+	 * @var string
+	 */
 	private $subject_system_name;
 
-	/** @var string */
+	/**
+	 * Semantic observed-fact presentation code.
+	 *
+	 * @var string
+	 */
 	private $fact_code;
 
-	/** @var string */
+	/**
+	 * Semantic administrator-declaration presentation code.
+	 *
+	 * @var string
+	 */
 	private $declaration_code;
 
-	/** @var string */
+	/**
+	 * Semantic technical-guidance presentation code.
+	 *
+	 * @var string
+	 */
 	private $guidance_code;
 
-	/** @var string */
+	/**
+	 * Stable signature of rule-relevant evidence.
+	 *
+	 * @var string
+	 */
 	private $evidence_signature;
 
-	/** @var string */
+	/**
+	 * Finding generation timestamp.
+	 *
+	 * @var string
+	 */
 	private $generated_at;
 
 	/**
@@ -122,57 +166,101 @@ final class Finding {
 		$this->generated_at        = $generated_at;
 	}
 
-	/** Get stable finding id. @return string */
+	/**
+	 * Get the stable finding identifier.
+	 *
+	 * @return string
+	 */
 	public function id(): string {
 		return $this->id;
 	}
 
-	/** Get rule id. @return string */
+	/**
+	 * Get the rule identifier.
+	 *
+	 * @return string
+	 */
 	public function rule_id(): string {
 		return $this->rule_id;
 	}
 
-	/** Get category. @return string */
+	/**
+	 * Get the finding category.
+	 *
+	 * @return string
+	 */
 	public function category(): string {
 		return $this->category;
 	}
 
-	/** Get priority. @return string */
+	/**
+	 * Get the technical priority.
+	 *
+	 * @return string
+	 */
 	public function priority(): string {
 		return $this->priority;
 	}
 
-	/** Get subject system id. @return string */
+	/**
+	 * Get the subject system identifier.
+	 *
+	 * @return string
+	 */
 	public function subject_system_id(): string {
 		return $this->subject_system_id;
 	}
 
-	/** Get subject system name. @return string */
+	/**
+	 * Get the subject system display name.
+	 *
+	 * @return string
+	 */
 	public function subject_system_name(): string {
 		return $this->subject_system_name;
 	}
 
-	/** Get fact code. @return string */
+	/**
+	 * Get the semantic fact code.
+	 *
+	 * @return string
+	 */
 	public function fact_code(): string {
 		return $this->fact_code;
 	}
 
-	/** Get declaration code. @return string */
+	/**
+	 * Get the administrator declaration code.
+	 *
+	 * @return string
+	 */
 	public function declaration_code(): string {
 		return $this->declaration_code;
 	}
 
-	/** Get guidance code. @return string */
+	/**
+	 * Get the technical guidance code.
+	 *
+	 * @return string
+	 */
 	public function guidance_code(): string {
 		return $this->guidance_code;
 	}
 
-	/** Get evidence signature. @return string */
+	/**
+	 * Get the stable evidence signature.
+	 *
+	 * @return string
+	 */
 	public function evidence_signature(): string {
 		return $this->evidence_signature;
 	}
 
-	/** Get generation timestamp. @return string */
+	/**
+	 * Get the generation timestamp.
+	 *
+	 * @return string
+	 */
 	public function generated_at(): string {
 		return $this->generated_at;
 	}

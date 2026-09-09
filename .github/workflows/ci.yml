@@ -175,10 +175,10 @@ jobs:
         run: bash bin/run-with-diagnostics.sh "WordPress single-site start" -- npm exec -- wp-env start
 
       - name: Verify production plugin activation
-        run: bash bin/run-with-diagnostics.sh "WordPress plugin activation" -- npm exec -- wp-env run cli "wp plugin is-active ai-transparency"
+        run: bash bin/run-with-diagnostics.sh "WordPress plugin activation" -- npm exec -- wp-env run cli -- wp plugin is-active ai-transparency
 
       - name: Run real migration smoke
-        run: bash bin/run-with-diagnostics.sh "WordPress migration smoke" -- npm exec -- wp-env run cli "wp eval-file wp-content/ai-transparency-runtime-tests/single-site-smoke.php"
+        run: bash bin/run-with-diagnostics.sh "WordPress migration smoke" -- npm exec -- wp-env run cli -- wp eval-file wp-content/ai-transparency-runtime-tests/single-site-smoke.php
 
       - name: Configure ephemeral runtime users
         shell: bash
@@ -186,8 +186,8 @@ jobs:
           set -euo pipefail
           ADMIN_PASS="$(openssl rand -hex 18)"
           EDITOR_PASS="$(openssl rand -hex 18)"
-          npm exec -- wp-env run cli "wp user update admin --user_pass=${ADMIN_PASS}"
-          npm exec -- wp-env run cli "wp user create phase2_editor phase2-editor@example.test --role=editor --user_pass=${EDITOR_PASS}"
+          npm exec -- wp-env run cli -- wp user update admin --user_pass="${ADMIN_PASS}"
+          npm exec -- wp-env run cli -- wp user create phase2_editor phase2-editor@example.test --role=editor --user_pass="${EDITOR_PASS}"
           {
             echo "WP_TEST_ADMIN_USER=admin"
             echo "WP_TEST_ADMIN_PASS=${ADMIN_PASS}"
@@ -210,7 +210,8 @@ jobs:
       - name: Run real Multisite isolation smoke
         run: >-
           bash bin/run-with-diagnostics.sh "WordPress Multisite isolation" --
-          npm exec -- wp-env run cli "wp eval-file wp-content/ai-transparency-runtime-tests/multisite-smoke.php" --config=.wp-env.multisite.json
+          npm exec -- wp-env run cli --config=.wp-env.multisite.json --
+          wp eval-file wp-content/ai-transparency-runtime-tests/multisite-smoke.php
 
       - name: Stop Multisite WordPress
         if: always()

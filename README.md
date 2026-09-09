@@ -1,112 +1,61 @@
-# Kairoseth AI Transparency
+# AI Transparency for WordPress
 
-**EU AI Act Readiness for WordPress**
+**Plugin:** Kairoseth AI Transparency  
+**Status:** pre-release development
 
 [English](#english) · [Español](#español)
-
-> **Status / Estado:** pre-release development / desarrollo pre-release. Phase 2 registry implementation is active; no stable WordPress.org release is claimed yet / la implementación del registro de Fase 2 está activa; todavía no se afirma una versión estable en WordPress.org.
 
 ---
 
 ## English
 
-Kairoseth AI Transparency is the first WordPress-first product in the Kairoseth Extensions portfolio. It helps WordPress site owners build a reviewable technical transparency workflow around AI systems used on their websites.
+Kairoseth AI Transparency is a WordPress plugin for maintaining a reviewable technical inventory of AI systems used on a website and, in later phases, supporting evidence-backed transparency and disclosure workflows.
 
-### Product identity
+### Plugin identity
 
 | Field | Value |
 |---|---|
-| Commercial name | **Kairoseth AI Transparency** |
-| SEO descriptor | **EU AI Act Readiness for WordPress** |
+| Plugin name | **Kairoseth AI Transparency** |
 | Technical slug | `ai-transparency` |
-| WordPress text domain | `kairoseth-ai-transparency` |
-| WordPress.org target slug | `kairoseth-ai-transparency` |
-| Commercial model | useful Free + Custom |
-| Public source license | MIT |
-| Custom work | separate private repositories |
-| Mandatory languages | English + Spanish, 100% customer-facing coverage |
+| WordPress text domain | `ai-transparency` |
+| WordPress.org target slug | `ai-transparency` |
+| Requires WordPress | 6.6+ |
+| Tested-up-to target | 7.1 |
+| Requires PHP | 7.4+ |
+| Languages | English + Spanish |
+| License | MIT |
 
-### Free product direction
+### Current functionality
 
-```text
-WordPress site
-    ↓
-AI Systems Registry
-    ↓
-deterministic discovery of supported integrations
-    ↓
-evidence-backed readiness findings
-    ↓
-AI interaction / content disclosure workflows
-    ↓
-local evidence export
-    ↓
-optional user-initiated Custom Request
-```
-
-The Free v1 direction includes:
-
-- a local AI Systems Registry;
-- deterministic discovery for explicitly supported AI integrations;
-- evidence-backed readiness findings;
-- accessible AI-interaction disclosure tooling;
-- explicit content/media declaration workflows where applicable and configured;
-- dated local evidence/export;
-- **100% English and Spanish customer-facing UX in every functional release**;
-- no mandatory Kairoseth account or automatic telemetry for the Free baseline.
-
-### Current implementation status
-
-Phase 2 currently provides a development implementation of the local AI Systems Registry under **Tools > AI Transparency**.
+The current development line includes a local **AI Systems Registry** under **Tools > AI Transparency**.
 
 An authorized administrator can:
 
-```text
-add AI system
-edit AI system
-set review status
-record interaction context
-configure interaction-disclosure state
-archive AI system
-```
+- add AI systems;
+- edit AI systems;
+- record the system type and interaction context;
+- set review status;
+- configure whether the recorded workflow requires an AI interaction disclosure;
+- archive records without deleting their history.
 
-Registry state is persisted locally in the current WordPress site's normal Options storage using a versioned schema. It does not use a network-wide Multisite option and does not send registry data to Kairoseth automatically.
+Registry data is stored locally using the WordPress Options API with a versioned schema. In Multisite, storage follows the current site/blog context rather than creating a network-wide registry.
 
-Phase 2 is **not closed yet**. Real WordPress/Multisite, unauthorized-role, responsive, accessibility and upgrade/migration acceptance must still pass before Phase 3 begins. See [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md).
+### Privacy and data handling
 
-### Important boundary
+The current registry does not automatically send its data to any external service. Core registry state stays inside the WordPress installation unless a future feature explicitly documents and requires an external connection.
 
-This software provides **technical readiness, workflow and evidence tooling**. It does **not** certify or guarantee legal compliance with the EU AI Act or any other law.
+### Important limitation
 
-Kairoseth AI Transparency intentionally does **not** attempt generic probabilistic detection of whether arbitrary text was written by AI.
+This plugin provides technical readiness, workflow and evidence tooling. It does **not** certify or guarantee legal compliance with the EU AI Act or any other law.
 
-### Engineering baseline
+It also does not attempt generic probabilistic detection of whether arbitrary text was written by AI.
 
-The repository contains:
+### Installation
 
-- WordPress plugin loader and production autoloader;
-- registry administration under **Tools > AI Transparency**;
-- pure PHP `AiSystem` domain model and deterministic `AiSystemsRegistry`;
-- versioned registry schema and site-local WordPress Options persistence adapter;
-- migration and simulated site-isolation tests;
-- PHPUnit, WordPress Coding Standards and PHP 7.4+ compatibility gates;
-- PHP syntax matrix;
-- official WordPress Plugin Check against the generated production package;
-- mandatory **EN/ES 100% coverage** CI gate;
-- bundled Spanish gettext catalog compiled into the production package;
-- actionable CI diagnostic runner and downloadable failure artifacts;
-- durable engineering failure/solution memory;
-- security, contribution, engineering, bilingual and trademark policies;
-- WordPress.org-style `readme.txt`.
-
-### Development requirements
-
-- WordPress: **6.6+** development baseline
-- Current tested-up-to target: **7.1**
-- PHP: **7.4+**
-- Composer 2 for development tooling
-
-Compatibility becomes a release claim only after the corresponding acceptance evidence is complete.
+1. Upload the plugin directory to `/wp-content/plugins/` or install the packaged ZIP.
+2. Activate **Kairoseth AI Transparency** from the WordPress Plugins screen.
+3. Open **Tools > AI Transparency**.
+4. Add and maintain the site's AI systems in the local registry.
 
 ### Development
 
@@ -116,146 +65,84 @@ composer verify
 bash bin/build-plugin.sh
 ```
 
-`composer verify` includes coding standards, tests and the bilingual coverage gate. The build compiles the Spanish catalog and produces `build/kairoseth-ai-transparency/`, which is the release-validation authority.
-
-### Mandatory engineering policies
-
-- [`docs/ENGINEERING_RULES.md`](docs/ENGINEERING_RULES.md)
-- [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
-- [`docs/engineering-failures/README.md`](docs/engineering-failures/README.md)
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- [`docs/ROADMAP.md`](docs/ROADMAP.md)
-- [`SECURITY.md`](SECURITY.md)
-- [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- [`TRADEMARKS.md`](TRADEMARKS.md)
-
-The broader product/commercial contracts remain in `Emmakex/kairoseth-platform` under the Kairoseth Extensions and AI Transparency documentation.
-
-### Commercial model
+The production package is generated at:
 
 ```text
-Free public plugin
-→ user finds a real need
-→ contextual Custom Request
-→ separate private customer repository
-→ bespoke integration / remediation / workflow
+build/ai-transparency/
 ```
 
-A Custom engagement does not make this Free repository private and does not revoke rights already granted under MIT.
+### Validation
 
-### WordPress.org direction
+The repository currently validates:
 
-The project is built toward WordPress Plugin Directory expectations: GPL-compatible source, human-readable code, no trialware, no non-consensual tracking, no dashboard hijacking and no promotional links injected into the public site without permission.
+- WordPress Coding Standards;
+- PHPUnit tests;
+- PHP 7.4+ compatibility;
+- PHP syntax across the configured version matrix;
+- 100% EN/ES runtime-string coverage;
+- compiled Spanish gettext catalog;
+- official WordPress Plugin Check against the generated production package.
 
-MIT is GPL-compatible, but every bundled dependency and asset will be reviewed before directory submission.
+### Project documentation
 
-### Security, license and brand
-
-Do not publish exploitable vulnerability details or real customer secrets/data in public issues. See [`SECURITY.md`](SECURITY.md).
-
-Source code is licensed under the [MIT License](LICENSE). Kairoseth brand and trademark rights are separate from the source-code license; see [`TRADEMARKS.md`](TRADEMARKS.md).
+- [`docs/ROADMAP.md`](docs/ROADMAP.md)
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
+- [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
+- [`SECURITY.md`](SECURITY.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ---
 
 ## Español
 
-Kairoseth AI Transparency es el primer producto WordPress-first del catálogo Kairoseth Extensions. Ayuda a propietarios y administradores de sitios WordPress a construir un flujo técnico revisable de transparencia alrededor de los sistemas de IA utilizados en sus webs.
+Kairoseth AI Transparency es un plugin para WordPress orientado a mantener un inventario técnico y revisable de los sistemas de IA utilizados en una web y, en fases posteriores, facilitar flujos de transparencia y evidencia respaldados por datos observables.
 
-### Identidad del producto
+### Identidad del plugin
 
 | Campo | Valor |
 |---|---|
-| Nombre comercial | **Kairoseth AI Transparency** |
-| Descriptor SEO | **EU AI Act Readiness for WordPress** |
+| Nombre del plugin | **Kairoseth AI Transparency** |
 | Slug técnico | `ai-transparency` |
-| Text domain WordPress | `kairoseth-ai-transparency` |
-| Slug objetivo WordPress.org | `kairoseth-ai-transparency` |
-| Modelo comercial | Free útil + Custom |
-| Licencia pública | MIT |
-| Trabajo Custom | repositorios privados separados |
-| Idiomas obligatorios | inglés + español, cobertura customer-facing 100% |
+| Text domain WordPress | `ai-transparency` |
+| Slug objetivo WordPress.org | `ai-transparency` |
+| Requiere WordPress | 6.6+ |
+| Target tested-up-to | 7.1 |
+| Requiere PHP | 7.4+ |
+| Idiomas | inglés + español |
+| Licencia | MIT |
 
-### Dirección del producto Free
+### Funcionalidad actual
 
-```text
-sitio WordPress
-    ↓
-AI Systems Registry
-    ↓
-descubrimiento determinista de integraciones soportadas
-    ↓
-findings de readiness respaldados por evidencia
-    ↓
-flujos de transparencia de interacción/contenido IA
-    ↓
-export local de evidencia
-    ↓
-Custom Request opcional iniciado por el usuario
-```
-
-La dirección Free v1 incluye:
-
-- AI Systems Registry local;
-- descubrimiento determinista de integraciones IA soportadas explícitamente;
-- findings de readiness respaldados por evidencia;
-- tooling accesible de avisos de interacción con IA;
-- flujos explícitos de declaración de contenido/media cuando apliquen y estén configurados;
-- evidencia/export local fechado;
-- **UX customer-facing 100% en inglés y español en cada release funcional**;
-- sin cuenta Kairoseth obligatoria ni telemetría automática en el baseline Free.
-
-### Estado actual de implementación
-
-La Fase 2 dispone actualmente de una implementación de desarrollo del AI Systems Registry local en **Herramientas > AI Transparency**.
+La línea actual de desarrollo incluye un **AI Systems Registry** local en **Herramientas > AI Transparency**.
 
 Un administrador autorizado puede:
 
-```text
-añadir sistema de IA
-editar sistema de IA
-marcar estado de revisión
-guardar contexto de interacción
-configurar el estado del aviso de interacción
-archivar sistema de IA
-```
+- añadir sistemas de IA;
+- editar sistemas de IA;
+- registrar el tipo de sistema y el contexto de interacción;
+- establecer el estado de revisión;
+- indicar si el flujo registrado requiere un aviso de interacción con IA;
+- archivar registros sin eliminar su historial.
 
-El registro se guarda localmente en el almacenamiento normal Options del sitio WordPress actual mediante un schema versionado. No usa una opción global de red Multisite ni envía automáticamente los datos del registro a Kairoseth.
+Los datos del registro se guardan localmente mediante la API Options de WordPress con un schema versionado. En Multisite, el almacenamiento sigue el contexto del sitio/blog actual y no crea un registro global de red.
 
-La Fase 2 **todavía no está cerrada**. Deben pasar la aceptación real de WordPress/Multisite, rechazo de roles no autorizados, responsive, accesibilidad y upgrade/migración antes de iniciar la Fase 3. Consulta [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md).
+### Privacidad y tratamiento de datos
+
+El registro actual no envía automáticamente sus datos a ningún servicio externo. El estado principal del registro permanece dentro de la instalación WordPress salvo que una función futura documente y requiera explícitamente una conexión externa.
 
 ### Límite importante
 
-Este software proporciona **readiness técnico, workflow y herramientas de evidencia**. **No certifica ni garantiza cumplimiento legal** del Reglamento de IA de la UE ni de ninguna otra norma.
+Este plugin proporciona readiness técnico, workflow y herramientas de evidencia. **No certifica ni garantiza cumplimiento legal** del Reglamento de IA de la UE ni de ninguna otra norma.
 
-Kairoseth AI Transparency tampoco intenta detectar probabilísticamente y de forma genérica si cualquier texto fue escrito por IA.
+Tampoco intenta detectar probabilísticamente y de forma genérica si cualquier texto fue escrito por IA.
 
-### Baseline de ingeniería
+### Instalación
 
-El repositorio contiene:
-
-- loader del plugin WordPress y autoloader de producción;
-- administración del registro en **Herramientas > AI Transparency**;
-- modelo PHP puro `AiSystem` y `AiSystemsRegistry` determinista;
-- schema versionado y adaptador de persistencia WordPress Options site-local;
-- tests de migración y aislamiento simulado por sitio;
-- PHPUnit, WordPress Coding Standards y gates de compatibilidad PHP 7.4+;
-- matriz de sintaxis PHP;
-- WordPress Plugin Check oficial sobre el paquete generado;
-- gate CI obligatorio de **cobertura EN/ES 100%**;
-- catálogo gettext español compilado dentro del paquete de producción;
-- runner de diagnósticos CI accionables y artefactos descargables de fallo;
-- memoria duradera de fallos/soluciones de ingeniería;
-- políticas de seguridad, contribución, ingeniería, bilingüismo y marca;
-- `readme.txt` estilo WordPress.org.
-
-### Requisitos de desarrollo
-
-- WordPress: baseline **6.6+**
-- Target actual tested-up-to: **7.1**
-- PHP: **7.4+**
-- Composer 2 para tooling de desarrollo
-
-La compatibilidad solo se convierte en claim de release cuando existe la evidencia de aceptación correspondiente.
+1. Sube el directorio del plugin a `/wp-content/plugins/` o instala el ZIP generado.
+2. Activa **Kairoseth AI Transparency** desde la pantalla de Plugins de WordPress.
+3. Abre **Herramientas > AI Transparency**.
+4. Añade y mantén los sistemas de IA del sitio en el registro local.
 
 ### Desarrollo
 
@@ -265,43 +152,29 @@ composer verify
 bash bin/build-plugin.sh
 ```
 
-`composer verify` incluye coding standards, tests y cobertura bilingüe. El build compila el catálogo español y genera `build/kairoseth-ai-transparency/`, que es la autoridad para la validación de release.
-
-### Políticas obligatorias de ingeniería
-
-- [`docs/ENGINEERING_RULES.md`](docs/ENGINEERING_RULES.md)
-- [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
-- [`docs/engineering-failures/README.md`](docs/engineering-failures/README.md)
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- [`docs/ROADMAP.md`](docs/ROADMAP.md)
-- [`SECURITY.md`](SECURITY.md)
-- [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- [`TRADEMARKS.md`](TRADEMARKS.md)
-
-Los contratos globales de producto/comercial permanecen en `Emmakex/kairoseth-platform`, dentro de la documentación de Kairoseth Extensions y AI Transparency.
-
-### Modelo comercial
+El paquete de producción se genera en:
 
 ```text
-plugin Free público
-→ el usuario encuentra una necesidad real
-→ Custom Request contextual
-→ repositorio privado separado del cliente
-→ integración / remediación / workflow a medida
+build/ai-transparency/
 ```
 
-Un proyecto Custom no convierte este repositorio Free en privado ni revoca los derechos ya concedidos bajo MIT.
+### Validación
 
-### Dirección WordPress.org
+El repositorio valida actualmente:
 
-El proyecto se construye para las expectativas del directorio WordPress: código GPL-compatible, legible, sin trialware, sin tracking no consentido, sin secuestro del dashboard y sin enlaces promocionales insertados en la web pública sin permiso.
+- WordPress Coding Standards;
+- tests PHPUnit;
+- compatibilidad PHP 7.4+;
+- sintaxis PHP en la matriz de versiones configurada;
+- cobertura 100% EN/ES de las cadenas runtime;
+- catálogo gettext español compilado;
+- WordPress Plugin Check oficial sobre el paquete de producción generado.
 
-MIT es compatible con GPL, pero cada dependencia y asset se revisará antes del envío al directorio.
+### Documentación del proyecto
 
-### Seguridad, licencia y marca
-
-No publiques vulnerabilidades explotables ni secretos/datos reales de clientes en issues públicos. Consulta [`SECURITY.md`](SECURITY.md).
-
-El código fuente usa [licencia MIT](LICENSE). Los derechos de marca Kairoseth son independientes de la licencia del código; consulta [`TRADEMARKS.md`](TRADEMARKS.md).
-
-Copyright © 2026 Kairoseth / Eduardo Yauri.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md)
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
+- [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
+- [`SECURITY.md`](SECURITY.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)

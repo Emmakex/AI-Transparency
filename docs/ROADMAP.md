@@ -86,23 +86,24 @@ Exit: complete.
 
 ## Phase 3 — Deterministic discovery
 
-Status: **active — first detector implementation: AI Engine 3.7.7.**
+Status: **closed — AI Engine 3.7.7 detector accepted, merged and verified on `main`.**
 
 Goal: discover only integrations for which the plugin can produce explainable and reproducible evidence.
 
-Detector contract:
+Accepted detector contract:
 
 ```text
 detector id
 supported integration/version boundary
 observed WordPress evidence
-source signature
+stable source signature
 discovered candidate
 explicit administrator review
+server-side re-observation
 no legal conclusion
 ```
 
-### First detector — AI Engine
+### First accepted detector — AI Engine
 
 Validated boundary:
 
@@ -114,56 +115,84 @@ version: 3.7.7
 active plugin required: yes
 ```
 
-Current workstream:
+Accepted:
 
 - [x] immutable WordPress `PluginObservation`
 - [x] deterministic `DiscoveryResult` with SHA-256 evidence signature
-- [x] AI Engine detector with exact 3.7.7 supported boundary
-- [x] unsupported-version result that cannot be auto-accepted
+- [x] exact AI Engine 3.7.7 supported boundary
+- [x] other versions reported outside validated boundary
+- [x] unrelated/inactive plugins ignored
 - [x] WordPress plugin inventory adapter
-- [x] **Tools → AI Discovery** admin review surface
-- [x] browser values are not accepted as discovery authority
+- [x] **Tools → AI Discovery** administrator review surface
+- [x] browser values are not discovery authority
 - [x] server re-observes WordPress before persistence
 - [x] explicit `manage_options` + nonce acceptance action
-- [x] discovered candidate enters registry as `other + discovered + pending review`
-- [x] EN/ES 100% discovery UI/catalog source
-- [x] unit tests for identity, active state, version boundary, signature and candidate semantics
-- [x] runtime CI fixture installs exact AI Engine 3.7.7 from WordPress.org
-- [x] Playwright path covers detection → evidence → explicit acceptance → registry
-- [ ] final PR-head CI green
-- [ ] WordPress Plugin Check green on exact package
-- [ ] runtime discovery acceptance green
-- [ ] PR merged to `main`
-- [ ] post-merge `main` verification green
-- [ ] blockers = 0
+- [x] candidate enters registry as `other + discovered + pending review`
+- [x] EN/ES 100% discovery UI/catalog
+- [x] deterministic unit tests
+- [x] exact WordPress.org AI Engine 3.7.7 runtime fixture
+- [x] Playwright detection → evidence → Add to registry → registry verification
+- [x] responsive/accessibility acceptance
+- [x] inherited Phase 2 migration/CRUD/permissions regressions green
+- [x] Multisite isolation green
+- [x] WordPress Plugin Check green
+- [x] PR #7 merged to `main`
+- [x] post-merge `main` CI green
+- [x] blockers = 0
 
-Implementation/acceptance details: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).
+Closure evidence:
 
-Exit: at least one real supported AI integration can be discovered, reviewed and added to the registry with deterministic tests, EN/ES coverage, merged code and green post-merge verification.
+```text
+Accepted PR head: af44fe2156bde2947519e78112ea1d7a39abb0ff
+Pre-merge CI: #68 / 34373934127
+Merged PR: #7
+Main merge commit: d595819a7a8f7d292bb23a7c919bec22f6138381
+Post-merge main CI: #69 / 34377130702
+```
+
+Implementation details: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).  
+Runtime evidence: [`PHASE3_RUNTIME_EVIDENCE.md`](PHASE3_RUNTIME_EVIDENCE.md).
+
+Exit: **complete.**
 
 ## Phase 4 — Readiness findings and evidence
 
-Status: **not started — blocked by Phase 3 closure.**
+Status: **not started — unblocked by Phase 3 closure.**
 
 Goal: convert registry/discovery state into evidence-backed technical findings.
 
-Planned categories:
-
-- interaction disclosure missing/review needed;
-- system record incomplete;
-- unsupported/unknown AI integration requiring manual review;
-- content/media declaration workflow missing where explicitly configured;
-- stale review/evidence.
-
-Every finding must separate:
+Planned first contract:
 
 ```text
-observed fact
-administrator declaration
-guidance
+Finding
+├ stable finding id
+├ category
+├ severity / priority
+├ subject system id
+├ FACT — observed technical evidence
+├ DECLARATION — explicit administrator state when relevant
+├ GUIDANCE — what should be reviewed or implemented
+├ source signature / evidence reference
+└ generated timestamp
 ```
 
-Exit: findings are reproducible, fully EN/ES customer-facing and never represented as automatic legal certification.
+Initial candidate categories:
+
+- system record incomplete / review needed;
+- configured interaction disclosure requires review;
+- unsupported/unknown AI integration requiring manual review;
+- stale review/evidence;
+- later: content/media declaration workflow missing only when explicitly configured.
+
+Rules:
+
+- findings must be deterministic and reproducible;
+- observed facts, administrator declarations and guidance must never be conflated;
+- a finding is not a legal decision or certification;
+- customer-facing findings ship EN/ES together;
+- no automatic external telemetry is introduced.
+
+Exit: at least one real registry/discovery state produces reproducible, bilingual findings with explicit evidence and no legal overclaim.
 
 ## Phase 5 — Disclosure tooling
 

@@ -33,6 +33,8 @@ The current development line includes:
 - deterministic **AI Discovery** under **Tools > AI Discovery**;
 - deterministic technical **AI Readiness** findings under **Tools > AI Readiness**.
 
+Phases 1–4 are accepted and verified on `main`. Phase 5 — Disclosure Tooling — is unblocked but has not started.
+
 An authorized administrator can:
 
 - add, edit, review and archive AI system records;
@@ -111,7 +113,10 @@ The repository currently validates:
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
 - [`docs/PHASE3_DISCOVERY_IMPLEMENTATION.md`](docs/PHASE3_DISCOVERY_IMPLEMENTATION.md)
+- [`docs/PHASE3_RUNTIME_EVIDENCE.md`](docs/PHASE3_RUNTIME_EVIDENCE.md)
 - [`docs/PHASE4_FINDINGS_IMPLEMENTATION.md`](docs/PHASE4_FINDINGS_IMPLEMENTATION.md)
+- [`docs/PHASE4_ACCEPTANCE.md`](docs/PHASE4_ACCEPTANCE.md)
+- [`docs/PHASE4_RUNTIME_EVIDENCE.md`](docs/PHASE4_RUNTIME_EVIDENCE.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)
@@ -143,6 +148,8 @@ La línea actual de desarrollo incluye:
 - un **AI Systems Registry** local en **Herramientas > AI Transparency**;
 - **AI Discovery** determinista en **Herramientas > AI Discovery**;
 - hallazgos técnicos deterministas de **AI Readiness** en **Herramientas > AI Readiness**.
+
+Las Fases 1–4 están aceptadas y verificadas en `main`. La Fase 5 — Disclosure Tooling — está desbloqueada, pero todavía no ha comenzado.
 
 Un administrador autorizado puede:
 
@@ -222,7 +229,10 @@ El repositorio valida actualmente:
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md)
 - [`docs/PHASE3_DISCOVERY_IMPLEMENTATION.md`](docs/PHASE3_DISCOVERY_IMPLEMENTATION.md)
+- [`docs/PHASE3_RUNTIME_EVIDENCE.md`](docs/PHASE3_RUNTIME_EVIDENCE.md)
 - [`docs/PHASE4_FINDINGS_IMPLEMENTATION.md`](docs/PHASE4_FINDINGS_IMPLEMENTATION.md)
+- [`docs/PHASE4_ACCEPTANCE.md`](docs/PHASE4_ACCEPTANCE.md)
+- [`docs/PHASE4_RUNTIME_EVIDENCE.md`](docs/PHASE4_RUNTIME_EVIDENCE.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)

@@ -13,57 +13,105 @@ use InvalidArgumentException;
  * Represents one locally known AI system and its evidence source.
  */
 final class AiSystem {
-	public const TYPE_CHATBOT = 'chatbot';
-	public const TYPE_ASSISTANT = 'assistant';
-	public const TYPE_GENERATOR = 'generator';
+	public const TYPE_CHATBOT     = 'chatbot';
+	public const TYPE_ASSISTANT   = 'assistant';
+	public const TYPE_GENERATOR   = 'generator';
 	public const TYPE_RECOMMENDER = 'recommender';
-	public const TYPE_CLASSIFIER = 'classifier';
-	public const TYPE_OTHER = 'other';
+	public const TYPE_CLASSIFIER  = 'classifier';
+	public const TYPE_OTHER       = 'other';
 
-	public const SOURCE_MANUAL = 'manual';
+	public const SOURCE_MANUAL     = 'manual';
 	public const SOURCE_DISCOVERED = 'discovered';
-	public const SOURCE_IMPORTED = 'imported';
+	public const SOURCE_IMPORTED   = 'imported';
 
-	public const STATUS_ACTIVE = 'active';
+	public const STATUS_ACTIVE   = 'active';
 	public const STATUS_ARCHIVED = 'archived';
 
-	public const REVIEW_PENDING = 'pending';
+	public const REVIEW_PENDING  = 'pending';
 	public const REVIEW_REVIEWED = 'reviewed';
 
-	/** @var string */
+	/**
+	 * Stable local identifier.
+	 *
+	 * @var string
+	 */
 	private $id;
 
-	/** @var string */
+	/**
+	 * Human-readable system name.
+	 *
+	 * @var string
+	 */
 	private $name;
 
-	/** @var string */
+	/**
+	 * System taxonomy type.
+	 *
+	 * @var string
+	 */
 	private $type;
 
-	/** @var string */
+	/**
+	 * Evidence/source identifier.
+	 *
+	 * @var string
+	 */
 	private $source;
 
-	/** @var bool */
+	/**
+	 * Whether the configured workflow requires interaction disclosure.
+	 *
+	 * @var bool
+	 */
 	private $interaction_disclosure_required;
 
-	/** @var string */
+	/**
+	 * Origin category for the record.
+	 *
+	 * @var string
+	 */
 	private $source_origin;
 
-	/** @var string */
+	/**
+	 * Lifecycle status.
+	 *
+	 * @var string
+	 */
 	private $status;
 
-	/** @var string */
+	/**
+	 * Administrator review status.
+	 *
+	 * @var string
+	 */
 	private $review_status;
 
-	/** @var string */
+	/**
+	 * Description of where the AI system is used.
+	 *
+	 * @var string
+	 */
 	private $interaction_context;
 
-	/** @var string */
+	/**
+	 * Creation timestamp.
+	 *
+	 * @var string
+	 */
 	private $created_at;
 
-	/** @var string */
+	/**
+	 * Last update timestamp.
+	 *
+	 * @var string
+	 */
 	private $updated_at;
 
-	/** @var string */
+	/**
+	 * Last review timestamp.
+	 *
+	 * @var string
+	 */
 	private $reviewed_at;
 
 	/**
@@ -163,62 +211,110 @@ final class AiSystem {
 		return self::from_array( array_merge( $this->to_array(), $changes ) );
 	}
 
-	/** @return string */
+	/**
+	 * Get the stable local identifier.
+	 *
+	 * @return string
+	 */
 	public function id(): string {
 		return $this->id;
 	}
 
-	/** @return string */
+	/**
+	 * Get the human-readable name.
+	 *
+	 * @return string
+	 */
 	public function name(): string {
 		return $this->name;
 	}
 
-	/** @return string */
+	/**
+	 * Get the taxonomy type.
+	 *
+	 * @return string
+	 */
 	public function type(): string {
 		return $this->type;
 	}
 
-	/** @return string */
+	/**
+	 * Get the evidence/source identifier.
+	 *
+	 * @return string
+	 */
 	public function source(): string {
 		return $this->source;
 	}
 
-	/** @return bool */
+	/**
+	 * Whether interaction disclosure is configured as required.
+	 *
+	 * @return bool
+	 */
 	public function interaction_disclosure_required(): bool {
 		return $this->interaction_disclosure_required;
 	}
 
-	/** @return string */
+	/**
+	 * Get the source origin category.
+	 *
+	 * @return string
+	 */
 	public function source_origin(): string {
 		return $this->source_origin;
 	}
 
-	/** @return string */
+	/**
+	 * Get lifecycle status.
+	 *
+	 * @return string
+	 */
 	public function status(): string {
 		return $this->status;
 	}
 
-	/** @return string */
+	/**
+	 * Get review status.
+	 *
+	 * @return string
+	 */
 	public function review_status(): string {
 		return $this->review_status;
 	}
 
-	/** @return string */
+	/**
+	 * Get interaction context.
+	 *
+	 * @return string
+	 */
 	public function interaction_context(): string {
 		return $this->interaction_context;
 	}
 
-	/** @return string */
+	/**
+	 * Get creation timestamp.
+	 *
+	 * @return string
+	 */
 	public function created_at(): string {
 		return $this->created_at;
 	}
 
-	/** @return string */
+	/**
+	 * Get last update timestamp.
+	 *
+	 * @return string
+	 */
 	public function updated_at(): string {
 		return $this->updated_at;
 	}
 
-	/** @return string */
+	/**
+	 * Get last review timestamp.
+	 *
+	 * @return string
+	 */
 	public function reviewed_at(): string {
 		return $this->reviewed_at;
 	}
@@ -246,7 +342,7 @@ final class AiSystem {
 	}
 
 	/**
-	 * Supported AI system types.
+	 * Return supported AI system types.
 	 *
 	 * @return string[]
 	 */
@@ -261,17 +357,29 @@ final class AiSystem {
 		);
 	}
 
-	/** @return string[] */
+	/**
+	 * Return supported record source origins.
+	 *
+	 * @return string[]
+	 */
 	public static function supported_source_origins(): array {
 		return array( self::SOURCE_MANUAL, self::SOURCE_DISCOVERED, self::SOURCE_IMPORTED );
 	}
 
-	/** @return string[] */
+	/**
+	 * Return supported lifecycle statuses.
+	 *
+	 * @return string[]
+	 */
 	public static function supported_statuses(): array {
 		return array( self::STATUS_ACTIVE, self::STATUS_ARCHIVED );
 	}
 
-	/** @return string[] */
+	/**
+	 * Return supported administrator review statuses.
+	 *
+	 * @return string[]
+	 */
 	public static function supported_review_statuses(): array {
 		return array( self::REVIEW_PENDING, self::REVIEW_REVIEWED );
 	}

@@ -111,9 +111,9 @@ final class DisclosurePage {
 						<tbody>
 							<?php foreach ( $registry->all() as $system ) : ?>
 								<?php
-								$reasons  = $this->engine->reason_codes( $system );
-								$is_ready = empty( $reasons );
-								$edit_url = add_query_arg(
+								$reasons   = $this->engine->reason_codes( $system );
+								$is_ready  = empty( $reasons );
+								$edit_url  = add_query_arg(
 									array(
 										'page'   => 'ai-transparency',
 										'system' => $system->id(),

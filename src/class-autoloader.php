@@ -36,14 +36,8 @@ final class Autoloader {
 		$relative_class = substr( $fully_qualified_class_name, strlen( $prefix ) );
 		$segments       = explode( '\\', $relative_class );
 		$class_name     = array_pop( $segments );
-		$file_stem      = preg_replace( '/(?<!^)[A-Z]/', '-$0', $class_name );
-
-		if ( null === $file_stem ) {
-			return;
-		}
-
-		$file_name = 'class-' . strtolower( $file_stem ) . '.php';
-		$directory = __DIR__;
+		$file_name      = 'class-' . strtolower( $class_name ) . '.php';
+		$directory      = __DIR__;
 
 		if ( ! empty( $segments ) ) {
 			$directory .= '/' . implode( '/', $segments );

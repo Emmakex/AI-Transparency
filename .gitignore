@@ -8,3 +8,4 @@ composer.lock
 *.zip
 build/
 dist/
+.ci-diagnostics/

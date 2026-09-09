@@ -19,12 +19,12 @@ Goal: establish a safe, reviewable WordPress plugin foundation with public CI.
 - [x] PHP 7.4+ compatibility gate
 - [x] PHP syntax matrix
 - [x] official WordPress Plugin Check workflow
+- [x] deterministic production package at `build/kairoseth-ai-transparency`
 - [x] `readme.txt`
 - [x] security/contribution/trademark policies
-- [ ] CI green on bootstrap PR
-- [ ] merge to `main`
+- [x] required bootstrap PR CI green
 
-Exit: bootstrap PR merged with required public CI evidence.
+Exit: bootstrap PR merged with required public CI evidence. The GitHub PR/merge record is the canonical evidence for the merge itself and is intentionally not represented by a pre-merge checkbox here.
 
 ## Phase 2 — Persistent AI Systems Registry
 

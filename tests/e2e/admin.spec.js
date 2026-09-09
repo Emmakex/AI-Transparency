@@ -26,7 +26,48 @@ function rowForSystem(page, systemName) {
 
 test.describe.configure({ mode: 'serial' });
 
-test.describe('Phase 2 WordPress runtime acceptance', () => {
+test.describe('WordPress runtime acceptance', () => {
+  test('AI Engine 3.7.7 is discovered with explainable evidence and requires explicit registry acceptance', async ({ page }) => {
+    await login(page, adminUser, adminPass);
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-discovery');
+
+    await expect(page.getByRole('heading', { level: 1, name: 'AI Discovery' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'AI Engine', exact: true })).toBeVisible();
+    await expect(page.getByRole('cell', { name: '3.7.7', exact: true }).first()).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Supported', exact: true })).toBeVisible();
+    await expect(page.getByText('ai-engine/ai-engine.php', { exact: true })).toBeVisible();
+    await expect(page.getByText('ai-engine', { exact: true }).last()).toBeVisible();
+
+    const signature = page.getByRole('row').filter({ hasText: 'Evidence signature' }).locator('code');
+    await expect(signature).toHaveText(/^[a-f0-9]{64}$/);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    const horizontalOverflow = await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(horizontalOverflow).toBeLessThanOrEqual(1);
+
+    const accessibility = await new AxeBuilder({ page })
+      .include('.ai-transparency-admin')
+      .analyze();
+    const blockingViolations = accessibility.violations.filter((violation) =>
+      ['critical', 'serious'].includes(violation.impact)
+    );
+    expect(blockingViolations, JSON.stringify(blockingViolations, null, 2)).toEqual([]);
+
+    await page.getByRole('button', { name: 'Add to registry' }).click();
+    await expect(page.locator('.notice-success')).toContainText(
+      'Detected AI integration added to the registry for administrator review.'
+    );
+    await expect(page.getByText('Already in registry', { exact: true })).toBeVisible();
+
+    await page.goto('/wp-admin/tools.php?page=ai-transparency');
+    const row = rowForSystem(page, 'AI Engine');
+    await expect(row).toContainText('Other');
+    await expect(row).toContainText('Pending review');
+    await expect(row).toContainText('Active');
+  });
+
   test('administrator can add, edit, review and archive a registry record', async ({ page }) => {
     const runId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
     const systemName = `Phase 2 Runtime Assistant ${runId}`;
@@ -104,11 +145,15 @@ test.describe('Phase 2 WordPress runtime acceptance', () => {
     ).toEqual([]);
   });
 
-  test('non-administrator cannot access the registry administration surface', async ({ page }) => {
+  test('non-administrator cannot access registry or discovery administration surfaces', async ({ page }) => {
     await login(page, editorUser, editorPass);
-    await page.goto('/wp-admin/tools.php?page=ai-transparency');
 
+    await page.goto('/wp-admin/tools.php?page=ai-transparency');
     await expect(page.locator('body')).not.toContainText('AI Systems Registry');
+    await expect(page.locator('body')).toContainText(/not allowed|permission/i);
+
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-discovery');
+    await expect(page.locator('body')).not.toContainText('Deterministic discovery');
     await expect(page.locator('body')).toContainText(/not allowed|permission/i);
   });
 });

@@ -3,6 +3,31 @@
 Status: active development  
 Last reviewed: 9 September 2026
 
+## Cross-cutting release invariants
+
+These rules apply to every phase and are blocking when relevant:
+
+```text
+English + Spanish 100% customer-facing coverage
++ WordPress server-authoritative capabilities/nonces
++ local-first/privacy boundaries
++ responsive/accessibility UX acceptance
++ minimum sufficient validation
++ actionable failure diagnostics
++ engineering failure-memory consultation/update
++ feature branch → PR → CI → merge → verification
++ finish current phase before advancing
+```
+
+Canonical policies:
+
+- `docs/ENGINEERING_RULES.md`
+- `docs/BILINGUAL_EN_ES_POLICY.md`
+- `docs/CI_VALIDATION_POLICY.md`
+- `docs/IMPLEMENTATION_COMPLETION_POLICY.md`
+- `docs/CI_FAILURE_DIAGNOSTICS_POLICY.md`
+- `docs/engineering-failures/README.md`
+
 ## Phase 1 — Repository bootstrap
 
 Goal: establish a safe, reviewable WordPress plugin foundation with public CI.
@@ -20,11 +45,18 @@ Goal: establish a safe, reviewable WordPress plugin foundation with public CI.
 - [x] PHP syntax matrix
 - [x] official WordPress Plugin Check workflow
 - [x] deterministic production package at `build/kairoseth-ai-transparency`
+- [x] canonical extension engineering policies adapted from Kairoseth Platform
+- [x] actionable CI diagnostic runner + bounded failure artifacts
+- [x] durable engineering failure/solution memory
+- [x] mandatory EN/ES 100% coverage checker
+- [x] bundled Spanish gettext source catalog
+- [x] release build compiles Spanish `.mo` catalog
+- [x] public README EN/ES
 - [x] `readme.txt`
 - [x] security/contribution/trademark policies
 - [x] required bootstrap PR CI green
 
-Exit: bootstrap PR merged with required public CI evidence. The GitHub PR/merge record is the canonical evidence for the merge itself and is intentionally not represented by a pre-merge checkbox here.
+Exit: bootstrap foundation merged with required public CI evidence. Engineering/i18n policy hardening is an extension of the Phase 1 foundation and must be green before Phase 2 implementation begins.
 
 ## Phase 2 — Persistent AI Systems Registry
 
@@ -38,13 +70,14 @@ Planned:
 - system type taxonomy;
 - source/origin metadata;
 - review status and timestamps;
-- EN/ES admin UX;
+- **100% EN/ES admin UX in the same PRs**;
 - capability + nonce enforcement;
 - deterministic export shape;
 - migration tests;
-- Multisite storage decision.
+- Multisite storage decision and isolation acceptance;
+- responsive/accessibility acceptance for the registry UI.
 
-Exit: registry CRUD and persistence accepted without external telemetry.
+Exit: registry CRUD and persistence accepted without external telemetry, with EN/ES coverage gate green and blockers 0.
 
 ## Phase 3 — Deterministic discovery
 
@@ -63,7 +96,7 @@ no legal conclusion
 
 Candidate integrations are selected from actual WordPress market usage and maintainable APIs/hooks, one at a time.
 
-Exit: at least one real supported AI integration can be discovered, reviewed and added to the registry with deterministic tests.
+Exit: at least one real supported AI integration can be discovered, reviewed and added to the registry with deterministic tests and bilingual user-facing findings.
 
 ## Phase 4 — Readiness findings and evidence
 
@@ -85,7 +118,7 @@ administrator declaration
 guidance
 ```
 
-Exit: findings are reproducible and never represented as automatic legal certification.
+Exit: findings are reproducible, fully EN/ES customer-facing, and never represented as automatic legal certification.
 
 ## Phase 5 — Disclosure tooling
 
@@ -97,12 +130,12 @@ Planned:
 - admin configuration;
 - block/shortcode or integration-specific renderer only where justified;
 - accessible markup;
-- locale-aware EN/ES copy;
+- locale-aware EN/ES copy with 100% coverage;
 - no public promotional link by default;
 - deterministic placement tests;
 - cache/theme compatibility acceptance.
 
-Exit: one real supported interaction-disclosure workflow passes accessibility and frontend acceptance.
+Exit: one real supported interaction-disclosure workflow passes bilingual, accessibility and frontend acceptance.
 
 ## Phase 6 — Evidence export
 
@@ -112,13 +145,14 @@ Planned:
 
 - JSON export first;
 - human-readable report/export where useful;
+- EN/ES customer-readable output when a human-facing export exists;
 - schema/version metadata;
 - source/evidence signatures;
 - no secrets/private credentials;
 - explicit generation timestamp;
 - clear non-certification disclaimer.
 
-Exit: export is deterministic, documented and privacy-safe.
+Exit: export is deterministic, documented, bilingual where customer-facing and privacy-safe.
 
 ## Phase 7 — Custom Requests integration
 
@@ -127,6 +161,7 @@ Goal: connect plugin users who need unsupported/custom workflows with Kairoseth 
 Planned:
 
 - plugin-owned Help/About CTA;
+- **EN/ES CTA and context copy**;
 - context prepared locally;
 - user explicitly initiates contact;
 - only documented fields transmitted;
@@ -134,7 +169,7 @@ Planned:
 - Kairoseth Platform Custom Requests endpoint when implemented;
 - graceful fallback to canonical contact route.
 
-Exit: user-initiated CTA reaches the authorized Custom Requests workflow end-to-end.
+Exit: user-initiated CTA reaches the authorized Custom Requests workflow end-to-end in EN/ES.
 
 ## Phase 8 — First public release
 
@@ -142,18 +177,21 @@ Required release evidence:
 
 ```text
 functional Free value
-+ EN/ES
++ EN/ES 100% customer-facing coverage
++ compiled Spanish catalog in release package
 + supported WordPress/PHP compatibility evidence
 + security/privacy review
-+ accessibility acceptance
-+ Plugin Check repo category green
++ accessibility/responsive acceptance
++ Plugin Check green on exact production package
 + install/activation/deactivation/uninstall tests
 + release ZIP
 + README/readme/version consistency
-+ canonical Kairoseth product page
++ canonical Kairoseth product page EN/ES
 + share
-+ Custom Request CTA
++ Custom Request CTA EN/ES
++ engineering failure memory synchronized
 + documentation synchronized
++ blockers 0
 ```
 
 Only then does the project claim a stable public release / WordPress.org availability.

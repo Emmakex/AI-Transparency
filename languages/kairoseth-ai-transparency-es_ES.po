@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kairoseth AI Transparency 0.1.0\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: kairoseth-ai-transparency\n"
+
+msgid "Kairoseth AI Transparency"
+msgstr "Kairoseth AI Transparency"
+
+msgid "AI Transparency"
+msgstr "Transparencia de IA"
+
+msgid "You do not have permission to access this page."
+msgstr "No tienes permiso para acceder a esta página."
+
+msgid "EU AI Act Readiness for WordPress"
+msgstr "Preparación para el Reglamento de IA de la UE en WordPress"
+
+msgid "This development build establishes the plugin foundation. AI discovery, registry, disclosure and evidence workflows will be enabled only after their acceptance gates are implemented."
+msgstr "Esta versión de desarrollo establece la base del plugin. Los flujos de descubrimiento de IA, registro, transparencia y evidencia solo se habilitarán después de implementar sus gates de aceptación."
+
+msgid "This plugin provides technical readiness and evidence tooling. It does not certify or guarantee legal compliance."
+msgstr "Este plugin proporciona herramientas técnicas de preparación y evidencia. No certifica ni garantiza el cumplimiento legal."

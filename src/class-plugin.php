@@ -52,9 +52,24 @@ final class Plugin {
 
 		$this->booted = true;
 
+		add_action( 'init', array( $this, 'load_textdomain' ) );
+
 		if ( is_admin() ) {
 			( new AdminPage() )->register();
 		}
+	}
+
+	/**
+	 * Load bundled translations after WordPress initialization begins.
+	 *
+	 * @return void
+	 */
+	public function load_textdomain(): void {
+		load_plugin_textdomain(
+			'kairoseth-ai-transparency',
+			false,
+			dirname( plugin_basename( KAIROSETH_AI_TRANSPARENCY_FILE ) ) . '/languages'
+		);
 	}
 
 	/**

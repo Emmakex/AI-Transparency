@@ -26,6 +26,8 @@ Initial product direction includes:
 * local evidence/export records;
 * English and Spanish customer-facing experience.
 
+The current pre-release development build includes the local AI Systems Registry. An authorized administrator can add, edit, review and archive AI system records. Registry data is stored locally in the current WordPress site's normal Options storage using a versioned schema.
+
 **Important:** This plugin provides technical readiness, workflow and evidence tooling. It does not certify or guarantee compliance with the EU AI Act or any other law. Legal obligations depend on the actual AI system, role, context and use case.
 
 The plugin does not perform generic probabilistic detection of whether arbitrary text was written by AI.
@@ -34,9 +36,9 @@ The plugin does not perform generic probabilistic detection of whether arbitrary
 
 1. Upload the plugin directory to `/wp-content/plugins/` or install the packaged ZIP.
 2. Activate **Kairoseth AI Transparency** from the Plugins screen.
-3. During development, open **Tools > AI Transparency** to confirm the plugin foundation is active.
+3. During development, open **Tools > AI Transparency** to maintain the local AI Systems Registry.
 
-Functional discovery, registry and disclosure workflows will be enabled only after their product acceptance gates are implemented.
+The registry is implemented in the current development line. Deterministic discovery, readiness findings and disclosure workflows remain later roadmap phases and are not claimed as completed features yet.
 
 == Frequently Asked Questions ==
 
@@ -46,7 +48,11 @@ No. It provides technical readiness, evidence and workflow tooling. It does not 
 
 = Does the plugin send my site data to Kairoseth automatically? =
 
-No automatic Kairoseth telemetry or account connection is part of the Free v1 baseline. Any future external service must be explicit, documented and consent-aware.
+No automatic Kairoseth telemetry or account connection is part of the Free v1 baseline. The current AI Systems Registry remains local to the WordPress site. Any future external service must be explicit, documented and consent-aware.
+
+= How is the AI Systems Registry stored? =
+
+The current development implementation uses the normal WordPress Options API with a versioned local schema. In Multisite, the registry follows the current blog/site context rather than silently creating one network-wide inventory.
 
 = Does it detect whether any article was written by AI? =
 
@@ -60,10 +66,13 @@ Yes. Custom implementations are handled separately from the public Free reposito
 
 = 0.1.0 =
 * Repository and WordPress plugin bootstrap.
-* Initial domain model and local registry foundation.
-* Public CI and WordPress Plugin Check baseline prepared.
+* Initial domain model and deterministic registry foundation.
+* Mandatory English/Spanish coverage and compiled Spanish catalog.
+* Versioned local AI Systems Registry persistence foundation.
+* Development admin CRUD for add/edit/review/archive AI system records.
+* Public CI and WordPress Plugin Check baseline.
 
 == Upgrade Notice ==
 
 = 0.1.0 =
-Initial development baseline. No stable WordPress.org release is claimed yet.
+Pre-release development baseline. No stable WordPress.org release is claimed yet.

@@ -12,25 +12,26 @@ use PHPUnit\Framework\TestCase;
 
 final class AiEngineDetectorTest extends TestCase {
 	public function test_detects_exact_supported_ai_engine_boundary(): void {
-		$detector = new AiEngineDetector();
-		$result   = $detector->detect(
-			new PluginObservation(
-				'ai-engine/ai-engine.php',
-				'AI Engine – The Chatbot, AI Framework & MCP for WordPress',
-				'3.7.7',
-				'ai-engine',
-				true
-			)
+		$detector    = new AiEngineDetector();
+		$observation = new PluginObservation(
+			'ai-engine/ai-engine.php',
+			'AI Engine – The Chatbot, AI Framework & MCP for WordPress',
+			'3.7.7',
+			'ai-engine',
+			true
 		);
+		$result      = $detector->detect( $observation );
+		$repeat      = $detector->detect( $observation );
 
 		$this->assertNotNull( $result );
+		$this->assertNotNull( $repeat );
 		$this->assertTrue( $result->supported() );
 		$this->assertSame( 'ai-engine-plugin', $result->detector_id() );
 		$this->assertSame( 'ai-engine', $result->integration_slug() );
 		$this->assertSame( 'AI Engine', $result->integration_name() );
 		$this->assertSame( '3.7.7', $result->observed_version() );
 		$this->assertSame( 64, strlen( $result->source_signature() ) );
-		$this->assertSame( $result->source_signature(), $detector->detect( new PluginObservation( 'ai-engine/ai-engine.php', 'AI Engine', '3.7.7', 'ai-engine', true ) )->source_signature() );
+		$this->assertSame( $result->source_signature(), $repeat->source_signature() );
 	}
 
 	public function test_ignores_unrelated_or_inactive_plugins(): void {

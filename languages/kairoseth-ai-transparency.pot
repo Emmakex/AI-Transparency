@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kairoseth AI Transparency 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Emmakex/AI-Transparency/issues\n"
-"POT-Creation-Date: 2026-09-09 00:00+0000\n"
+"POT-Creation-Date: 2026-09-09 13:10+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,11 +17,119 @@ msgstr ""
 msgid "You do not have permission to access this page."
 msgstr ""
 
-msgid "EU AI Act Readiness for WordPress"
+msgid "Maintain a local inventory of AI systems used by this WordPress site."
 msgstr ""
 
-msgid "This development build establishes the plugin foundation. AI discovery, registry, disclosure and evidence workflows will be enabled only after their acceptance gates are implemented."
+msgid "Registry data stays in this WordPress site and is not sent to Kairoseth automatically."
 msgstr ""
 
-msgid "This plugin provides technical readiness and evidence tooling. It does not certify or guarantee legal compliance."
+msgid "AI Systems Registry"
+msgstr ""
+
+msgid "No AI systems have been registered yet."
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Review"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Archive"
+msgstr ""
+
+msgid "Edit AI system"
+msgstr ""
+
+msgid "Add AI system"
+msgstr ""
+
+msgid "Readiness boundary:"
+msgstr ""
+
+msgid "This registry records technical information and administrator declarations. It does not certify or guarantee legal compliance."
+msgstr ""
+
+msgid "System name"
+msgstr ""
+
+msgid "System type"
+msgstr ""
+
+msgid "Interaction context"
+msgstr ""
+
+msgid "Describe where or how visitors, staff or customers interact with this AI system."
+msgstr ""
+
+msgid "Review status"
+msgstr ""
+
+msgid "Pending review"
+msgstr ""
+
+msgid "Reviewed"
+msgstr ""
+
+msgid "Interaction disclosure"
+msgstr ""
+
+msgid "This configured workflow requires an AI interaction disclosure."
+msgstr ""
+
+msgid "Update AI system"
+msgstr ""
+
+msgid "AI system saved."
+msgstr ""
+
+msgid "AI system archived."
+msgstr ""
+
+msgid "Please provide a valid name, system type and review status."
+msgstr ""
+
+msgid "The requested AI system could not be found."
+msgstr ""
+
+msgid "The AI systems registry could not be saved."
+msgstr ""
+
+msgid "Chatbot"
+msgstr ""
+
+msgid "Assistant"
+msgstr ""
+
+msgid "Content generator"
+msgstr ""
+
+msgid "Recommender"
+msgstr ""
+
+msgid "Classifier"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Active"
 msgstr ""

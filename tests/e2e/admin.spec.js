@@ -68,6 +68,41 @@ test.describe('WordPress runtime acceptance', () => {
     await expect(row).toContainText('Active');
   });
 
+  test('readiness findings separate facts, declarations and guidance for the discovered system', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await login(page, adminUser, adminPass);
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-readiness');
+
+    await expect(page.getByRole('heading', { level: 1, name: 'AI Readiness' })).toBeVisible();
+
+    const findings = page.locator('.ai-transparency-finding');
+    await expect(findings).toHaveCount(2);
+    await expect(findings).toContainText([
+      /No interaction context is recorded for this active AI system\./,
+      /The active registry record is still pending administrator review\./,
+    ]);
+
+    for (const finding of await findings.all()) {
+      await expect(finding.getByRole('heading', { name: 'Fact' })).toBeVisible();
+      await expect(finding.getByRole('heading', { name: 'Administrator declaration' })).toBeVisible();
+      await expect(finding.getByRole('heading', { name: 'Guidance' })).toBeVisible();
+      await expect(finding.locator('.ai-transparency-signature')).toHaveText(/^[a-f0-9]{64}$/);
+    }
+
+    const horizontalOverflow = await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(horizontalOverflow).toBeLessThanOrEqual(1);
+
+    const accessibility = await new AxeBuilder({ page })
+      .include('.ai-transparency-admin')
+      .analyze();
+    const blockingViolations = accessibility.violations.filter((violation) =>
+      ['critical', 'serious'].includes(violation.impact)
+    );
+    expect(blockingViolations, JSON.stringify(blockingViolations, null, 2)).toEqual([]);
+  });
+
   test('administrator can add, edit, review and archive a registry record', async ({ page }) => {
     const runId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
     const systemName = `Phase 2 Runtime Assistant ${runId}`;
@@ -145,7 +180,7 @@ test.describe('WordPress runtime acceptance', () => {
     ).toEqual([]);
   });
 
-  test('non-administrator cannot access registry or discovery administration surfaces', async ({ page }) => {
+  test('non-administrator cannot access registry, discovery or readiness administration surfaces', async ({ page }) => {
     await login(page, editorUser, editorPass);
 
     await page.goto('/wp-admin/tools.php?page=ai-transparency');
@@ -154,6 +189,10 @@ test.describe('WordPress runtime acceptance', () => {
 
     await page.goto('/wp-admin/tools.php?page=ai-transparency-discovery');
     await expect(page.locator('body')).not.toContainText('Deterministic discovery');
+    await expect(page.locator('body')).toContainText(/not allowed|permission/i);
+
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-readiness');
+    await expect(page.locator('body')).not.toContainText('Technical readiness findings');
     await expect(page.locator('body')).toContainText(/not allowed|permission/i);
   });
 });

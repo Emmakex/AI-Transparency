@@ -49,6 +49,8 @@ An authorized administrator can:
 [kairoseth_ai_disclosure system="SYSTEM_ID"]
 ```
 
+**Phase 6 Evidence Export is currently design/contract only. It is not implemented or available in the plugin yet.**
+
 ### Registry and disclosure authority
 
 Registry data is stored locally using the WordPress Options API with a versioned schema. In Multisite, storage follows the current site/blog context rather than creating a network-wide registry.
@@ -99,15 +101,47 @@ Accepted first rules cover active systems pending administrator review, active s
 
 Findings are generated on demand and are not persisted separately from the Registry.
 
+### Phase 6 Evidence Export contract
+
+Phase 6 is now defined but **implementation has not started**.
+
+The accepted design target is:
+
+```text
+Tools → AI Evidence Export
+→ explicit administrator POST action
+→ current site-local Registry loaded server-side
+→ Registry + discovery references + Readiness findings + Disclosure readiness
+→ canonical allow-list JSON snapshot
+→ stable SHA-256 snapshot_signature
+→ direct local browser download
+```
+
+Key contract rules:
+
+- JSON only for v1;
+- `export_schema_version = 1`;
+- same technical state produces the same `snapshot_signature` even if generated later;
+- `generated_at` is informational and excluded from stable snapshot identity;
+- no export persistence, Media Library file, email, telemetry or Kairoseth cloud upload;
+- no credentials, cookies, nonces, user identities, prompts, conversations, logs or arbitrary WordPress/plugin option dumps;
+- site-local Multisite boundary only, not network-wide aggregation;
+- `interaction_context` is included only in the privileged administrative evidence artifact and the file must be treated as potentially confidential;
+- the export remains technical evidence, not legal certification or a digital signature.
+
 ### Privacy and data handling
 
 Registry, Discovery, Readiness and Disclosure do not automatically send their state to an external service. Core state remains inside the WordPress installation.
+
+The Phase 6 contract preserves this local-first model: the planned first evidence export is explicitly user-initiated, built in memory and downloaded directly rather than uploaded or retained by the plugin.
 
 ### Important limitation
 
 This plugin provides technical readiness, workflow and evidence tooling. It does **not** certify or guarantee legal compliance with the EU AI Act or any other law.
 
 Readiness findings are technical review signals, not legal decisions. Disclosure tooling renders explicit administrator configuration; it does not decide whether a legal disclosure obligation exists or whether a particular notice is legally sufficient.
+
+The planned Phase 6 `snapshot_signature` is only a deterministic technical snapshot identity. It will not constitute a legal/digital signature, trusted timestamp, non-repudiation proof or regulatory certification.
 
 The plugin also does not attempt generic probabilistic detection of whether arbitrary text was written by AI.
 
@@ -119,6 +153,8 @@ The plugin also does not attempt generic probabilistic detection of whether arbi
 4. Open **Tools > AI Discovery** to review supported deterministic integration evidence.
 5. Open **Tools > AI Readiness** to review current technical findings.
 6. Open **Tools > AI Disclosure** to review disclosure readiness and copy a shortcode for a ready system.
+
+There is no **Tools > AI Evidence Export** production screen yet; that belongs to the separate Phase 6 implementation after the contract is accepted.
 
 ### Development
 
@@ -154,6 +190,8 @@ The repository currently validates:
 - real Registry → Disclosure Admin → public anonymous frontend acceptance;
 - disclosure removal after administrator configuration changes.
 
+Phase 6 implementation will add export-specific unit/runtime gates only after its contract PR is merged.
+
 ### Current roadmap state
 
 ```text
@@ -162,12 +200,12 @@ Phase 2 Persistent AI Systems Registry       CLOSED
 Phase 3 Deterministic Discovery              CLOSED
 Phase 4 Readiness Findings & Evidence        CLOSED
 Phase 5 Disclosure Tooling                   CLOSED
-Phase 6 Evidence Export                      UNBLOCKED / NOT STARTED
+Phase 6 Evidence Export                      CONTRACT ACTIVE / IMPLEMENTATION NOT STARTED
 Phase 7 Contextual support/custom path       NOT STARTED
 Phase 8 First public release                 NOT STARTED
 ```
 
-Phase 5 implementation was accepted in PR #12 at merge `2770c7b7982ffbbe07ba58e8cedebd12d0add14a`; PR-head CI #82 and post-merge `main` CI #83 passed the complete required suite.
+Phase 5 implementation was accepted in PR #12 at merge `2770c7b7982ffbbe07ba58e8cedebd12d0add14a`; closure documentation was merged via PR #13 at `0912cf2a21956d25b8c77b1ffec3668d041def42`, and final post-closure `main` CI #85 passed the complete suite.
 
 ### Project documentation
 
@@ -180,6 +218,9 @@ Phase 5 implementation was accepted in PR #12 at merge `2770c7b7982ffbbe07ba58e8
 - [`docs/PHASE5_DISCLOSURE_IMPLEMENTATION.md`](docs/PHASE5_DISCLOSURE_IMPLEMENTATION.md)
 - [`docs/PHASE5_ACCEPTANCE.md`](docs/PHASE5_ACCEPTANCE.md)
 - [`docs/PHASE5_RUNTIME_EVIDENCE.md`](docs/PHASE5_RUNTIME_EVIDENCE.md)
+- [`docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
+- [`docs/PHASE6_ACCEPTANCE.md`](docs/PHASE6_ACCEPTANCE.md)
+- [`docs/PHASE6_JSON_SCHEMA_V1.md`](docs/PHASE6_JSON_SCHEMA_V1.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)
@@ -227,6 +268,8 @@ Un administrador autorizado puede:
 ```text
 [kairoseth_ai_disclosure system="SYSTEM_ID"]
 ```
+
+**Fase 6 Evidence Export está actualmente solo en diseño/contrato. Todavía no está implementada ni disponible en el plugin.**
 
 ### Autoridad del Registro y Disclosure
 
@@ -278,15 +321,47 @@ Las reglas aceptadas cubren registros activos pendientes de revisión, sistemas 
 
 Los hallazgos se calculan bajo demanda y no se guardan separadamente del Registro.
 
+### Contrato de Fase 6 Evidence Export
+
+Fase 6 ya está definida, pero **la implementación todavía no ha empezado**.
+
+El objetivo aceptado es:
+
+```text
+Herramientas → AI Evidence Export
+→ POST explícito del administrador
+→ Registry local del sitio cargado server-side
+→ Registry + referencias Discovery + findings + readiness de Disclosure
+→ snapshot JSON canónico por allow-list
+→ snapshot_signature SHA-256 estable
+→ descarga directa y local al navegador
+```
+
+Reglas principales:
+
+- solo JSON en v1;
+- `export_schema_version = 1`;
+- mismo estado técnico ⇒ misma `snapshot_signature` aunque se genere en otro momento;
+- `generated_at` es informativo y queda fuera de la identidad estable;
+- sin persistencia del export, Media Library, email, telemetría ni subida a Kairoseth;
+- sin credenciales, cookies, nonces, identidad de usuarios, prompts, conversaciones, logs ni dumps arbitrarios de options;
+- aislamiento por sitio en Multisite, sin agregación de red;
+- `interaction_context` solo aparece en el artefacto administrativo privilegiado y el fichero debe tratarse como potencialmente confidencial;
+- sigue siendo evidencia técnica, no certificación legal ni firma digital.
+
 ### Privacidad y tratamiento de datos
 
 Registry, Discovery, Readiness y Disclosure no envían automáticamente su estado a servicios externos. El estado principal permanece dentro de la instalación WordPress.
+
+El contrato de Fase 6 mantiene este modelo local-first: el primer export será iniciado explícitamente por el usuario, construido en memoria y descargado directamente, sin upload ni almacenamiento del fichero por parte del plugin.
 
 ### Límite importante
 
 Este plugin proporciona readiness técnico, workflow y herramientas de evidencia. **No certifica ni garantiza cumplimiento legal** del Reglamento de IA de la UE ni de ninguna otra norma.
 
 Los hallazgos de Readiness son señales técnicas, no decisiones legales. Disclosure renderiza una configuración explícita del administrador; no decide si existe obligación legal de informar ni si un aviso concreto es jurídicamente suficiente.
+
+La futura `snapshot_signature` de Fase 6 solo identificará de forma determinista un snapshot técnico. No será firma jurídica/digital, sellado de tiempo confiable, prueba de no repudio ni certificación regulatoria.
 
 Tampoco intenta detectar probabilísticamente si cualquier texto arbitrario fue escrito por IA.
 
@@ -298,6 +373,8 @@ Tampoco intenta detectar probabilísticamente si cualquier texto arbitrario fue 
 4. Abre **Herramientas > AI Discovery** para revisar evidencia determinista.
 5. Abre **Herramientas > AI Readiness** para revisar hallazgos técnicos.
 6. Abre **Herramientas > AI Disclosure** para revisar readiness de disclosure y copiar el shortcode de un sistema listo.
+
+Todavía no existe una pantalla de producción **Herramientas > AI Evidence Export**; pertenece a la implementación separada de Fase 6 después de aceptar este contrato.
 
 ### Desarrollo
 
@@ -333,6 +410,8 @@ El repositorio valida actualmente:
 - aceptación real Registry → Disclosure Admin → frontend público anónimo;
 - retirada del aviso después de cambiar la configuración del administrador.
 
+La implementación de Fase 6 añadirá sus gates específicos de export únicamente después de fusionar el PR del contrato.
+
 ### Estado actual del roadmap
 
 ```text
@@ -341,12 +420,12 @@ Fase 2 Persistent AI Systems Registry       CLOSED
 Fase 3 Deterministic Discovery              CLOSED
 Fase 4 Readiness Findings & Evidence        CLOSED
 Fase 5 Disclosure Tooling                   CLOSED
-Fase 6 Evidence Export                      DESBLOQUEADA / NO INICIADA
+Fase 6 Evidence Export                      CONTRATO ACTIVO / IMPLEMENTACIÓN NO INICIADA
 Fase 7 Contextual support/custom path       NO INICIADA
 Fase 8 First public release                 NO INICIADA
 ```
 
-La implementación de Fase 5 fue aceptada en PR #12 con merge `2770c7b7982ffbbe07ba58e8cedebd12d0add14a`; CI #82 del head y CI #83 post-merge en `main` pasaron toda la suite requerida.
+La implementación de Fase 5 fue aceptada en PR #12 con merge `2770c7b7982ffbbe07ba58e8cedebd12d0add14a`; la documentación de cierre fue fusionada mediante PR #13 en `0912cf2a21956d25b8c77b1ffec3668d041def42`, y CI #85 final de `main` pasó la suite completa.
 
 ### Documentación del proyecto
 
@@ -359,6 +438,9 @@ La implementación de Fase 5 fue aceptada en PR #12 con merge `2770c7b7982ffbbe0
 - [`docs/PHASE5_DISCLOSURE_IMPLEMENTATION.md`](docs/PHASE5_DISCLOSURE_IMPLEMENTATION.md)
 - [`docs/PHASE5_ACCEPTANCE.md`](docs/PHASE5_ACCEPTANCE.md)
 - [`docs/PHASE5_RUNTIME_EVIDENCE.md`](docs/PHASE5_RUNTIME_EVIDENCE.md)
+- [`docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
+- [`docs/PHASE6_ACCEPTANCE.md`](docs/PHASE6_ACCEPTANCE.md)
+- [`docs/PHASE6_JSON_SCHEMA_V1.md`](docs/PHASE6_JSON_SCHEMA_V1.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)

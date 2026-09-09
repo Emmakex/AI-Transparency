@@ -54,8 +54,8 @@ AI-Transparency/
 │   ├── Disclosure/                later phase
 │   └── Export/                    later phase
 ├── languages/
-│   ├── kairoseth-ai-transparency.pot
-│   └── kairoseth-ai-transparency-es_ES.po
+│   ├── ai-transparency.pot
+│   └── ai-transparency-es_ES.po
 ├── bin/
 │   ├── build-plugin.sh
 │   ├── check-i18n.php
@@ -73,7 +73,7 @@ source repository
 → bilingual coverage check
 → deterministic build
 → compile Spanish gettext catalog
-→ build/kairoseth-ai-transparency/
+→ build/ai-transparency/
 → official WordPress Plugin Check
 → release ZIP / WordPress.org candidate
 ```
@@ -85,13 +85,13 @@ Development-only files are intentionally absent from the generated package.
 Source language is English. Runtime strings use the text domain:
 
 ```text
-kairoseth-ai-transparency
+ai-transparency
 ```
 
 Spanish source translations live in:
 
 ```text
-languages/kairoseth-ai-transparency-es_ES.po
+languages/ai-transparency-es_ES.po
 ```
 
 `bin/check-i18n.php` compares runtime gettext strings with the Spanish catalog and fails on missing/empty translations or the wrong text domain.
@@ -99,7 +99,7 @@ languages/kairoseth-ai-transparency-es_ES.po
 `bin/build-plugin.sh` compiles the PO catalog into:
 
 ```text
-build/kairoseth-ai-transparency/languages/kairoseth-ai-transparency-es_ES.mo
+build/ai-transparency/languages/ai-transparency-es_ES.mo
 ```
 
 The runtime loads bundled translations from `/languages` at WordPress `init`.
@@ -285,7 +285,7 @@ PHP syntax
 └── 8.5
 
 WordPress Plugin Check
-└── exact build/kairoseth-ai-transparency package
+└── exact build/ai-transparency package
 ```
 
 Repository-controlled failing commands use `bin/run-with-diagnostics.sh` and upload bounded `.ci-diagnostics/` evidence. Because the directory is hidden, every diagnostics upload explicitly sets `include-hidden-files: true`; this invariant is recorded in engineering failure memory.

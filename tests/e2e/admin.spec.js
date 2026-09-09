@@ -24,6 +24,27 @@ function rowForSystem(page, systemName) {
   return page.getByRole('cell', { name: systemName, exact: true }).locator('..');
 }
 
+async function createPublishedPage(page, title, content) {
+  const nonceResponse = await page.request.get('/wp-admin/admin-ajax.php?action=rest-nonce');
+  expect(nonceResponse.ok()).toBeTruthy();
+  const nonce = (await nonceResponse.text()).trim();
+  expect(nonce.length).toBeGreaterThan(0);
+
+  const response = await page.request.post('/wp-json/wp/v2/pages', {
+    headers: {
+      'X-WP-Nonce': nonce,
+    },
+    data: {
+      title,
+      content,
+      status: 'publish',
+    },
+  });
+
+  expect(response.status()).toBe(201);
+  return response.json();
+}
+
 test.describe.configure({ mode: 'serial' });
 
 test.describe('WordPress runtime acceptance', () => {
@@ -153,6 +174,100 @@ test.describe('WordPress runtime acceptance', () => {
     await expect(row.getByRole('button', { name: 'Archive' })).toHaveCount(0);
   });
 
+  test('reviewed configured system renders an explicit public disclosure and disabling configuration removes it', async ({ page, browser }) => {
+    const runId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+    const systemName = `Phase 5 Disclosure Assistant ${runId}`;
+    const internalContext = `Internal disclosure context ${runId} — must stay private.`;
+    const pageTitle = `Phase 5 Disclosure Runtime ${runId}`;
+
+    await login(page, adminUser, adminPass);
+    await page.goto('/wp-admin/tools.php?page=ai-transparency');
+
+    await page.getByLabel('System name').fill(systemName);
+    await page.getByLabel('System type').selectOption('assistant');
+    await page.getByLabel('Interaction context').fill(internalContext);
+    await page.getByLabel('Review status').selectOption('reviewed');
+    await page.getByRole('checkbox').check();
+    await page.getByRole('button', { name: 'Add AI system' }).click();
+    await expect(page.locator('.notice-success')).toContainText('AI system saved.');
+
+    const registryRow = rowForSystem(page, systemName);
+    const editHref = await registryRow.getByRole('link', { name: 'Edit' }).getAttribute('href');
+    expect(editHref).toBeTruthy();
+    const systemId = new URL(editHref).searchParams.get('system');
+    expect(systemId).toBeTruthy();
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-disclosure');
+    await expect(page.getByRole('heading', { level: 1, name: 'AI Disclosure' })).toBeVisible();
+
+    const disclosureRow = rowForSystem(page, systemName);
+    await expect(disclosureRow).toContainText('Ready');
+    const shortcode = `[kairoseth_ai_disclosure system="${systemId}"]`;
+    await expect(disclosureRow.locator('code')).toHaveText(shortcode);
+
+    const adminOverflow = await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(adminOverflow).toBeLessThanOrEqual(1);
+
+    const adminAccessibility = await new AxeBuilder({ page })
+      .include('.ai-transparency-admin')
+      .analyze();
+    const blockingAdminViolations = adminAccessibility.violations.filter((violation) =>
+      ['critical', 'serious'].includes(violation.impact)
+    );
+    expect(blockingAdminViolations, JSON.stringify(blockingAdminViolations, null, 2)).toEqual([]);
+
+    const publishedPage = await createPublishedPage(page, pageTitle, shortcode);
+    expect(publishedPage.link).toBeTruthy();
+
+    const anonymousContext = await browser.newContext();
+    const anonymousPage = await anonymousContext.newPage();
+    await anonymousPage.setViewportSize({ width: 390, height: 844 });
+    await anonymousPage.goto(publishedPage.link);
+
+    const disclosure = anonymousPage.locator('.ai-transparency-disclosure');
+    await expect(disclosure).toBeVisible();
+    await expect(disclosure.getByText('AI transparency notice', { exact: true })).toBeVisible();
+    await expect(disclosure).toContainText(systemName);
+    await expect(anonymousPage.locator('body')).not.toContainText(internalContext);
+    await expect(anonymousPage.locator('link[href*="assets/frontend.css"]')).toHaveCount(1);
+
+    await anonymousPage.locator('html').evaluate((element) => {
+      element.style.fontSize = '200%';
+    });
+    const disclosureOverflow = await disclosure.evaluate(
+      (element) => element.scrollWidth - element.clientWidth
+    );
+    expect(disclosureOverflow).toBeLessThanOrEqual(1);
+
+    const publicAccessibility = await new AxeBuilder({ page: anonymousPage })
+      .include('.ai-transparency-disclosure')
+      .analyze();
+    const blockingPublicViolations = publicAccessibility.violations.filter((violation) =>
+      ['critical', 'serious'].includes(violation.impact)
+    );
+    expect(blockingPublicViolations, JSON.stringify(blockingPublicViolations, null, 2)).toEqual([]);
+
+    await page.goto(editHref);
+    await expect(page.getByRole('heading', { name: 'Edit AI system' })).toBeVisible();
+    await page.getByRole('checkbox').uncheck();
+    await page.getByRole('button', { name: 'Update AI system' }).click();
+    await expect(page.locator('.notice-success')).toContainText('AI system saved.');
+
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-disclosure');
+    const disabledRow = rowForSystem(page, systemName);
+    await expect(disabledRow).toContainText('Not ready');
+    await expect(disabledRow).toContainText('Interaction disclosure is not configured.');
+
+    await anonymousPage.reload();
+    await expect(anonymousPage.locator('.ai-transparency-disclosure')).toHaveCount(0);
+    await expect(anonymousPage.locator('body')).not.toContainText('AI transparency notice');
+
+    await anonymousContext.close();
+  });
+
   test('admin surface passes responsive and serious accessibility acceptance', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await login(page, adminUser, adminPass);
@@ -187,7 +302,7 @@ test.describe('WordPress runtime acceptance', () => {
     ).toEqual([]);
   });
 
-  test('non-administrator cannot access registry, discovery or readiness administration surfaces', async ({ page }) => {
+  test('non-administrator cannot access registry, discovery, readiness or disclosure administration surfaces', async ({ page }) => {
     await login(page, editorUser, editorPass);
 
     await page.goto('/wp-admin/tools.php?page=ai-transparency');
@@ -200,6 +315,10 @@ test.describe('WordPress runtime acceptance', () => {
 
     await page.goto('/wp-admin/tools.php?page=ai-transparency-readiness');
     await expect(page.locator('body')).not.toContainText('Technical readiness findings');
+    await expect(page.locator('body')).toContainText(/not allowed|permission/i);
+
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-disclosure');
+    await expect(page.locator('body')).not.toContainText('Disclosure readiness');
     await expect(page.locator('body')).toContainText(/not allowed|permission/i);
   });
 });

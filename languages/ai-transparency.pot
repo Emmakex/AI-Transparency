@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kairoseth AI Transparency 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Emmakex/AI-Transparency/issues\n"
-"POT-Creation-Date: 2026-09-09 15:45+0000\n"
+"POT-Creation-Date: 2026-09-09 16:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -210,4 +210,64 @@ msgid "The AI Engine observation is outside the currently validated detector bou
 msgstr ""
 
 msgid "AI Engine could not be detected as an active plugin."
+msgstr ""
+
+msgid "AI Readiness"
+msgstr ""
+
+msgid "Technical readiness findings are generated from the current local AI Systems Registry."
+msgstr ""
+
+msgid "Findings keep observed facts, administrator declarations and guidance separate. They do not determine or certify legal compliance."
+msgstr ""
+
+msgid "No readiness findings were generated from the current active registry records."
+msgstr ""
+
+msgid "Priority:"
+msgstr ""
+
+msgid "Fact"
+msgstr ""
+
+msgid "Administrator declaration"
+msgstr ""
+
+msgid "Guidance"
+msgstr ""
+
+msgid "Evidence signature:"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+msgid "The active registry record is still pending administrator review."
+msgstr ""
+
+msgid "No interaction context is recorded for this active AI system."
+msgstr ""
+
+msgid "This AI system is active in the local AI Systems Registry."
+msgstr ""
+
+msgid "A technical registry condition requires review."
+msgstr ""
+
+msgid "The administrator has configured this workflow as requiring an AI interaction disclosure."
+msgstr ""
+
+msgid "No additional administrator declaration is attached to this finding."
+msgstr ""
+
+msgid "Review the system actual use, type, interaction context and transparency configuration."
+msgstr ""
+
+msgid "Document where or how visitors, staff or customers interact with this AI system."
+msgstr ""
+
+msgid "Verify that the configured disclosure has an appropriate implementation and placement for the actual workflow."
+msgstr ""
+
+msgid "Review the technical evidence and update the registry when appropriate."
 msgstr ""

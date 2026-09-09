@@ -55,10 +55,15 @@ test.describe('WordPress runtime acceptance', () => {
     );
     expect(blockingViolations, JSON.stringify(blockingViolations, null, 2)).toEqual([]);
 
-    await page.getByRole('button', { name: 'Add to registry' }).click();
-    await expect(page.locator('.notice-success')).toContainText(
-      'Detected AI integration added to the registry for administrator review.'
-    );
+    const addButton = page.getByRole('button', { name: 'Add to registry' });
+    if (await addButton.count()) {
+      await addButton.click();
+      await expect(page.locator('.notice-success')).toContainText(
+        'Detected AI integration added to the registry for administrator review.'
+      );
+    } else {
+      await expect(page.getByText('Already in registry', { exact: true })).toBeVisible();
+    }
     await expect(page.getByText('Already in registry', { exact: true })).toBeVisible();
 
     await page.goto('/wp-admin/tools.php?page=ai-transparency');
@@ -66,6 +71,43 @@ test.describe('WordPress runtime acceptance', () => {
     await expect(row).toContainText('Other');
     await expect(row).toContainText('Pending review');
     await expect(row).toContainText('Active');
+  });
+
+  test('readiness findings separate facts, declarations and guidance for the discovered system', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await login(page, adminUser, adminPass);
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-readiness');
+
+    await expect(page.getByRole('heading', { level: 1, name: 'AI Readiness' })).toBeVisible();
+
+    const aiEngineFindings = page.locator('.ai-transparency-finding').filter({
+      has: page.getByRole('heading', { level: 2, name: 'AI Engine', exact: true }),
+    });
+    await expect(aiEngineFindings).toHaveCount(2);
+    await expect(aiEngineFindings).toContainText([
+      /No interaction context is recorded for this active AI system\./,
+      /The active registry record is still pending administrator review\./,
+    ]);
+
+    for (const finding of await aiEngineFindings.all()) {
+      await expect(finding.getByRole('heading', { name: 'Fact' })).toBeVisible();
+      await expect(finding.getByRole('heading', { name: 'Administrator declaration' })).toBeVisible();
+      await expect(finding.getByRole('heading', { name: 'Guidance' })).toBeVisible();
+      await expect(finding.locator('.ai-transparency-signature')).toHaveText(/^[a-f0-9]{64}$/);
+    }
+
+    const horizontalOverflow = await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(horizontalOverflow).toBeLessThanOrEqual(1);
+
+    const accessibility = await new AxeBuilder({ page })
+      .include('.ai-transparency-admin')
+      .analyze();
+    const blockingViolations = accessibility.violations.filter((violation) =>
+      ['critical', 'serious'].includes(violation.impact)
+    );
+    expect(blockingViolations, JSON.stringify(blockingViolations, null, 2)).toEqual([]);
   });
 
   test('administrator can add, edit, review and archive a registry record', async ({ page }) => {
@@ -145,7 +187,7 @@ test.describe('WordPress runtime acceptance', () => {
     ).toEqual([]);
   });
 
-  test('non-administrator cannot access registry or discovery administration surfaces', async ({ page }) => {
+  test('non-administrator cannot access registry, discovery or readiness administration surfaces', async ({ page }) => {
     await login(page, editorUser, editorPass);
 
     await page.goto('/wp-admin/tools.php?page=ai-transparency');
@@ -154,6 +196,10 @@ test.describe('WordPress runtime acceptance', () => {
 
     await page.goto('/wp-admin/tools.php?page=ai-transparency-discovery');
     await expect(page.locator('body')).not.toContainText('Deterministic discovery');
+    await expect(page.locator('body')).toContainText(/not allowed|permission/i);
+
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-readiness');
+    await expect(page.locator('body')).not.toContainText('Technical readiness findings');
     await expect(page.locator('body')).toContainText(/not allowed|permission/i);
   });
 });

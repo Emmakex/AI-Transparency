@@ -211,3 +211,63 @@ msgstr "La observación de AI Engine está fuera del alcance actualmente validad
 
 msgid "AI Engine could not be detected as an active plugin."
 msgstr "No se pudo detectar AI Engine como plugin activo."
+
+msgid "AI Readiness"
+msgstr "Preparación de IA"
+
+msgid "Technical readiness findings are generated from the current local AI Systems Registry."
+msgstr "Los hallazgos de preparación técnica se generan desde el Registro de sistemas de IA local actual."
+
+msgid "Findings keep observed facts, administrator declarations and guidance separate. They do not determine or certify legal compliance."
+msgstr "Los hallazgos mantienen separados los hechos observados, las declaraciones del administrador y la orientación. No determinan ni certifican el cumplimiento legal."
+
+msgid "No readiness findings were generated from the current active registry records."
+msgstr "No se generaron hallazgos de preparación a partir de los registros activos actuales."
+
+msgid "Priority:"
+msgstr "Prioridad:"
+
+msgid "Fact"
+msgstr "Hecho"
+
+msgid "Administrator declaration"
+msgstr "Declaración del administrador"
+
+msgid "Guidance"
+msgstr "Orientación"
+
+msgid "Evidence signature:"
+msgstr "Firma de evidencia:"
+
+msgid "Information"
+msgstr "Información"
+
+msgid "The active registry record is still pending administrator review."
+msgstr "El registro activo todavía está pendiente de revisión por un administrador."
+
+msgid "No interaction context is recorded for this active AI system."
+msgstr "No se ha registrado un contexto de interacción para este sistema de IA activo."
+
+msgid "This AI system is active in the local AI Systems Registry."
+msgstr "Este sistema de IA está activo en el Registro local de sistemas de IA."
+
+msgid "A technical registry condition requires review."
+msgstr "Una condición técnica del registro requiere revisión."
+
+msgid "The administrator has configured this workflow as requiring an AI interaction disclosure."
+msgstr "El administrador ha configurado este flujo como uno que requiere un aviso de interacción con IA."
+
+msgid "No additional administrator declaration is attached to this finding."
+msgstr "No hay ninguna declaración adicional del administrador asociada a este hallazgo."
+
+msgid "Review the system actual use, type, interaction context and transparency configuration."
+msgstr "Revisa el uso real del sistema, su tipo, el contexto de interacción y la configuración de transparencia."
+
+msgid "Document where or how visitors, staff or customers interact with this AI system."
+msgstr "Documenta dónde o cómo interactúan los visitantes, el personal o los clientes con este sistema de IA."
+
+msgid "Verify that the configured disclosure has an appropriate implementation and placement for the actual workflow."
+msgstr "Verifica que el aviso configurado tenga una implementación y ubicación adecuadas para el flujo real."
+
+msgid "Review the technical evidence and update the registry when appropriate."
+msgstr "Revisa la evidencia técnica y actualiza el registro cuando corresponda."

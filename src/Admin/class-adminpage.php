@@ -91,6 +91,15 @@ final class AdminPage {
 					</thead>
 					<tbody>
 						<?php foreach ( $registry->all() as $system ) : ?>
+							<?php
+							$edit_url = add_query_arg(
+								array(
+									'page'   => 'kairoseth-ai-transparency',
+									'system' => $system->id(),
+								),
+								admin_url( 'tools.php' )
+							);
+							?>
 							<tr>
 								<td><strong><?php echo esc_html( $system->name() ); ?></strong></td>
 								<td><?php echo esc_html( $this->type_label( $system->type() ) ); ?></td>
@@ -98,10 +107,7 @@ final class AdminPage {
 								<td><?php echo esc_html( $this->status_label( $system->status() ) ); ?></td>
 								<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
 								<td>
-									<a href="<?php echo esc_url( add_query_arg( array(
-										'page'   => 'kairoseth-ai-transparency',
-										'system' => $system->id(),
-									), admin_url( 'tools.php' ) ) ); ?>">
+									<a href="<?php echo esc_url( $edit_url ); ?>">
 										<?php echo esc_html__( 'Edit', 'kairoseth-ai-transparency' ); ?>
 									</a>
 									<?php if ( AiSystem::STATUS_ACTIVE === $system->status() ) : ?>

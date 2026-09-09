@@ -36,4 +36,9 @@ if [[ ! -s "${PLUGIN_DIR}/assets/admin.css" ]]; then
   exit 1
 fi
 
+if [[ ! -s "${PLUGIN_DIR}/assets/frontend.css" ]]; then
+  echo "Plugin disclosure frontend stylesheet is missing from the production package." >&2
+  exit 1
+fi
+
 printf 'Built production plugin at %s with complete EN/ES translation assets.\n' "${PLUGIN_DIR}"

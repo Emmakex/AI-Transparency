@@ -1,249 +1,283 @@
 # Phase 6 — Evidence Export Acceptance
 
-Status: **active contract — implementation not started**  
+Status: **CLOSED — accepted, merged and verified on `main`**  
 Last reviewed: 9 September 2026
 
-## Scope
+## Accepted scope
 
-This contract applies to the first supported Phase 6 workflow: a privileged, user-initiated JSON evidence export for the **current site-local WordPress Registry**.
+Phase 6 v1 provides one privileged, user-initiated JSON evidence export for the **current site-local WordPress Registry**.
 
-Phase 6 v1 does not create legal certification, cloud synchronization, export history, scheduled exports, import capability or human-readable PDF/report output.
+It does not create legal certification, cloud synchronization, export history, scheduled exports, import capability, PDF/report output or network-wide Multisite aggregation.
 
-## Blocking gates
+## Accepted evidence
 
-### Export authority
+```text
+Contract PR: #14
+Implementation PR: #15
+Accepted implementation head: 2b9ebe93820e98d9ce6e0abb4deb235fdeeda57c
+PR-head CI: #91 / 34402108452 — SUCCESS — 8/8 jobs green
+Implementation merge: bd07261751471fe7866e62049e3a66b7bd767afe
+Post-merge main CI: #92 / 34402685906 — SUCCESS — 8/8 jobs green
+Blockers: 0
+```
 
-- [ ] **Tools → AI Evidence Export** exists
-- [ ] page requires `manage_options`
-- [ ] export generation is an explicit POST/admin action
-- [ ] export generation requires a valid nonce
-- [ ] a page GET never triggers download side effects
-- [ ] browser/request data never supplies Registry state, findings, readiness, signature or trusted timestamp
-- [ ] server loads the current site-local Registry directly
-- [ ] first increment exports the complete current site-local Registry rather than browser-selected system ids
-- [ ] Editor/non-administrator cannot access or generate the export
+## Blocking gate result
 
-### Local-only / persistence boundary
+All Phase 6 v1 blocking gates are accepted.
 
-- [ ] export is built in memory for the current request
-- [ ] JSON is downloaded directly to the requesting administrator
-- [ ] plugin does not write the generated export to Media Library
-- [ ] plugin does not persist export bytes/history in WordPress options
-- [ ] plugin does not create a custom export-history table
-- [ ] plugin does not email the export
-- [ ] plugin does not send the export to Kairoseth or any remote service
-- [ ] plugin introduces no export telemetry/cookies/cloud account requirement
+### Export authority — PASS
 
-### JSON response contract
+- **Tools → AI Evidence Export** exists.
+- Page/action require `manage_options`.
+- Generation is an explicit POST/admin action protected by nonce.
+- GET page load has no download side effect.
+- Browser/request data never supplies Registry state, findings, readiness, signature or authoritative site identity.
+- Server loads the complete current site-local Registry.
+- Editor/non-administrator access and generation are denied.
 
-- [ ] JSON is the only Phase 6 v1 format
-- [ ] response `Content-Type` is `application/json; charset=UTF-8`
-- [ ] response uses an attachment filename beginning `kairoseth-ai-transparency-evidence-`
-- [ ] filename contains a UTC generation timestamp and `.json`
-- [ ] response prevents caching with appropriate no-store/no-cache semantics
-- [ ] payload is valid UTF-8
-- [ ] payload parses as valid JSON
-- [ ] serialization failure never emits a partially valid evidence document
-- [ ] bounded failure does not leak stack traces or secrets
+### Local-only / persistence boundary — PASS
 
-### Export envelope
+- Snapshot is built for the current request and downloaded directly.
+- No Media Library persistence.
+- No export bytes/history option.
+- No custom export-history table.
+- No email delivery.
+- No Kairoseth/cloud/provider upload.
+- No export telemetry/cookie/cloud-account requirement.
 
-- [ ] `export_schema_version = 1`
-- [ ] `generated_at` exists and is UTC ISO-8601
-- [ ] `snapshot_signature` exists
-- [ ] `snapshot_signature` is lowercase SHA-256 hex with exactly 64 characters
-- [ ] `generator` exists
-- [ ] `site` exists
-- [ ] `registry` exists
-- [ ] `findings` exists
-- [ ] `disclosure_readiness` exists
-- [ ] export schema version is independent from Registry schema version
+### JSON response contract — PASS
 
-### Generator metadata
+- JSON is the only Phase 6 v1 format.
+- Response uses `application/json; charset=UTF-8`.
+- Attachment filename begins `kairoseth-ai-transparency-evidence-`, contains UTC generation time and ends `.json`.
+- No-store/no-cache response policy is applied.
+- Output is valid UTF-8 and parseable JSON.
+- Serialization failure handling does not emit a partial evidence document or expose stack traces/secrets.
 
-- [ ] generator identifies plugin slug `ai-transparency`
-- [ ] generator identifies product name `Kairoseth AI Transparency`
-- [ ] generator version comes from the real plugin runtime/version constant
-- [ ] exporter does not maintain a contradictory duplicate hard-coded runtime version
+### Export envelope — PASS
 
-### Site identity boundary
+Accepted top-level contract:
 
-- [ ] current `home_url` is included
-- [ ] current Multisite boolean is included
-- [ ] current `blog_id` is included
-- [ ] no administrator/user id is included
-- [ ] no administrator/user email is included
-- [ ] no client IP is included
-- [ ] no auth/session cookie is included
-- [ ] no request headers are included
+```text
+export_schema_version = 1
+generated_at
+snapshot_signature
+generator
+site
+registry
+discovery_evidence
+findings
+disclosure_readiness
+```
 
-### Registry snapshot
+`export_schema_version` is independent from Registry schema version.
 
-- [ ] current Registry schema version is included
-- [ ] all current site-local records are included
-- [ ] archived records are included
-- [ ] empty Registry produces a valid export rather than an error
-- [ ] exported systems use a bounded allow-list based on current stable `AiSystem` evidence fields
-- [ ] systems are sorted by stable system id
-- [ ] arbitrary WordPress option ordering cannot change snapshot identity
-- [ ] administrator-authored `interaction_context` is included as confidential administrative evidence
-- [ ] UI clearly warns that the evidence export may contain confidential operational context
-- [ ] Phase 5 public disclosure continues to exclude `interaction_context`
+### Generator metadata — PASS
 
-### Discovery evidence references
+- Plugin slug: `ai-transparency`.
+- Product name: `Kairoseth AI Transparency`.
+- Plugin version comes from the real runtime version constant.
+- No contradictory exporter-specific runtime version is maintained.
 
-- [ ] discovered Registry records preserve their persisted discovery source/signature reference where structurally valid
-- [ ] normalized discovery reference includes system id, detector id and source signature
-- [ ] export does not misrepresent historical persisted discovery signature as a fresh current observation
-- [ ] v1 does not require detector re-observation at export time
-- [ ] malformed/non-discovery `source` values do not produce invented discovery evidence
+### Site identity boundary — PASS
 
-### Findings snapshot
+Included:
 
-- [ ] Phase 4 `FindingEngine` is reused rather than reimplementing rules
-- [ ] findings are generated from the same loaded Registry snapshot used by the export
-- [ ] archived systems remain subject to the already accepted FindingEngine behavior
-- [ ] exported finding contains stable id
-- [ ] exported finding contains rule id
-- [ ] exported finding contains category
-- [ ] exported finding contains priority
-- [ ] exported finding contains subject system id/name
-- [ ] exported finding contains fact/declaration/guidance semantic codes
-- [ ] exported finding contains Phase 4 evidence signature
-- [ ] localized Fact/Declaration/Guidance prose is not required in JSON v1
-- [ ] finding-level volatile generation timestamp is excluded from the stable serialized evidence item
-- [ ] findings are sorted by stable finding id
+```text
+home_url
+is_multisite
+blog_id
+```
 
-### Disclosure readiness snapshot
+Excluded:
 
-- [ ] Phase 5 `DisclosureEngine` is reused rather than reimplementing eligibility
-- [ ] every Registry system has one disclosure-readiness item
-- [ ] item contains `system_id`
-- [ ] item contains boolean `eligible`
-- [ ] item contains deterministic `reason_codes`
-- [ ] reason-code ordering matches accepted Phase 5 engine ordering
-- [ ] archived/pending/missing-context/disclosure-disabled behavior remains inherited from Phase 5
+```text
+administrator/user id or email
+client IP
+auth/session cookies
+request headers
+```
 
-### Stable snapshot signature
+WordPress server state (`home_url()`, `is_multisite()`, `get_current_blog_id()`) is authoritative.
 
-- [ ] signature algorithm is SHA-256
-- [ ] signature is calculated from a canonical allow-list payload built by the plugin
-- [ ] canonical payload includes `export_schema_version`
-- [ ] canonical payload includes generator metadata
-- [ ] canonical payload includes site metadata
-- [ ] canonical payload includes Registry schema/state
-- [ ] canonical payload includes normalized discovery evidence references
-- [ ] canonical payload includes findings without volatile per-export timestamps
-- [ ] canonical payload includes disclosure readiness
-- [ ] canonical payload excludes top-level `generated_at`
-- [ ] canonical payload excludes filename/HTTP headers
-- [ ] canonical payload excludes user/session/request data
-- [ ] canonical payload excludes localized UI strings
-- [ ] repeated export of unchanged technical state at a different generation time returns the same `snapshot_signature`
-- [ ] meaningful exported Registry state change changes `snapshot_signature`
-- [ ] ordering differences alone cannot alter `snapshot_signature`
-- [ ] documentation does not call this a digital signature, legal signature, trusted timestamp, non-repudiation proof or certification
+### Registry snapshot — PASS
 
-### Privacy / forbidden data
+- Current Registry schema version included.
+- All current site-local records included.
+- Archived records included.
+- Empty Registry produces a valid signed export.
+- Systems use the bounded stable Registry schema/`AiSystem` evidence fields.
+- Systems are deterministically ordered by stable id.
+- Arbitrary option/repository iteration order cannot alter snapshot identity.
+- Administrator-authored `interaction_context` is included only as privileged administrative evidence.
+- Export UI explicitly warns that the file may contain confidential operational context.
+- Phase 5 public disclosure continues to exclude `interaction_context`.
 
-Exporter is allow-list based. The following must be absent from the generated document unless a future contract explicitly changes the schema:
+### Discovery evidence references — PASS
 
-- [ ] WordPress salts / wp-config secrets absent
-- [ ] database credentials absent
-- [ ] provider/API credentials absent
-- [ ] OAuth/access/refresh tokens absent
-- [ ] session/auth cookies absent
-- [ ] nonces absent
-- [ ] request headers absent
-- [ ] administrator/user identity absent
-- [ ] prompts absent
-- [ ] conversations absent
-- [ ] customer content absent
-- [ ] private/debug logs absent
-- [ ] raw database dumps absent
-- [ ] arbitrary third-party plugin options absent
-- [ ] browser storage absent
+- Structurally valid discovered Registry sources are normalized to system id + detector id + source signature.
+- Historical persisted Discovery signatures are not described as fresh observation.
+- v1 does not re-run Discovery during export.
+- Malformed/non-discovery source values do not create invented Discovery evidence.
 
-### Legal/product boundary
+### Findings snapshot — PASS
 
-- [ ] UI states export is technical evidence, not legal certification
-- [ ] JSON does not claim legal compliance/non-compliance
-- [ ] JSON does not claim regulatory approval
-- [ ] JSON does not claim legal completeness
-- [ ] generated timestamp does not claim external timestamp authority
-- [ ] snapshot signature does not claim external cryptographic attestation
-- [ ] no automatic legal classification is introduced
+- Existing Phase 4 `FindingEngine` is reused.
+- Findings are generated from the same loaded Registry snapshot.
+- Accepted Phase 4 archived-system behavior is inherited.
+- Exported finding includes stable id, rule/category/priority, subject id/name, Fact/Declaration/Guidance semantic codes and Phase 4 evidence signature.
+- Volatile finding generation time is excluded from the stable evidence item.
+- Findings are deterministically ordered by stable id.
 
-### Empty-state behavior
+### Disclosure readiness snapshot — PASS
 
-- [ ] empty Registry export succeeds
-- [ ] Registry systems array is empty
-- [ ] findings array is empty
-- [ ] disclosure readiness array is empty
-- [ ] valid `generated_at` remains present
-- [ ] valid deterministic `snapshot_signature` remains present
+- Existing Phase 5 `DisclosureEngine` is reused.
+- Every Registry system receives one readiness item.
+- Each item contains `system_id`, boolean `eligible` and deterministic `reason_codes`.
+- Archived/pending/missing-context/disclosure-disabled behavior and reason ordering remain inherited from Phase 5.
 
-### Multisite isolation
+### Stable snapshot signature — PASS
 
-- [ ] export is scoped to current blog/site
-- [ ] current blog id is recorded
-- [ ] another blog's Registry records never appear
-- [ ] network-wide aggregation is not implemented in v1
-- [ ] switching blogs changes the loaded repository context server-side
-- [ ] no browser-supplied blog id can override the authoritative current site context
+- Algorithm: SHA-256.
+- Lowercase 64-character hex output.
+- Signature is calculated from a canonical plugin-built allow-list payload.
+- Stable payload includes export schema version, generator, site, Registry, normalized Discovery references, findings without volatile timestamps and disclosure readiness.
+- Stable payload excludes top-level `generated_at`, filename/HTTP headers, user/session/request state and localized UI strings.
+- Repeated unchanged-state export at a different generation time keeps the same signature.
+- Meaningful Registry mutation changes the signature.
+- Ordering differences alone cannot change the signature.
+- Documentation does not represent the hash as a legal/digital signature, trusted timestamp, non-repudiation proof or certification.
 
-### Administrator UX / EN-ES / accessibility
+### Privacy / forbidden data — PASS
 
-- [ ] page has concise EN/ES explanation of purpose and legal boundary
-- [ ] page has concise EN/ES confidentiality warning
-- [ ] page states local/user-initiated/no-upload behavior
-- [ ] primary action is understandable in EN/ES
-- [ ] responsive layout passes at 390 px
-- [ ] page-level horizontal overflow <= 1 px
-- [ ] page remains usable at 200% text zoom
-- [ ] serious/critical axe violations = 0
-- [ ] export action is keyboard reachable
-- [ ] page does not rely on color alone
+The allow-list excludes automatically:
 
-### Real WordPress runtime authority
+```text
+WordPress salts / wp-config secrets
+database credentials
+provider/API credentials
+OAuth/access/refresh tokens
+session/auth cookies
+nonces
+request headers
+administrator/user identity
+prompts
+conversations
+customer content
+private/debug logs
+raw database dumps
+arbitrary third-party plugin options
+browser storage
+```
 
-- [ ] acceptance creates or reuses unique runtime Registry evidence without assuming globally empty Registry
-- [ ] administrator opens Tools → AI Evidence Export
-- [ ] administrator submits the real protected export action
-- [ ] browser receives an attachment JSON response
-- [ ] JSON parses successfully
-- [ ] exported Registry contains the unique runtime system
-- [ ] exported findings match current FindingEngine behavior when applicable
-- [ ] exported disclosure readiness matches current DisclosureEngine behavior
-- [ ] internal `interaction_context` appears in the privileged export when configured
-- [ ] forbidden secret/user/request fields are absent
-- [ ] repeated export without state change has identical `snapshot_signature`
-- [ ] a real Registry change causes a different `snapshot_signature`
-- [ ] Editor cannot generate an export
-- [ ] test remains retry-safe
+Real runtime acceptance explicitly checked forbidden key absence.
 
-### Regression/release gates
+### Legal/product boundary — PASS
 
-- [ ] PHPUnit/WPCS/PHPCompatibility green
-- [ ] PHP 7.4 / 8.1 / 8.3 / 8.5 syntax green
-- [ ] EN/ES runtime-string coverage = 100%
-- [ ] compiled Spanish `.mo` exists in exact production package
-- [ ] WordPress Plugin Check green on `build/ai-transparency/`
-- [ ] Phase 2 Registry migration/CRUD/permissions remain green
-- [ ] Phase 3 deterministic discovery remains green
-- [ ] Phase 4 readiness findings remain green
-- [ ] Phase 5 disclosure runtime remains green
-- [ ] Multisite isolation remains green
-- [ ] actionable failure diagnostics cover any material failure
-- [ ] engineering failure memory updated for any material regression
-- [ ] implementation PR merged to `main`
-- [ ] post-merge `main` verification green
-- [ ] documentation synchronized
-- [ ] blockers = 0
+- UI states that export is technical evidence, not legal certification.
+- JSON makes no legal compliance/non-compliance, regulatory approval or legal-completeness claim.
+- `generated_at` does not claim external timestamp authority.
+- `snapshot_signature` does not claim external cryptographic attestation.
+- No automatic legal classification was introduced.
+
+### Empty state — PASS
+
+Empty Registry produces:
+
+```text
+registry.systems = []
+findings = []
+disclosure_readiness = []
+valid generated_at
+valid deterministic snapshot_signature
+```
+
+### Multisite isolation — PASS
+
+- Export is current-blog/site scoped.
+- Current `blog_id` is recorded.
+- Another blog's Registry records never appear.
+- Network-wide aggregation is absent.
+- Switching blog context changes repository context server-side.
+- Browser-supplied blog ids cannot override WordPress authority.
+
+### Administrator UX / EN-ES / accessibility — PASS
+
+- Purpose, legal boundary, confidentiality and local/no-upload behavior are explained in EN/ES.
+- Primary download action is localized.
+- 390 px acceptance green.
+- 200% text acceptance green.
+- page-level overflow acceptance green.
+- axe serious/critical violations = 0.
+- action remains keyboard reachable.
+
+### Real WordPress runtime authority — PASS
+
+Acceptance exercised a real WordPress environment and proved:
+
+```text
+administrator opens Evidence Export
+→ submits protected action
+→ browser receives attachment JSON
+→ payload parses
+→ runtime Registry system present
+→ current findings/readiness present
+→ interaction_context present only in privileged export when configured
+→ forbidden sensitive/user/request fields absent
+→ repeated unchanged export keeps signature
+→ real Registry mutation changes signature
+→ Editor denied
+→ test retry-safe
+```
+
+### Regression / release gates — PASS
+
+CI #91 and post-merge CI #92 verified:
+
+- WordPress Coding Standards;
+- PHPUnit;
+- PHPCompatibility 7.4+;
+- PHP 7.4 / 8.1 / 8.3 / 8.5 syntax;
+- EN/ES runtime-string coverage = 100%;
+- compiled Spanish `.mo` in exact production package;
+- official WordPress Plugin Check on `build/ai-transparency/`;
+- Phase 2 Registry migration/CRUD/permissions;
+- Phase 3 deterministic Discovery;
+- Phase 4 Readiness;
+- Phase 5 Disclosure runtime;
+- real site-local Multisite isolation;
+- actionable diagnostics on material CI failures.
+
+## Resolved implementation-CI incidents
+
+### CI #88
+
+```text
+job: PHP Quality
+step: Run coding standards, tests and bilingual coverage
+command: composer verify
+exit: 2
+signature: 2a713bc20438829d660dc95e2e37ae7ee4f63636d066a158e0ddf13c82bcb26e
+cause: WPCS short ternary / @throws formatting / assignment alignment
+```
+
+### CI #90
+
+```text
+job: PHP Quality
+step: Run coding standards, tests and bilingual coverage
+command: composer verify
+exit: 1
+file: src/Export/class-evidencesnapshotbuilder.php:60
+signature: 6b48a8a870fbf9e3431c98705136950325a21c62cd988d4b69f3048dda33ed09
+cause: Squiz @throws interpretation for direct InvalidArgumentException
+```
+
+Both incidents were non-behavioral WPCS failures, fixed without changing the Evidence Export contract and validated by CI #91 and #92.
+
+Durable record: [`engineering-failures/2026-09-09-phase6-wpcs-docblock-formatting.md`](engineering-failures/2026-09-09-phase6-wpcs-docblock-formatting.md).
 
 ## Explicitly deferred from Phase 6 v1
-
-These items do not block Phase 6 unless implementation expands scope to include them:
 
 ```text
 CSV
@@ -266,4 +300,6 @@ legal compliance scoring/certification
 
 ## Exit
 
-Phase 6 may be declared closed only when one real administrator-generated JSON evidence export passes the complete current-site Registry → Findings → Disclosure readiness → canonical snapshot → deterministic signature → protected download workflow above, the exact merged `main` commit is green, and blockers are zero.
+**PASSED. Phase 6 is closed.**
+
+The real administrator-generated JSON workflow passed current-site Registry → Findings → Disclosure readiness → canonical snapshot → deterministic signature → protected local download, the exact implementation merge `bd07261751471fe7866e62049e3a66b7bd767afe` passed post-merge `main` CI #92, and blockers are zero.

@@ -138,6 +138,7 @@ Accepted:
 - [x] WordPress Plugin Check green
 - [x] PR #7 merged to `main`
 - [x] post-merge `main` CI green
+- [x] final documentation PR #8 merged and verified on `main`
 - [x] blockers = 0
 
 Closure evidence:
@@ -145,9 +146,12 @@ Closure evidence:
 ```text
 Accepted PR head: af44fe2156bde2947519e78112ea1d7a39abb0ff
 Pre-merge CI: #68 / 34373934127
-Merged PR: #7
-Main merge commit: d595819a7a8f7d292bb23a7c919bec22f6138381
-Post-merge main CI: #69 / 34377130702
+Implementation PR: #7
+Implementation merge commit: d595819a7a8f7d292bb23a7c919bec22f6138381
+Implementation post-merge CI: #69 / 34377130702
+Closure documentation PR: #8
+Closure documentation merge commit: fbb1eaac71a2b0a026c7633549bc0704bbd1d42f
+Final Phase 3 main CI: #71 / 34378441934
 ```
 
 Implementation details: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).  
@@ -157,44 +161,83 @@ Exit: **complete.**
 
 ## Phase 4 — Readiness findings and evidence
 
-Status: **not started — unblocked by Phase 3 closure.**
+Status: **active implementation — first deterministic registry-driven findings.**
 
-Goal: convert registry/discovery state into evidence-backed technical findings.
+Goal: convert registry/discovery state into evidence-backed technical findings while preserving the boundary between observed facts, administrator declarations and guidance.
 
-Planned first contract:
+Current contract:
 
 ```text
 Finding
 ├ stable finding id
+├ stable rule id
 ├ category
-├ severity / priority
-├ subject system id
-├ FACT — observed technical evidence
+├ priority
+├ subject system id/name
+├ FACT — observed technical state
 ├ DECLARATION — explicit administrator state when relevant
-├ GUIDANCE — what should be reviewed or implemented
-├ source signature / evidence reference
-└ generated timestamp
+├ GUIDANCE — technical review/completion action
+├ SHA-256 evidence signature
+└ generated_at metadata
 ```
 
-Initial candidate categories:
+Current workstream:
 
-- system record incomplete / review needed;
-- configured interaction disclosure requires review;
-- unsupported/unknown AI integration requiring manual review;
-- stale review/evidence;
-- later: content/media declaration workflow missing only when explicitly configured.
+- [x] immutable `Finding` domain model
+- [x] pure-PHP deterministic `FindingEngine`
+- [x] findings computed on demand rather than persisted separately
+- [x] stable finding identity independent of generation time
+- [x] stable SHA-256 signature from rule-relevant evidence only
+- [x] archived registry records ignored
+- [x] `registry_review_pending_v1`
+- [x] `interaction_context_missing_v1`
+- [x] `configured_disclosure_review_v1`
+- [x] disclosure finding preserves administrator declaration instead of inferring a legal obligation
+- [x] **Tools → AI Readiness** read-only administrator surface
+- [x] `manage_options` capability boundary
+- [x] EN/ES customer-facing readiness strings
+- [x] responsive readiness card layout and signature wrapping
+- [x] PHPUnit coverage for rule semantics, determinism and correction/removal behavior
+- [x] Playwright Discovery → Registry → Readiness path
+- [x] Editor access denial coverage
+- [ ] final PR-head CI green
+- [ ] WordPress Plugin Check green on exact package
+- [ ] runtime Readiness acceptance green
+- [ ] inherited Phase 2/3 regression suite green
+- [ ] PR merged to `main`
+- [ ] post-merge `main` verification green
+- [ ] blockers = 0
+
+First real runtime expectation:
+
+```text
+AI Engine 3.7.7
+→ deterministic Discovery
+→ explicit Add to registry
+→ discovered + pending review + empty interaction context
+→ Tools → AI Readiness
+→ exactly two initial technical findings
+   1. pending administrator review
+   2. missing interaction context
+```
 
 Rules:
 
 - findings must be deterministic and reproducible;
+- correcting registry state must remove obsolete findings on the next evaluation;
 - observed facts, administrator declarations and guidance must never be conflated;
-- a finding is not a legal decision or certification;
+- findings are technical review signals, not legal decisions or certification;
 - customer-facing findings ship EN/ES together;
 - no automatic external telemetry is introduced.
 
-Exit: at least one real registry/discovery state produces reproducible, bilingual findings with explicit evidence and no legal overclaim.
+Implementation details: [`PHASE4_FINDINGS_IMPLEMENTATION.md`](PHASE4_FINDINGS_IMPLEMENTATION.md).  
+Acceptance checklist: [`PHASE4_ACCEPTANCE.md`](PHASE4_ACCEPTANCE.md).
+
+Exit: at least one real registry/discovery state produces reproducible, bilingual findings with explicit evidence, merged code, green post-merge verification and no legal overclaim.
 
 ## Phase 5 — Disclosure tooling
+
+Status: **not started — blocked by Phase 4 closure.**
 
 Goal: provide accessible, explicit disclosure components for supported configured contexts.
 

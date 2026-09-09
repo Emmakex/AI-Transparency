@@ -84,11 +84,11 @@ final class DiscoveryResult {
 		array $evidence,
 		string $source_signature
 	) {
-		$detector_id       = trim( $detector_id );
-		$integration_slug  = trim( $integration_slug );
-		$integration_name  = trim( $integration_name );
-		$observed_version  = trim( $observed_version );
-		$source_signature  = trim( $source_signature );
+		$detector_id      = trim( $detector_id );
+		$integration_slug = trim( $integration_slug );
+		$integration_name = trim( $integration_name );
+		$observed_version = trim( $observed_version );
+		$source_signature = trim( $source_signature );
 
 		if ( '' === $detector_id || '' === $integration_slug || '' === $integration_name || '' === $observed_version || '' === $source_signature ) {
 			throw new InvalidArgumentException( 'Discovery result identifiers, version and signature must be non-empty.' );

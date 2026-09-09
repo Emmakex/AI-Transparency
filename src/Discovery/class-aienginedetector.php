@@ -53,7 +53,8 @@ final class AiEngineDetector {
 			'plugin'                     => $observation->to_array(),
 		);
 
-		$encoded_evidence = wp_json_encode( $evidence, JSON_UNESCAPED_SLASHES );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode -- Pure detector intentionally has no WordPress runtime dependency.
+		$encoded_evidence = json_encode( $evidence, JSON_UNESCAPED_SLASHES );
 		if ( false === $encoded_evidence ) {
 			return null;
 		}

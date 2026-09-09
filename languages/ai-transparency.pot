@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kairoseth AI Transparency 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Emmakex/AI-Transparency/issues\n"
-"POT-Creation-Date: 2026-09-09 13:10+0000\n"
+"POT-Creation-Date: 2026-09-09 15:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -132,4 +132,82 @@ msgid "Archived"
 msgstr ""
 
 msgid "Active"
+msgstr ""
+
+msgid "AI Discovery"
+msgstr ""
+
+msgid "Discovery reports only explainable technical evidence from supported WordPress integrations."
+msgstr ""
+
+msgid "Discovery reads plugin identity, version and activation state only. It does not read AI provider credentials or infer legal compliance."
+msgstr ""
+
+msgid "Deterministic discovery"
+msgstr ""
+
+msgid "AI Engine was not detected as active in the WordPress plugin inventory."
+msgstr ""
+
+msgid "Open AI Systems Registry"
+msgstr ""
+
+msgid "Supported"
+msgstr ""
+
+msgid "Outside validated boundary"
+msgstr ""
+
+msgid "Detected integration evidence"
+msgstr ""
+
+msgid "Detected integration"
+msgstr ""
+
+msgid "Observed version"
+msgstr ""
+
+msgid "Supported detector boundary"
+msgstr ""
+
+msgid "Discovery status"
+msgstr ""
+
+msgid "Plugin file"
+msgstr ""
+
+msgid "Text domain"
+msgstr ""
+
+msgid "Evidence signature"
+msgstr ""
+
+msgid "This AI Engine version is detected but is outside the currently validated detector boundary."
+msgstr ""
+
+msgid "Review the installed version manually or wait for a validated detector update before adding it through discovery."
+msgstr ""
+
+msgid "Already in registry"
+msgstr ""
+
+msgid "This detected integration has already been added to the local registry."
+msgstr ""
+
+msgid "Add to registry"
+msgstr ""
+
+msgid "Adding the detected integration creates a local record with pending review status. You must still review its actual use and interaction context."
+msgstr ""
+
+msgid "Detected AI integration added to the registry for administrator review."
+msgstr ""
+
+msgid "The detected integration is already present in the registry."
+msgstr ""
+
+msgid "The AI Engine observation is outside the currently validated detector boundary."
+msgstr ""
+
+msgid "AI Engine could not be detected as an active plugin."
 msgstr ""

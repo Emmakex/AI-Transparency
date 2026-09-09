@@ -1,0 +1,135 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kairoseth AI Transparency 0.1.0\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: ai-transparency\n"
+
+msgid "Kairoseth AI Transparency"
+msgstr "Kairoseth AI Transparency"
+
+msgid "AI Transparency"
+msgstr "Transparencia de IA"
+
+msgid "You do not have permission to access this page."
+msgstr "No tienes permiso para acceder a esta página."
+
+msgid "Maintain a local inventory of AI systems used by this WordPress site."
+msgstr "Mantén un inventario local de los sistemas de IA utilizados por este sitio WordPress."
+
+msgid "Registry data stays in this WordPress site and is not sent to any external service automatically."
+msgstr "Los datos del registro permanecen en este sitio WordPress y no se envían automáticamente a ningún servicio externo."
+
+msgid "AI Systems Registry"
+msgstr "Registro de sistemas de IA"
+
+msgid "No AI systems have been registered yet."
+msgstr "Todavía no se ha registrado ningún sistema de IA."
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Review"
+msgstr "Revisión"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Updated"
+msgstr "Actualizado"
+
+msgid "Actions"
+msgstr "Acciones"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Archive"
+msgstr "Archivar"
+
+msgid "Edit AI system"
+msgstr "Editar sistema de IA"
+
+msgid "Add AI system"
+msgstr "Añadir sistema de IA"
+
+msgid "Readiness boundary:"
+msgstr "Límite de preparación:"
+
+msgid "This registry records technical information and administrator declarations. It does not certify or guarantee legal compliance."
+msgstr "Este registro conserva información técnica y declaraciones del administrador. No certifica ni garantiza el cumplimiento legal."
+
+msgid "System name"
+msgstr "Nombre del sistema"
+
+msgid "System type"
+msgstr "Tipo de sistema"
+
+msgid "Interaction context"
+msgstr "Contexto de interacción"
+
+msgid "Describe where or how visitors, staff or customers interact with this AI system."
+msgstr "Describe dónde o cómo interactúan los visitantes, el personal o los clientes con este sistema de IA."
+
+msgid "Review status"
+msgstr "Estado de revisión"
+
+msgid "Pending review"
+msgstr "Pendiente de revisión"
+
+msgid "Reviewed"
+msgstr "Revisado"
+
+msgid "Interaction disclosure"
+msgstr "Aviso de interacción con IA"
+
+msgid "This configured workflow requires an AI interaction disclosure."
+msgstr "Este flujo configurado requiere un aviso de interacción con IA."
+
+msgid "Update AI system"
+msgstr "Actualizar sistema de IA"
+
+msgid "AI system saved."
+msgstr "Sistema de IA guardado."
+
+msgid "AI system archived."
+msgstr "Sistema de IA archivado."
+
+msgid "Please provide a valid name, system type and review status."
+msgstr "Indica un nombre, un tipo de sistema y un estado de revisión válidos."
+
+msgid "The requested AI system could not be found."
+msgstr "No se pudo encontrar el sistema de IA solicitado."
+
+msgid "The AI systems registry could not be saved."
+msgstr "No se pudo guardar el registro de sistemas de IA."
+
+msgid "Chatbot"
+msgstr "Chatbot"
+
+msgid "Assistant"
+msgstr "Asistente"
+
+msgid "Content generator"
+msgstr "Generador de contenido"
+
+msgid "Recommender"
+msgstr "Recomendador"
+
+msgid "Classifier"
+msgstr "Clasificador"
+
+msgid "Other"
+msgstr "Otro"
+
+msgid "Archived"
+msgstr "Archivado"
+
+msgid "Active"
+msgstr "Activo"

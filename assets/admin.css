@@ -13,6 +13,21 @@
 	outline-offset: 2px;
 }
 
+.ai-transparency-admin .ai-transparency-discovery-evidence {
+	max-width: 900px;
+	table-layout: fixed;
+}
+
+.ai-transparency-admin .ai-transparency-discovery-evidence th {
+	width: 220px;
+}
+
+.ai-transparency-admin .ai-transparency-discovery-evidence code {
+	white-space: normal;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+
 .ai-transparency-admin .form-table input.regular-text,
 .ai-transparency-admin .form-table textarea,
 .ai-transparency-admin .form-table select {
@@ -46,8 +61,12 @@
 		padding-top: 0;
 	}
 
-	.ai-transparency-admin .widefat {
+	.ai-transparency-admin .ai-transparency-table-wrap .widefat {
 		min-width: 720px;
+	}
+
+	.ai-transparency-admin .ai-transparency-discovery-evidence th {
+		width: 42%;
 	}
 
 	.ai-transparency-admin .button-link-delete {

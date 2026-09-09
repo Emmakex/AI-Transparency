@@ -133,3 +133,81 @@ msgstr "Archivado"
 
 msgid "Active"
 msgstr "Activo"
+
+msgid "AI Discovery"
+msgstr "Descubrimiento de IA"
+
+msgid "Discovery reports only explainable technical evidence from supported WordPress integrations."
+msgstr "El descubrimiento muestra únicamente evidencia técnica explicable de integraciones WordPress compatibles."
+
+msgid "Discovery reads plugin identity, version and activation state only. It does not read AI provider credentials or infer legal compliance."
+msgstr "El descubrimiento solo lee la identidad, la versión y el estado de activación del plugin. No lee credenciales de proveedores de IA ni infiere cumplimiento legal."
+
+msgid "Deterministic discovery"
+msgstr "Descubrimiento determinista"
+
+msgid "AI Engine was not detected as active in the WordPress plugin inventory."
+msgstr "AI Engine no se detectó como activo en el inventario de plugins de WordPress."
+
+msgid "Open AI Systems Registry"
+msgstr "Abrir registro de sistemas de IA"
+
+msgid "Supported"
+msgstr "Compatible"
+
+msgid "Outside validated boundary"
+msgstr "Fuera del alcance validado"
+
+msgid "Detected integration evidence"
+msgstr "Evidencia de la integración detectada"
+
+msgid "Detected integration"
+msgstr "Integración detectada"
+
+msgid "Observed version"
+msgstr "Versión observada"
+
+msgid "Supported detector boundary"
+msgstr "Versión validada por el detector"
+
+msgid "Discovery status"
+msgstr "Estado del descubrimiento"
+
+msgid "Plugin file"
+msgstr "Archivo del plugin"
+
+msgid "Text domain"
+msgstr "Dominio de traducción"
+
+msgid "Evidence signature"
+msgstr "Firma de evidencia"
+
+msgid "This AI Engine version is detected but is outside the currently validated detector boundary."
+msgstr "Esta versión de AI Engine se detectó, pero está fuera del alcance actualmente validado del detector."
+
+msgid "Review the installed version manually or wait for a validated detector update before adding it through discovery."
+msgstr "Revisa manualmente la versión instalada o espera una actualización validada del detector antes de añadirla mediante el descubrimiento."
+
+msgid "Already in registry"
+msgstr "Ya está en el registro"
+
+msgid "This detected integration has already been added to the local registry."
+msgstr "Esta integración detectada ya se ha añadido al registro local."
+
+msgid "Add to registry"
+msgstr "Añadir al registro"
+
+msgid "Adding the detected integration creates a local record with pending review status. You must still review its actual use and interaction context."
+msgstr "Añadir la integración detectada crea un registro local con estado pendiente de revisión. Aún debes revisar su uso real y su contexto de interacción."
+
+msgid "Detected AI integration added to the registry for administrator review."
+msgstr "La integración de IA detectada se añadió al registro para que la revise un administrador."
+
+msgid "The detected integration is already present in the registry."
+msgstr "La integración detectada ya está presente en el registro."
+
+msgid "The AI Engine observation is outside the currently validated detector boundary."
+msgstr "La observación de AI Engine está fuera del alcance actualmente validado del detector."
+
+msgid "AI Engine could not be detected as an active plugin."
+msgstr "No se pudo detectar AI Engine como plugin activo."

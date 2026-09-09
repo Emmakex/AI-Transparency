@@ -30,14 +30,14 @@ Canonical policies:
 
 ## Phase status summary
 
-| Phase | Status | Accepted outcome |
+| Phase | Status | Accepted outcome / target |
 |---|---|---|
 | 1 — Repository bootstrap | **Closed** | Safe public plugin foundation and CI |
 | 2 — Persistent AI Systems Registry | **Closed** | Local versioned registry + CRUD/review/archive |
 | 3 — Deterministic discovery | **Closed** | Explainable AI Engine 3.7.7 detector |
 | 4 — Readiness findings & evidence | **Closed** | Deterministic Fact / Declaration / Guidance findings |
 | 5 — Disclosure tooling | **Closed** | Reviewed registry state → explicit public shortcode disclosure |
-| 6 — Evidence export | **Unblocked / not started** | Dated reviewable local evidence export |
+| 6 — Evidence export | **Contract active / implementation not started** | Dated deterministic site-local JSON evidence snapshot |
 | 7 — Contextual support/custom integration | Not started | User-initiated support/custom path |
 | 8 — First public release | Not started | Stable public release after all release gates |
 
@@ -175,7 +175,7 @@ Exit: **complete.**
 
 ## Phase 5 — Disclosure tooling
 
-Status: **closed — accepted, merged and verified on `main` on 9 September 2026.**
+Status: **closed — accepted, merged, documented and verified on `main` on 9 September 2026.**
 
 Goal achieved: turn explicit reviewed registry configuration into a deliberately placed public disclosure without allowing browser content or plugin presence to become disclosure authority.
 
@@ -218,7 +218,7 @@ Accepted:
 - inherited Registry / Discovery / Readiness / Multisite gates green;
 - no telemetry, cookies, cloud dependency or legal compliance claim.
 
-Implementation evidence:
+Implementation and closure evidence:
 
 ```text
 Contract PR: #11
@@ -228,7 +228,11 @@ Implementation PR: #12
 Accepted head: 37ac6f8a3adf6ae33c98910fc0b2ff816789a697
 PR-head CI: #82 / 34394624556
 Implementation merge: 2770c7b7982ffbbe07ba58e8cedebd12d0add14a
-Post-merge main CI: #83 / 34395173777
+Implementation post-merge main CI: #83 / 34395173777
+Closure docs PR: #13
+Closure docs PR CI: #84 / 34396119654
+Closure docs merge: 0912cf2a21956d25b8c77b1ffec3668d041def42
+Final Phase 5 main CI: #85 / 34396547978
 Blockers: 0
 ```
 
@@ -252,25 +256,86 @@ Exit: **complete.**
 
 ## Phase 6 — Evidence export
 
-Status: **unblocked / not started.**
+Status: **contract active / implementation not started.**
 
-Goal: produce a dated, reviewable local evidence record without leaking secrets or turning technical evidence into legal certification.
+Goal: produce a dated, reviewable, privacy-safe and deterministic **site-local JSON technical evidence snapshot** without leaking secrets or turning technical evidence into legal certification.
 
-Planned first contract:
+Active v1 contract:
 
-- JSON export first;
-- schema/version metadata;
-- registry state relevant to the exported evidence;
-- discovery/finding evidence signatures where applicable;
-- explicit generation timestamp;
-- no secrets/provider credentials/prompts/conversations;
-- human-readable output only when separately designed and accepted;
-- EN/ES together for any customer-facing export UX or human-readable report;
-- deterministic output contract where timestamps are excluded from stable evidence identity as appropriate.
+```text
+WordPress administrator
+→ Tools → AI Evidence Export
+→ explicit POST action
+→ manage_options + nonce
+→ current site-local Registry loaded server-side
+→ Registry + persisted Discovery references
+→ FindingEngine output
+→ DisclosureEngine readiness
+→ canonical allow-list snapshot
+→ SHA-256 snapshot_signature
+→ direct JSON attachment download
+```
 
-Phase 6 implementation must not start until its design/acceptance contract is defined on a separate branch/PR.
+Contracted v1 boundaries:
 
-Exit target: one real administrator-generated export is deterministic, reviewable, privacy-safe, documented and validated against the production package.
+- JSON only; `export_schema_version = 1`;
+- current site/blog only in Multisite, never network-wide aggregation;
+- complete current site-local Registry, including archived records;
+- deterministic system/finding/readiness ordering;
+- normalized historical discovery signature references when persisted source shape is valid;
+- Phase 4 `FindingEngine` reused, not reimplemented;
+- Phase 5 `DisclosureEngine` reused, not reimplemented;
+- root UTC `generated_at` metadata;
+- stable SHA-256 `snapshot_signature` excludes volatile generation time;
+- same technical state + same contract → same `snapshot_signature` even at another generation time;
+- meaningful exported technical-state change → different `snapshot_signature`;
+- `interaction_context` is included only in the privileged administrative evidence artifact and the UI must warn that the file may contain confidential operational context;
+- no credentials, tokens, cookies, nonces, request headers, user identities, prompts, conversations, customer content, logs, DB dumps or arbitrary WordPress/plugin options;
+- no persistence to Media Library/options/custom table;
+- no email, telemetry, Kairoseth upload, provider call or cloud account;
+- technical snapshot signature is **not** a digital/legal signature, trusted timestamp, non-repudiation proof or compliance certification;
+- empty Registry remains a valid signed export;
+- customer-facing export UI must ship EN/ES together and pass responsive/accessibility acceptance.
+
+Canonical contract documents:
+
+- [`PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
+- [`PHASE6_ACCEPTANCE.md`](PHASE6_ACCEPTANCE.md)
+- [`PHASE6_JSON_SCHEMA_V1.md`](PHASE6_JSON_SCHEMA_V1.md)
+
+Planned implementation architecture after this contract is merged and verified:
+
+```text
+src/Export/class-evidencesnapshot.php
+src/Export/class-evidencesnapshotbuilder.php
+src/Export/class-jsonexporter.php
+src/Admin/class-evidenceexportpage.php
+```
+
+Exact class names may simplify during implementation, but the allow-list, deterministic-signature, server-authority, privacy and local-only boundaries are blocking.
+
+Required implementation evidence will include:
+
+```text
+unit determinism/privacy tests
++ real protected administrator JSON download
++ repeated unchanged export → same signature
++ real Registry change → different signature
++ Editor denied
++ EN/ES admin UX
++ 390 px / 200% / axe acceptance
++ production-package Plugin Check
++ inherited Registry / Discovery / Readiness / Disclosure regressions
++ site-local Multisite export isolation
++ PR merge
++ post-merge main CI
++ synchronized closure evidence
++ blockers = 0
+```
+
+Phase 6 production implementation must remain separate from this documentation contract. It may start only after the contract PR is merged and its post-merge `main` verification is green.
+
+Exit target: one real administrator-generated JSON evidence export passes the complete Registry → Findings → Disclosure readiness → canonical snapshot → deterministic signature → protected local download workflow, with privacy and Multisite boundaries validated.
 
 ## Phase 7 — Contextual support/custom integration path
 

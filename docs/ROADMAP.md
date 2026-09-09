@@ -38,7 +38,7 @@ Canonical policies:
 | 4 — Readiness findings & evidence | **Closed** | Deterministic Fact / Declaration / Guidance findings |
 | 5 — Disclosure tooling | **Closed** | Reviewed Registry state → explicit public shortcode disclosure |
 | 6 — Evidence export | **Closed** | Deterministic site-local JSON technical evidence snapshot |
-| 7 — Contextual support/custom integration | Not started | User-initiated support/custom path |
+| 7 — Contextual support/custom integration | **Contract active / implementation not started** | User-initiated bounded support/custom path to verified Kairoseth Custom Requests |
 | 8 — First public release | Not started | Stable public release after all release gates |
 
 ---
@@ -251,6 +251,9 @@ Accepted implementation head: 2b9ebe93820e98d9ce6e0abb4deb235fdeeda57c
 PR-head CI: #91 / 34402108452 — SUCCESS — 8/8 jobs green
 Implementation merge: bd07261751471fe7866e62049e3a66b7bd767afe
 Post-merge main CI: #92 / 34402685906 — SUCCESS — 8/8 jobs green
+Closure docs PR: #16
+Closure docs merge: baaeb200c7aa0a7625923515f8f1637e973797d9
+Final Phase 6 main CI: #94 / 34404252257 — SUCCESS — 8/8 jobs green
 Blockers: 0
 ```
 
@@ -276,22 +279,6 @@ real administrator page/action
 + inherited Phase 2–5 regressions green
 ```
 
-Resolved implementation-CI incidents:
-
-```text
-CI #88 / 34401564420
-PHP Quality → composer verify → exit 2
-signature: 2a713bc20438829d660dc95e2e37ae7ee4f63636d066a158e0ddf13c82bcb26e
-cause: WPCS short ternary / @throws formatting / assignment alignment
-
-CI #90 / 34401789546
-PHP Quality → composer verify → exit 1
-signature: 6b48a8a870fbf9e3431c98705136950325a21c62cd988d4b69f3048dda33ed09
-cause: Squiz @throws interpretation on EvidenceSnapshotBuilder::build()
-
-Both fixed without behavior change and validated by CI #91 and #92.
-```
-
 References:
 
 - [`PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
@@ -303,19 +290,53 @@ Exit: **complete.**
 
 ## Phase 7 — Contextual support/custom integration path
 
-Status: **not started — unblocked after Phase 6 closure documentation is merged and verified.**
+Status: **contract active — implementation not started.**
 
-Planned contract topics:
+Goal: provide an optional, user-initiated route from the WordPress admin to Kairoseth support/custom work while preserving the useful local Free product and strict privacy/data-minimization boundaries.
 
-- plugin-owned Help/About CTA;
-- EN/ES copy;
-- user-initiated action only;
-- bounded non-sensitive context;
-- no automatic telemetry/lead submission;
-- no credentials, logs, prompts, conversations or arbitrary site data;
-- clear boundary between local Free functionality and optional Kairoseth support/custom work.
+Accepted contract direction:
 
-Exit target: user-initiated support/custom path works end-to-end without weakening privacy, WordPress authority or local-first behavior.
+```text
+administrator
+→ Tools → AI Transparency Support
+→ explicit support/custom CTA click
+→ server-built bounded contextual URL
+→ verified canonical HTTPS Kairoseth Custom Requests route
+→ user reviews/enters personal or business details on Kairoseth
+→ user explicitly submits there
+```
+
+Allowed automatic context is limited to:
+
+```text
+source=extension
+extensionSlug=ai-transparency
+extensionName=Kairoseth AI Transparency
+extensionVersion=<real plugin version>
+hostPlatform=wordpress
+hostPlatformVersion=<real WordPress version>
+locale=<current locale>
+requestType=<bounded enum>
+```
+
+The plugin must not automatically transmit site URL, user identity, Registry contents, `interaction_context`, Discovery evidence, Readiness findings, Disclosure state, Evidence Export data/signature, plugin inventory, credentials, prompts, conversations, logs, DB content or arbitrary options.
+
+Phase 7 introduces no automatic network request on page load, no background lead submission, no telemetry, no remote entitlement and no cloud dependency for existing local workflows.
+
+Current external blocker:
+
+```text
+verified production Kairoseth Custom Requests route
+```
+
+The route must be real and verified before implementation can claim availability. The plugin must fail closed for non-HTTPS, non-Kairoseth or structurally unsafe destinations.
+
+Contract documents:
+
+- [`PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md`](PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md)
+- [`PHASE7_ACCEPTANCE.md`](PHASE7_ACCEPTANCE.md)
+
+Phase 7 implementation may start only after this contract PR is merged and verified. Closure additionally requires a real WordPress → Kairoseth Custom Requests E2E, EN/ES, responsive/accessibility, required CI/post-merge verification and blockers = 0.
 
 ## Phase 8 — First public release
 

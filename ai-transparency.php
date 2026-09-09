@@ -10,7 +10,7 @@
  * Author URI:        https://kairoseth.com/
  * License:           MIT
  * License URI:       https://opensource.org/license/mit/
- * Text Domain:       kairoseth-ai-transparency
+ * Text Domain:       ai-transparency
  * Domain Path:       /languages
  *
  * @package KairosethAITransparency

@@ -20,7 +20,13 @@
 }
 
 .ai-transparency-admin .button-link-delete {
+	color: #b32d2e;
 	margin-left: 8px;
+}
+
+.ai-transparency-admin .button-link-delete:hover,
+.ai-transparency-admin .button-link-delete:focus {
+	color: #8a2424;
 }
 
 @media screen and (max-width: 782px) {

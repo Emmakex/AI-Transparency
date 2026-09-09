@@ -34,8 +34,48 @@ jobs:
       - name: Install development dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
-      - name: Run coding standards and unit tests
-        run: composer verify
+      - name: Run coding standards, tests and bilingual coverage
+        run: bash bin/run-with-diagnostics.sh "PHP quality" -- composer verify
+
+      - name: Upload PHP quality diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-quality-diagnostics
+          path: .ci-diagnostics/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  bilingual-coverage:
+    name: EN/ES 100% coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Verify EN/ES catalog coverage
+        run: bash bin/run-with-diagnostics.sh "EN ES coverage" -- php bin/check-i18n.php
+
+      - name: Build bilingual production package
+        run: bash bin/run-with-diagnostics.sh "Bilingual production package" -- bash bin/build-plugin.sh
+
+      - name: Verify compiled Spanish catalog
+        run: test -s build/kairoseth-ai-transparency/languages/kairoseth-ai-transparency-es_ES.mo
+
+      - name: Upload bilingual diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bilingual-coverage-diagnostics
+          path: .ci-diagnostics/
+          if-no-files-found: ignore
+          retention-days: 14
 
   php-compatibility:
     name: PHP ${{ matrix.php }} syntax
@@ -56,11 +96,18 @@ jobs:
 
       - name: Lint production PHP
         shell: bash
-        run: |
-          set -euo pipefail
-          while IFS= read -r -d '' file; do
-            php -l "$file"
-          done < <(find . -path './vendor' -prune -o -name '*.php' -print0)
+        run: >-
+          bash bin/run-with-diagnostics.sh "PHP ${{ matrix.php }} syntax" --
+          bash -c 'set -euo pipefail; while IFS= read -r -d "" file; do php -l "$file"; done < <(find . -path "./vendor" -prune -o -path "./build" -prune -o -name "*.php" -print0)'
+
+      - name: Upload PHP syntax diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-${{ matrix.php }}-syntax-diagnostics
+          path: .ci-diagnostics/
+          if-no-files-found: ignore
+          retention-days: 14
 
   wordpress-plugin-check:
     name: WordPress Plugin Check
@@ -70,7 +117,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Build production plugin package
-        run: bash bin/build-plugin.sh
+        run: bash bin/run-with-diagnostics.sh "WordPress production package" -- bash bin/build-plugin.sh
 
       - name: Run official WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
@@ -82,3 +129,12 @@ jobs:
             security
             accessibility
             performance
+
+      - name: Upload package diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wordpress-package-diagnostics
+          path: .ci-diagnostics/
+          if-no-files-found: ignore
+          retention-days: 14

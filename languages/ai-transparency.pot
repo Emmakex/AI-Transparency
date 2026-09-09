@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kairoseth AI Transparency 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Emmakex/AI-Transparency/issues\n"
-"POT-Creation-Date: 2026-09-09 18:55+0000\n"
+"POT-Creation-Date: 2026-09-09 20:20+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -326,4 +326,34 @@ msgstr ""
 #. translators: %s is the administrator-reviewed AI system name.
 #, php-format
 msgid "This interaction uses the AI system “%s”. Review important information or outcomes before relying on them."
+msgstr ""
+
+msgid "AI Evidence Export"
+msgstr ""
+
+msgid "Create a local JSON snapshot of the current site AI Systems Registry, technical findings and disclosure readiness."
+msgstr ""
+
+msgid "This export is technical evidence for review. It is not legal certification, regulatory approval, a trusted timestamp or a digital signature."
+msgstr ""
+
+msgid "Confidentiality:"
+msgstr ""
+
+msgid "The JSON file may contain administrator-authored operational context from the Registry. Review and store the downloaded file appropriately."
+msgstr ""
+
+msgid "Generation is user-initiated and local to this WordPress request. The plugin does not upload, email or persist the generated evidence file."
+msgstr ""
+
+msgid "The export always uses the complete current site-local Registry. Browser-selected system ids or evidence values are not accepted."
+msgstr ""
+
+msgid "Download JSON evidence"
+msgstr ""
+
+msgid "The evidence export could not be generated. No file was created."
+msgstr ""
+
+msgid "Evidence export failed"
 msgstr ""

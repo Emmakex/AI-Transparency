@@ -35,6 +35,7 @@ final class AdminPage {
 	 */
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'register_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'admin_post_kairoseth_ai_transparency_save_system', array( $this, 'handle_save' ) );
 		add_action( 'admin_post_kairoseth_ai_transparency_archive_system', array( $this, 'handle_archive' ) );
 	}
@@ -55,6 +56,25 @@ final class AdminPage {
 	}
 
 	/**
+	 * Enqueue plugin-owned admin styles only on this screen.
+	 *
+	 * @param string $hook_suffix Current WordPress admin page hook.
+	 * @return void
+	 */
+	public function enqueue_assets( string $hook_suffix ): void {
+		if ( 'tools_page_ai-transparency' !== $hook_suffix ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'ai-transparency-admin',
+			plugins_url( 'assets/admin.css', KAIROSETH_AI_TRANSPARENCY_FILE ),
+			array(),
+			KAIROSETH_AI_TRANSPARENCY_VERSION
+		);
+	}
+
+	/**
 	 * Render the registry and editor.
 	 *
 	 * @return void
@@ -67,7 +87,7 @@ final class AdminPage {
 		$edit_id = isset( $_GET['system'] ) ? sanitize_text_field( wp_unslash( $_GET['system'] ) ) : '';
 		$editing = '' !== $edit_id ? $registry->find( $edit_id ) : null;
 		?>
-		<div class="wrap">
+		<div class="wrap ai-transparency-admin">
 			<h1><?php echo esc_html__( 'Kairoseth AI Transparency', 'ai-transparency' ); ?></h1>
 			<p><?php echo esc_html__( 'Maintain a local inventory of AI systems used by this WordPress site.', 'ai-transparency' ); ?></p>
 			<p><em><?php echo esc_html__( 'Registry data stays in this WordPress site and is not sent to any external service automatically.', 'ai-transparency' ); ?></em></p>
@@ -78,51 +98,59 @@ final class AdminPage {
 			<?php if ( 0 === $registry->count() ) : ?>
 				<p><?php echo esc_html__( 'No AI systems have been registered yet.', 'ai-transparency' ); ?></p>
 			<?php else : ?>
-				<table class="widefat striped">
-					<thead>
-						<tr>
-							<th scope="col"><?php echo esc_html__( 'Name', 'ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Type', 'ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Review', 'ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Status', 'ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Updated', 'ai-transparency' ); ?></th>
-							<th scope="col"><?php echo esc_html__( 'Actions', 'ai-transparency' ); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $registry->all() as $system ) : ?>
-							<?php
-							$edit_url = add_query_arg(
-								array(
-									'page'   => 'ai-transparency',
-									'system' => $system->id(),
-								),
-								admin_url( 'tools.php' )
-							);
-							?>
+				<div
+					class="ai-transparency-table-wrap"
+					role="region"
+					aria-label="<?php echo esc_attr__( 'AI Systems Registry', 'ai-transparency' ); ?>"
+					tabindex="0"
+				>
+					<table class="widefat striped">
+						<caption class="screen-reader-text"><?php echo esc_html__( 'AI Systems Registry', 'ai-transparency' ); ?></caption>
+						<thead>
 							<tr>
-								<td><strong><?php echo esc_html( $system->name() ); ?></strong></td>
-								<td><?php echo esc_html( $this->type_label( $system->type() ) ); ?></td>
-								<td><?php echo esc_html( $this->review_label( $system->review_status() ) ); ?></td>
-								<td><?php echo esc_html( $this->status_label( $system->status() ) ); ?></td>
-								<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
-								<td>
-									<a href="<?php echo esc_url( $edit_url ); ?>">
-										<?php echo esc_html__( 'Edit', 'ai-transparency' ); ?>
-									</a>
-									<?php if ( AiSystem::STATUS_ACTIVE === $system->status() ) : ?>
-										<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline">
-											<input type="hidden" name="action" value="kairoseth_ai_transparency_archive_system">
-											<input type="hidden" name="system_id" value="<?php echo esc_attr( $system->id() ); ?>">
-											<?php wp_nonce_field( 'kairoseth_ai_transparency_archive_' . $system->id(), '_kat_nonce' ); ?>
-											<button type="submit" class="button-link-delete"><?php echo esc_html__( 'Archive', 'ai-transparency' ); ?></button>
-										</form>
-									<?php endif; ?>
-								</td>
+								<th scope="col"><?php echo esc_html__( 'Name', 'ai-transparency' ); ?></th>
+								<th scope="col"><?php echo esc_html__( 'Type', 'ai-transparency' ); ?></th>
+								<th scope="col"><?php echo esc_html__( 'Review', 'ai-transparency' ); ?></th>
+								<th scope="col"><?php echo esc_html__( 'Status', 'ai-transparency' ); ?></th>
+								<th scope="col"><?php echo esc_html__( 'Updated', 'ai-transparency' ); ?></th>
+								<th scope="col"><?php echo esc_html__( 'Actions', 'ai-transparency' ); ?></th>
 							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							<?php foreach ( $registry->all() as $system ) : ?>
+								<?php
+								$edit_url = add_query_arg(
+									array(
+										'page'   => 'ai-transparency',
+										'system' => $system->id(),
+									),
+									admin_url( 'tools.php' )
+								);
+								?>
+								<tr>
+									<td><strong><?php echo esc_html( $system->name() ); ?></strong></td>
+									<td><?php echo esc_html( $this->type_label( $system->type() ) ); ?></td>
+									<td><?php echo esc_html( $this->review_label( $system->review_status() ) ); ?></td>
+									<td><?php echo esc_html( $this->status_label( $system->status() ) ); ?></td>
+									<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
+									<td>
+										<a href="<?php echo esc_url( $edit_url ); ?>">
+											<?php echo esc_html__( 'Edit', 'ai-transparency' ); ?>
+										</a>
+										<?php if ( AiSystem::STATUS_ACTIVE === $system->status() ) : ?>
+											<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline">
+												<input type="hidden" name="action" value="kairoseth_ai_transparency_archive_system">
+												<input type="hidden" name="system_id" value="<?php echo esc_attr( $system->id() ); ?>">
+												<?php wp_nonce_field( 'kairoseth_ai_transparency_archive_' . $system->id(), '_kat_nonce' ); ?>
+												<button type="submit" class="button-link-delete"><?php echo esc_html__( 'Archive', 'ai-transparency' ); ?></button>
+											</form>
+										<?php endif; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 			<?php endif; ?>
 
 			<hr>
@@ -272,8 +300,8 @@ final class AdminPage {
 				<tr>
 					<th scope="row"><label for="kat-interaction-context"><?php echo esc_html__( 'Interaction context', 'ai-transparency' ); ?></label></th>
 					<td>
-						<textarea name="interaction_context" id="kat-interaction-context" class="large-text" rows="3"><?php echo esc_textarea( $context ); ?></textarea>
-						<p class="description"><?php echo esc_html__( 'Describe where or how visitors, staff or customers interact with this AI system.', 'ai-transparency' ); ?></p>
+						<textarea name="interaction_context" id="kat-interaction-context" class="large-text" rows="3" aria-describedby="kat-interaction-context-description"><?php echo esc_textarea( $context ); ?></textarea>
+						<p class="description" id="kat-interaction-context-description"><?php echo esc_html__( 'Describe where or how visitors, staff or customers interact with this AI system.', 'ai-transparency' ); ?></p>
 					</td>
 				</tr>
 				<tr>
@@ -320,8 +348,10 @@ final class AdminPage {
 		if ( ! isset( $map[ $notice ] ) ) {
 			return;
 		}
+
+		$role = 'error' === $map[ $notice ][0] ? 'alert' : 'status';
 		?>
-		<div class="notice notice-<?php echo esc_attr( $map[ $notice ][0] ); ?> is-dismissible"><p><?php echo esc_html( $map[ $notice ][1] ); ?></p></div>
+		<div class="notice notice-<?php echo esc_attr( $map[ $notice ][0] ); ?> is-dismissible" role="<?php echo esc_attr( $role ); ?>"><p><?php echo esc_html( $map[ $notice ][1] ); ?></p></div>
 		<?php
 	}
 

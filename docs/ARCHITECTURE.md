@@ -1,27 +1,28 @@
 # Kairoseth AI Transparency — Implementation Architecture
 
-Status: active development — Phase 2 registry implemented, acceptance pending  
+Status: active development — Phase 2 closed, Phase 3 deterministic discovery active  
 Last reviewed: 9 September 2026
 
 ## Product boundary
 
-Kairoseth AI Transparency is a WordPress plugin for technical AI-transparency readiness. It helps a site owner maintain evidence about AI systems used on the site and implement supported disclosure workflows.
+Kairoseth AI Transparency is a WordPress plugin for technical AI-transparency readiness. It maintains a local, reviewable AI Systems Registry and can discover supported AI integrations only when explainable WordPress evidence exists.
 
-It is not a legal certification engine and must not infer legal obligations from weak evidence.
+It is not a legal certification engine and must not infer legal obligations from weak or probabilistic evidence.
 
 ## Architectural principles
 
-1. **Local-first Free baseline.** No automatic Kairoseth account, telemetry or off-site data transfer is required for core Free workflows.
-2. **Evidence before conclusions.** A finding records why it exists and whether evidence came from deterministic discovery, site configuration or an explicit user declaration.
-3. **No probabilistic authorship detector.** v1 does not claim to identify arbitrary AI-written text.
-4. **Server-authoritative permissions.** WordPress capabilities govern privileged operations; state changes use nonces where applicable.
-5. **WordPress-native security.** Validate/sanitize input and escape output for its context.
-6. **Domain separated from WordPress adapters.** Registry/rules/evidence models remain testable as pure PHP where practical.
-7. **EN/ES 100% together.** Customer-facing functionality ships English and Spanish in the same PR/release and CI blocks incomplete Spanish coverage.
-8. **Responsive/accessibility acceptance.** Customer-facing admin/frontend surfaces must meet the relevant UX/accessibility contract.
-9. **Custom work stays separate.** Customer-specific integrations live in independent private repositories.
-10. **Production package is release authority.** WordPress.org/release gates validate the generated package, not the engineering repository root.
-11. **Failures become reusable knowledge.** Material failures produce structured diagnostics and durable records when the lesson is reusable.
+1. **Local-first baseline.** Core registry/discovery workflows require no automatic external account, telemetry or off-site data transfer.
+2. **Evidence before conclusions.** Discovery reports what was actually observed and never converts plugin presence into a legal conclusion.
+3. **No probabilistic authorship detector.** The plugin does not claim to identify arbitrary AI-written text.
+4. **Server-authoritative permissions.** WordPress capabilities and nonces protect privileged actions.
+5. **Browser input is not discovery authority.** Discovery evidence is re-observed server-side immediately before persistence.
+6. **WordPress-native security.** Validate/sanitize input and escape output for its context.
+7. **Domain separated from WordPress adapters.** Pure PHP detector/registry logic remains testable without booting WordPress where practical.
+8. **EN/ES 100% together.** Customer-facing functionality ships English and Spanish in the same PR/release and CI blocks incomplete Spanish coverage.
+9. **Responsive/accessibility acceptance.** Plugin-owned admin/frontend surfaces pass the relevant UX/accessibility gates.
+10. **Production package is release authority.** Plugin Check and runtime acceptance validate `build/ai-transparency/`.
+11. **Failures become reusable knowledge.** Material failures produce structured diagnostics and durable prevention records.
+12. **Finish before advancing.** A phase cannot be declared closed until required implementation, acceptance, merge and post-merge verification are complete.
 
 Canonical engineering policies:
 
@@ -41,7 +42,8 @@ AI-Transparency/
 │   ├── class-autoloader.php
 │   ├── class-plugin.php
 │   ├── Admin/
-│   │   └── class-adminpage.php
+│   │   ├── class-adminpage.php
+│   │   └── class-discoverypage.php
 │   ├── Domain/
 │   │   └── class-aisystem.php
 │   ├── Registry/
@@ -49,10 +51,16 @@ AI-Transparency/
 │   │   └── class-registryschema.php
 │   ├── Persistence/
 │   │   └── class-wordpressoptionsregistryrepository.php
-│   ├── Discovery/                 next phase
+│   ├── Discovery/
+│   │   ├── class-pluginobservation.php
+│   │   ├── class-discoveryresult.php
+│   │   ├── class-aienginedetector.php
+│   │   └── class-wordpressplugininventory.php
 │   ├── Evidence/                  later phase
 │   ├── Disclosure/                later phase
 │   └── Export/                    later phase
+├── assets/
+│   └── admin.css
 ├── languages/
 │   ├── ai-transparency.pot
 │   └── ai-transparency-es_ES.po
@@ -62,6 +70,8 @@ AI-Transparency/
 │   ├── compile-po.php
 │   └── run-with-diagnostics.sh
 ├── tests/
+│   ├── e2e/
+│   └── runtime/
 ├── docs/
 └── .github/workflows/
 ```
@@ -74,37 +84,24 @@ source repository
 → deterministic build
 → compile Spanish gettext catalog
 → build/ai-transparency/
-→ official WordPress Plugin Check
-→ release ZIP / WordPress.org candidate
+→ WordPress Plugin Check
+→ real WordPress runtime acceptance
+→ release candidate
 ```
 
 Development-only files are intentionally absent from the generated package.
 
 ## Internationalization architecture
 
-Source language is English. Runtime strings use the text domain:
+Source language is English. Runtime strings use:
 
 ```text
-ai-transparency
+text domain: ai-transparency
+Spanish source: languages/ai-transparency-es_ES.po
+compiled Spanish: build/ai-transparency/languages/ai-transparency-es_ES.mo
 ```
 
-Spanish source translations live in:
-
-```text
-languages/ai-transparency-es_ES.po
-```
-
-`bin/check-i18n.php` compares runtime gettext strings with the Spanish catalog and fails on missing/empty translations or the wrong text domain.
-
-`bin/build-plugin.sh` compiles the PO catalog into:
-
-```text
-build/ai-transparency/languages/ai-transparency-es_ES.mo
-```
-
-The runtime loads bundled translations from `/languages` at WordPress `init`.
-
-The business contract is stricter than normal fallback behavior: **English and Spanish must both be complete for every customer-facing release.**
+`bin/check-i18n.php` compares runtime gettext strings with the Spanish catalog and blocks missing/empty translations or a wrong text domain.
 
 ## Core domains
 
@@ -112,7 +109,7 @@ The business contract is stricter than normal fallback behavior: **English and S
 
 The registry is the canonical local inventory of AI systems known to the plugin.
 
-Phase 2 records:
+Current record shape:
 
 ```text
 stable local id
@@ -127,13 +124,11 @@ configured interaction-disclosure requirement
 created / updated / reviewed timestamps
 ```
 
-The registry remains a pure PHP collection. WordPress persistence is provided by a separate adapter so the domain model remains testable without booting WordPress.
+Manual records use WordPress-generated UUIDs. Discovered records use stable detector-derived ids. Archive changes lifecycle state rather than deleting the record.
 
-Manual records use stable UUIDs generated by WordPress. Archive changes lifecycle state instead of destructively deleting the record.
+### Registry schema and persistence
 
-### Registry schema
-
-`RegistrySchema::VERSION = 1` is the canonical storage/export shape for the current implementation.
+`RegistrySchema::VERSION = 1` is the canonical storage shape:
 
 ```text
 {
@@ -142,179 +137,165 @@ Manual records use stable UUIDs generated by WordPress. Archive changes lifecycl
 }
 ```
 
-The schema adapter:
-
-- encodes deterministic registry state;
-- accepts legacy bootstrap arrays and migrates them to v1 defaults;
-- skips an invalid individual record instead of discarding the complete registry;
-- fails safe when a future unsupported schema version is encountered.
-
-Schema changes must add explicit migration behavior and regression coverage.
-
-### Persistence
-
-Phase 2 selects the normal WordPress Options API as the first persistent implementation:
+Persistence uses the normal WordPress Options API:
 
 ```text
-option name: kairoseth_ai_transparency_registry
+option: kairoseth_ai_transparency_registry
 API: get_option() / update_option()
 autoload: false on writes
 scope: current WordPress blog/site
 ```
 
-The implementation intentionally does **not** use `get_site_option()` / `update_site_option()` and does not create custom database tables.
-
-In Multisite, normal options follow the active blog/site context, which gives site-local registry separation by default. A network-wide inventory would require a separate product and authorization contract rather than being introduced implicitly.
-
-The repository normalizes older payloads on load and writes the current schema back when migration is needed.
+The repository migrates the earlier bootstrap array format, skips invalid individual records, fails safe on unknown future schema versions and preserves site-local separation in Multisite.
 
 ### Registry administration
 
-The current WordPress admin adapter lives under **Tools → AI Transparency** and supports:
+**Tools → AI Transparency** supports:
 
 ```text
-list records
-add record
-edit record
-mark review state
-record interaction context
-configure interaction-disclosure requirement
-archive record
+list
+add
+edit
+review state
+interaction context
+disclosure-required declaration
+archive
 ```
 
-Every mutation routes through `admin-post.php`, requires `manage_options`, requires a WordPress nonce and validates/sanitizes request data server-side. Output is escaped according to context.
+Every mutation uses `admin-post.php`, `manage_options`, a nonce and server-side validation/sanitization.
 
-Registry operations make no telemetry or off-site Kairoseth request.
+### Deterministic discovery
 
-### Discovery
+**Tools → AI Discovery** converts WordPress observations into reviewable candidates.
 
-Discovery is deterministic and adapter-based.
-
-Examples:
+Architecture:
 
 ```text
-supported plugin installed/active
-known block/widget configuration
-known shortcode/configuration
-explicit administrator declaration
+WordPressPluginInventory
+→ PluginObservation[]
+→ integration-specific detector
+→ DiscoveryResult
+   ├ detector id
+   ├ observed version
+   ├ supported boundary
+   ├ explainable evidence
+   └ SHA-256 source signature
+→ administrator review
+→ explicit Add to registry
+→ server re-observes inventory
+→ supported result + manage_options + nonce
+→ discovered / pending-review AiSystem
 ```
 
-Discovery must not convert a weak heuristic into a legal conclusion. Every detector returns evidence, source type and a stable detector signature.
+Discovery never writes automatically.
 
-Discovery remains Phase 3 and must not begin until Phase 2 acceptance closes.
+#### AI Engine detector v1
 
-### Evidence / findings
-
-A future finding distinguishes:
+First validated boundary:
 
 ```text
-FACT
-what was observed
-
-DECLARATION
-what the administrator explicitly stated
-
-GUIDANCE
-what Kairoseth recommends reviewing/implementing
+plugin file: ai-engine/ai-engine.php
+text domain: ai-engine
+name prefix: AI Engine
+active: required
+validated version: 3.7.7
 ```
 
-This distinction is required for honest product claims and future exports.
+The detector proves only that the exact WordPress plugin identity is active at an observed version. It does not read AI Engine internal options, provider credentials, model configuration, prompts, conversations or content.
 
-### Disclosure
+A different AI Engine version can be identified but is reported as outside the validated boundary and cannot be accepted through automated discovery until explicitly validated.
 
-Disclosure tooling supports explicit, accessible notices for integrations/workflows where the administrator has configured a disclosure requirement.
+The generated registry candidate intentionally uses:
 
-It will not automatically alter arbitrary site content based solely on an AI guess.
+```text
+type: other
+source_origin: discovered
+review_status: pending
+interaction_context: empty
+interaction_disclosure_required: false
+```
+
+This prevents plugin presence from being misrepresented as evidence that a chatbot or other specific AI workflow is actually in use.
+
+Implementation/acceptance contract: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).
+
+### Future evidence/findings
+
+A future finding must distinguish:
+
+```text
+FACT        — what was observed
+DECLARATION — what an administrator stated
+GUIDANCE    — what should be reviewed or implemented
+```
+
+### Future disclosure tooling
+
+Disclosure components will only act on explicitly configured/supported workflows. The plugin will not alter arbitrary site content based on an AI guess.
 
 ## WordPress compatibility baseline
-
-Development target:
 
 - Requires WordPress: 6.6+
 - Tested-up-to target: 7.1
 - Requires PHP: 7.4+
-- Modern supported PHP is recommended for production.
+- Phase 3 AI Engine runtime fixture: AI Engine 3.7.7, which itself requires PHP 8.1+
 
-Compatibility claims become release claims only after corresponding acceptance evidence exists.
+The plugin remains PHP 7.4 compatible; the AI Engine discovery fixture runs in the dedicated WordPress 7.1 / PHP 8.3 acceptance lane.
 
 ## Security and privacy boundary
 
-The public plugin must never contain:
+The public plugin must never contain or silently collect:
 
-- client secrets;
-- customer-specific API credentials;
-- proprietary customer mappings;
+- customer/provider secrets;
+- API keys;
+- model/provider credentials;
+- private prompts/conversations;
+- customer-specific mappings;
 - private customer data fixtures;
 - hidden remote execution paths;
-- model output capable of granting WordPress roles/capabilities.
+- browser/model output capable of granting WordPress privileges.
 
-The Phase 2 registry adds no external request path. Its persistent state remains local to the current WordPress site/blog.
-
-If optional external Kairoseth services are introduced later, the integration requires an explicit product contract covering data categories, consent/action, purpose, retention, authorization and failure behavior.
-
-## Custom Requests boundary
-
-The Free plugin will eventually expose a contextual, non-intrusive Custom Request CTA in plugin-owned admin/help surfaces.
-
-The CTA and its context are EN/ES customer-facing surfaces and therefore subject to the 100% bilingual gate.
-
-The public frontend does not receive promotional Kairoseth credits/links by default.
-
-Custom implementations use a new private repository based on a referenced Free commit/release. The public Free repository remains public.
+Registry and current discovery operations make no external Kairoseth request.
 
 ## CI / release gates
 
-Current baseline:
+Current blocking gates:
 
 ```text
 PHP quality
-├── WordPress Coding Standards
-├── PHPCompatibility 7.4+
-├── PHPUnit
-└── EN/ES coverage checker
+├ WordPress Coding Standards
+├ PHPCompatibility 7.4+
+├ PHPUnit
+└ EN/ES source coverage
 
-EN/ES 100% coverage
-├── source/catalog comparison
-├── deterministic production build
-└── compiled Spanish MO exists
+EN/ES 100%
+├ runtime string/catalog comparison
+├ production build
+└ compiled Spanish MO
 
 PHP syntax
-├── 7.4
-├── 8.1
-├── 8.3
-└── 8.5
+├ 7.4
+├ 8.1
+├ 8.3
+└ 8.5
 
 WordPress Plugin Check
-└── exact build/ai-transparency package
+└ exact build/ai-transparency package
+
+WordPress runtime acceptance
+├ production plugin activation
+├ real schema migration
+├ registry CRUD/permissions
+├ responsive/accessibility browser gate
+├ AI Engine 3.7.7 deterministic discovery/acceptance
+└ Multisite registry isolation
 ```
 
-Repository-controlled failing commands use `bin/run-with-diagnostics.sh` and upload bounded `.ci-diagnostics/` evidence. Because the directory is hidden, every diagnostics upload explicitly sets `include-hidden-files: true`; this invariant is recorded in engineering failure memory.
+Repository-controlled failures use `bin/run-with-diagnostics.sh` and upload `.ci-diagnostics/` evidence.
 
-Phase 2 adds contract tests for:
+## Phase status
 
-```text
-registry lifecycle metadata
-schema v1 encode/decode
-legacy migration
-invalid-record isolation
-future-schema fail-safe
-WordPress Options persistence round trip
-simulated per-blog/site isolation
-```
-
-Phase 2 closure still requires real WordPress runtime, Multisite, responsive and accessibility acceptance. See [`PHASE2_REGISTRY_IMPLEMENTATION.md`](PHASE2_REGISTRY_IMPLEMENTATION.md).
-
-Later phases add only their required gates, including deterministic discovery integration tests, disclosure frontend acceptance and release ZIP checks.
-
-## Canonical cross-repository documents
-
-The broader product/commercial truth remains in `Emmakex/kairoseth-platform/docs/`:
-
-- `AI_TRANSPARENCY_PRODUCT_V1.md`
-- `AI_TRANSPARENCY_NAMING_SEO.md`
-- `AI_TRANSPARENCY_ARCHITECTURE.md`
-- `AI_TRANSPARENCY_ROADMAP.md`
-- `AI_TRANSPARENCY_ACCEPTANCE.md`
-- `EXTENSIONS_REPOSITORY_AND_CUSTOM_POLICY.md`
-
-This repository owns implementation/release truth for the WordPress Free plugin. If implementation forces a product-contract change, both repositories are updated in the same workstream before the phase is declared complete.
+- Phase 1: closed.
+- Phase 2 Persistent AI Systems Registry: closed and verified on `main`.
+- Phase 3 Deterministic Discovery: active; first AI Engine detector under acceptance.
+- Later phases: not started.

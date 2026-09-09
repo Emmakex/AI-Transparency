@@ -4,7 +4,7 @@
 
 [English](#english) · [Español](#español)
 
-> **Status / Estado:** pre-release development / desarrollo pre-release. No stable WordPress.org release is claimed yet / todavía no se afirma una versión estable en WordPress.org.
+> **Status / Estado:** pre-release development / desarrollo pre-release. Phase 2 registry implementation is active; no stable WordPress.org release is claimed yet / la implementación del registro de Fase 2 está activa; todavía no se afirma una versión estable en WordPress.org.
 
 ---
 
@@ -55,6 +55,25 @@ The Free v1 direction includes:
 - **100% English and Spanish customer-facing UX in every functional release**;
 - no mandatory Kairoseth account or automatic telemetry for the Free baseline.
 
+### Current implementation status
+
+Phase 2 currently provides a development implementation of the local AI Systems Registry under **Tools > AI Transparency**.
+
+An authorized administrator can:
+
+```text
+add AI system
+edit AI system
+set review status
+record interaction context
+configure interaction-disclosure state
+archive AI system
+```
+
+Registry state is persisted locally in the current WordPress site's normal Options storage using a versioned schema. It does not use a network-wide Multisite option and does not send registry data to Kairoseth automatically.
+
+Phase 2 is **not closed yet**. Real WordPress/Multisite, unauthorized-role, responsive, accessibility and upgrade/migration acceptance must still pass before Phase 3 begins. See [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md).
+
 ### Important boundary
 
 This software provides **technical readiness, workflow and evidence tooling**. It does **not** certify or guarantee legal compliance with the EU AI Act or any other law.
@@ -66,14 +85,16 @@ Kairoseth AI Transparency intentionally does **not** attempt generic probabilist
 The repository contains:
 
 - WordPress plugin loader and production autoloader;
-- initial admin screen under **Tools > AI Transparency**;
-- pure PHP `AiSystem` domain model and deterministic `AiSystemsRegistry` foundation;
+- registry administration under **Tools > AI Transparency**;
+- pure PHP `AiSystem` domain model and deterministic `AiSystemsRegistry`;
+- versioned registry schema and site-local WordPress Options persistence adapter;
+- migration and simulated site-isolation tests;
 - PHPUnit, WordPress Coding Standards and PHP 7.4+ compatibility gates;
 - PHP syntax matrix;
 - official WordPress Plugin Check against the generated production package;
 - mandatory **EN/ES 100% coverage** CI gate;
 - bundled Spanish gettext catalog compiled into the production package;
-- actionable CI diagnostic runner and failure artifacts;
+- actionable CI diagnostic runner and downloadable failure artifacts;
 - durable engineering failure/solution memory;
 - security, contribution, engineering, bilingual and trademark policies;
 - WordPress.org-style `readme.txt`.
@@ -183,6 +204,25 @@ La dirección Free v1 incluye:
 - **UX customer-facing 100% en inglés y español en cada release funcional**;
 - sin cuenta Kairoseth obligatoria ni telemetría automática en el baseline Free.
 
+### Estado actual de implementación
+
+La Fase 2 dispone actualmente de una implementación de desarrollo del AI Systems Registry local en **Herramientas > AI Transparency**.
+
+Un administrador autorizado puede:
+
+```text
+añadir sistema de IA
+editar sistema de IA
+marcar estado de revisión
+guardar contexto de interacción
+configurar el estado del aviso de interacción
+archivar sistema de IA
+```
+
+El registro se guarda localmente en el almacenamiento normal Options del sitio WordPress actual mediante un schema versionado. No usa una opción global de red Multisite ni envía automáticamente los datos del registro a Kairoseth.
+
+La Fase 2 **todavía no está cerrada**. Deben pasar la aceptación real de WordPress/Multisite, rechazo de roles no autorizados, responsive, accesibilidad y upgrade/migración antes de iniciar la Fase 3. Consulta [`docs/PHASE2_REGISTRY_IMPLEMENTATION.md`](docs/PHASE2_REGISTRY_IMPLEMENTATION.md).
+
 ### Límite importante
 
 Este software proporciona **readiness técnico, workflow y herramientas de evidencia**. **No certifica ni garantiza cumplimiento legal** del Reglamento de IA de la UE ni de ninguna otra norma.
@@ -194,14 +234,16 @@ Kairoseth AI Transparency tampoco intenta detectar probabilísticamente y de for
 El repositorio contiene:
 
 - loader del plugin WordPress y autoloader de producción;
-- pantalla inicial en **Herramientas > AI Transparency**;
-- modelo PHP puro `AiSystem` y base determinista `AiSystemsRegistry`;
+- administración del registro en **Herramientas > AI Transparency**;
+- modelo PHP puro `AiSystem` y `AiSystemsRegistry` determinista;
+- schema versionado y adaptador de persistencia WordPress Options site-local;
+- tests de migración y aislamiento simulado por sitio;
 - PHPUnit, WordPress Coding Standards y gates de compatibilidad PHP 7.4+;
 - matriz de sintaxis PHP;
 - WordPress Plugin Check oficial sobre el paquete generado;
 - gate CI obligatorio de **cobertura EN/ES 100%**;
 - catálogo gettext español compilado dentro del paquete de producción;
-- runner de diagnósticos CI accionables y artefactos de fallo;
+- runner de diagnósticos CI accionables y artefactos descargables de fallo;
 - memoria duradera de fallos/soluciones de ingeniería;
 - políticas de seguridad, contribución, ingeniería, bilingüismo y marca;
 - `readme.txt` estilo WordPress.org.

@@ -271,3 +271,59 @@ msgstr "Verifica que el aviso configurado tenga una implementación y ubicación
 
 msgid "Review the technical evidence and update the registry when appropriate."
 msgstr "Revisa la evidencia técnica y actualiza el registro cuando corresponda."
+
+msgid "AI Disclosure"
+msgstr "Aviso de IA"
+
+msgid "Review which registered AI systems are ready for explicit frontend disclosure placement."
+msgstr "Revisa qué sistemas de IA registrados están listos para colocar explícitamente un aviso en el frontend."
+
+msgid "Disclosure readiness is derived from current reviewed registry state. This screen does not decide legal obligations."
+msgstr "La preparación del aviso se deriva del estado actual revisado del registro. Esta pantalla no decide obligaciones legales."
+
+msgid "Disclosure readiness"
+msgstr "Preparación del aviso"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "Readiness"
+msgstr "Preparación"
+
+msgid "Placement"
+msgstr "Ubicación"
+
+msgid "Ready"
+msgstr "Listo"
+
+msgid "Not ready"
+msgstr "No listo"
+
+msgid "Place this shortcode manually in the supported WordPress post or page interaction context."
+msgstr "Coloca este shortcode manualmente en el contexto de interacción compatible de una entrada o página de WordPress."
+
+msgid "Edit registry record"
+msgstr "Editar registro"
+
+msgid "The system is archived."
+msgstr "El sistema está archivado."
+
+msgid "Administrator review is still pending."
+msgstr "La revisión del administrador sigue pendiente."
+
+msgid "Interaction context is missing."
+msgstr "Falta el contexto de interacción."
+
+msgid "Interaction disclosure is not configured."
+msgstr "El aviso de interacción no está configurado."
+
+msgid "The registry record is not ready for disclosure placement."
+msgstr "El registro no está listo para colocar el aviso."
+
+msgid "AI transparency notice"
+msgstr "Aviso de transparencia de IA"
+
+#. translators: %s is the administrator-reviewed AI system name.
+#, php-format
+msgid "This interaction uses the AI system “%s”. Review important information or outcomes before relying on them."
+msgstr "Esta interacción utiliza el sistema de IA «%s». Revisa la información o los resultados importantes antes de confiar en ellos."

@@ -43,13 +43,13 @@ Exceptions must never be used to bypass translation of surrounding explanatory t
 Customer-facing PHP strings use the plugin text domain:
 
 ```text
-kairoseth-ai-transparency
+ai-transparency
 ```
 
 Source language is English. Spanish source translations live in:
 
 ```text
-languages/kairoseth-ai-transparency-es_ES.po
+languages/ai-transparency-es_ES.po
 ```
 
 The release build compiles the Spanish catalog into the production package.
@@ -121,13 +121,13 @@ Estas excepciones nunca permiten dejar sin traducir el texto explicativo que las
 Las cadenas PHP customer-facing usan el text domain:
 
 ```text
-kairoseth-ai-transparency
+ai-transparency
 ```
 
 El idioma fuente es inglés. Las traducciones españolas viven en:
 
 ```text
-languages/kairoseth-ai-transparency-es_ES.po
+languages/ai-transparency-es_ES.po
 ```
 
 El build de release compila el catálogo español dentro del paquete de producción.

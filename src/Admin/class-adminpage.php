@@ -14,7 +14,11 @@ use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
  * Registers and renders the plugin-owned WordPress admin screen.
  */
 final class AdminPage {
-	/** @var WordPressOptionsRegistryRepository */
+	/**
+	 * Site-local registry repository.
+	 *
+	 * @var WordPressOptionsRegistryRepository
+	 */
 	private $repository;
 
 	/**
@@ -94,7 +98,10 @@ final class AdminPage {
 								<td><?php echo esc_html( $this->status_label( $system->status() ) ); ?></td>
 								<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
 								<td>
-									<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'kairoseth-ai-transparency', 'system' => $system->id() ), admin_url( 'tools.php' ) ) ); ?>">
+									<a href="<?php echo esc_url( add_query_arg( array(
+										'page'   => 'kairoseth-ai-transparency',
+										'system' => $system->id(),
+									), admin_url( 'tools.php' ) ) ); ?>">
 										<?php echo esc_html__( 'Edit', 'kairoseth-ai-transparency' ); ?>
 									</a>
 									<?php if ( AiSystem::STATUS_ACTIVE === $system->status() ) : ?>
@@ -342,26 +349,41 @@ final class AdminPage {
 		exit;
 	}
 
-	/** @param string $type Type key. @return string */
+	/**
+	 * Convert a system type key to its localized label.
+	 *
+	 * @param string $type Type key.
+	 * @return string
+	 */
 	private function type_label( string $type ): string {
 		$labels = array(
-			AiSystem::TYPE_CHATBOT    => __( 'Chatbot', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_ASSISTANT  => __( 'Assistant', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_GENERATOR  => __( 'Content generator', 'kairoseth-ai-transparency' ),
+			AiSystem::TYPE_CHATBOT     => __( 'Chatbot', 'kairoseth-ai-transparency' ),
+			AiSystem::TYPE_ASSISTANT   => __( 'Assistant', 'kairoseth-ai-transparency' ),
+			AiSystem::TYPE_GENERATOR   => __( 'Content generator', 'kairoseth-ai-transparency' ),
 			AiSystem::TYPE_RECOMMENDER => __( 'Recommender', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_CLASSIFIER => __( 'Classifier', 'kairoseth-ai-transparency' ),
-			AiSystem::TYPE_OTHER      => __( 'Other', 'kairoseth-ai-transparency' ),
+			AiSystem::TYPE_CLASSIFIER  => __( 'Classifier', 'kairoseth-ai-transparency' ),
+			AiSystem::TYPE_OTHER       => __( 'Other', 'kairoseth-ai-transparency' ),
 		);
 
 		return $labels[ $type ] ?? $type;
 	}
 
-	/** @param string $review Review key. @return string */
+	/**
+	 * Convert a review key to its localized label.
+	 *
+	 * @param string $review Review key.
+	 * @return string
+	 */
 	private function review_label( string $review ): string {
 		return AiSystem::REVIEW_REVIEWED === $review ? __( 'Reviewed', 'kairoseth-ai-transparency' ) : __( 'Pending review', 'kairoseth-ai-transparency' );
 	}
 
-	/** @param string $status Status key. @return string */
+	/**
+	 * Convert a lifecycle status key to its localized label.
+	 *
+	 * @param string $status Status key.
+	 * @return string
+	 */
 	private function status_label( string $status ): string {
 		return AiSystem::STATUS_ARCHIVED === $status ? __( 'Archived', 'kairoseth-ai-transparency' ) : __( 'Active', 'kairoseth-ai-transparency' );
 	}

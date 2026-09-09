@@ -99,8 +99,8 @@ final class DiscoveryPage {
 	public function render(): void {
 		$this->require_permission();
 
-		$result   = $this->detect_ai_engine();
-		$registry = $this->repository->load();
+		$result    = $this->detect_ai_engine();
+		$registry  = $this->repository->load();
 		$candidate = $result && $result->supported() ? $result->candidate( gmdate( 'c' ) ) : null;
 		$existing  = $candidate ? $registry->find( $candidate->id() ) : null;
 		?>
@@ -250,7 +250,7 @@ final class DiscoveryPage {
 	 */
 	private function render_notice(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only redirect notice.
-		$notice = isset( $_GET['kat_discovery_notice'] ) ? sanitize_key( wp_unslash( $_GET['kat_discovery_notice'] ) ) : '';
+		$notice   = isset( $_GET['kat_discovery_notice'] ) ? sanitize_key( wp_unslash( $_GET['kat_discovery_notice'] ) ) : '';
 		$messages = array(
 			'added'       => __( 'Detected AI integration added to the registry for administrator review.', 'ai-transparency' ),
 			'exists'      => __( 'The detected integration is already present in the registry.', 'ai-transparency' ),

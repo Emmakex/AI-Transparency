@@ -100,7 +100,7 @@ jobs:
         shell: bash
         run: >-
           bash bin/run-with-diagnostics.sh "PHP ${{ matrix.php }} syntax" --
-          bash -c 'set -euo pipefail; while IFS= read -r -d "" file; do php -l "$file"; done < <(find . -path "./vendor" -prune -o -path "./build" -prune -o -name "*.php" -print0)'
+          bash -c 'set -euo pipefail; while IFS= read -r -d "" file; do php -l "$file"; done < <(find . -path "./vendor" -prune -o -path "./build" -prune -o -path "./node_modules" -prune -o -name "*.php" -print0)'
 
       - name: Upload PHP syntax diagnostics
         if: failure()
@@ -139,6 +139,92 @@ jobs:
         with:
           name: wordpress-package-diagnostics
           path: .ci-diagnostics/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14
+
+  wordpress-runtime-acceptance:
+    name: WordPress runtime acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build production plugin package
+        run: bash bin/run-with-diagnostics.sh "Runtime production package" -- bash bin/build-plugin.sh
+
+      - name: Install pinned runtime tooling
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Start single-site WordPress
+        run: bash bin/run-with-diagnostics.sh "WordPress single-site start" -- npm exec -- wp-env start
+
+      - name: Verify production plugin activation
+        run: bash bin/run-with-diagnostics.sh "WordPress plugin activation" -- npm exec -- wp-env run cli "wp plugin is-active ai-transparency"
+
+      - name: Run real migration smoke
+        run: bash bin/run-with-diagnostics.sh "WordPress migration smoke" -- npm exec -- wp-env run cli "wp eval-file wp-content/ai-transparency-runtime-tests/single-site-smoke.php"
+
+      - name: Configure ephemeral runtime users
+        shell: bash
+        run: |
+          set -euo pipefail
+          ADMIN_PASS="$(openssl rand -hex 18)"
+          EDITOR_PASS="$(openssl rand -hex 18)"
+          npm exec -- wp-env run cli "wp user update admin --user_pass=${ADMIN_PASS}"
+          npm exec -- wp-env run cli "wp user create phase2_editor phase2-editor@example.test --role=editor --user_pass=${EDITOR_PASS}"
+          {
+            echo "WP_TEST_ADMIN_USER=admin"
+            echo "WP_TEST_ADMIN_PASS=${ADMIN_PASS}"
+            echo "WP_TEST_EDITOR_USER=phase2_editor"
+            echo "WP_TEST_EDITOR_PASS=${EDITOR_PASS}"
+          } >> "$GITHUB_ENV"
+
+      - name: Run CRUD, permission, responsive and accessibility acceptance
+        env:
+          WP_BASE_URL: http://localhost:8888
+        run: bash bin/run-with-diagnostics.sh "WordPress browser acceptance" -- npm run test:e2e
+
+      - name: Stop single-site WordPress
+        if: always()
+        run: npm exec -- wp-env stop || true
+
+      - name: Start Multisite WordPress
+        run: bash bin/run-with-diagnostics.sh "WordPress Multisite start" -- npm exec -- wp-env start --config=.wp-env.multisite.json
+
+      - name: Run real Multisite isolation smoke
+        run: >-
+          bash bin/run-with-diagnostics.sh "WordPress Multisite isolation" --
+          npm exec -- wp-env run cli "wp eval-file wp-content/ai-transparency-runtime-tests/multisite-smoke.php" --config=.wp-env.multisite.json
+
+      - name: Stop Multisite WordPress
+        if: always()
+        run: npm exec -- wp-env stop --config=.wp-env.multisite.json || true
+
+      - name: Upload runtime acceptance diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wordpress-runtime-acceptance-diagnostics
+          path: |
+            .ci-diagnostics/
+            playwright-report/
+            test-results/
           include-hidden-files: true
           if-no-files-found: ignore
           retention-days: 14

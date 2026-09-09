@@ -177,6 +177,12 @@ jobs:
       - name: Verify production plugin activation
         run: bash bin/run-with-diagnostics.sh "WordPress plugin activation" -- npm exec -- wp-env run cli -- wp plugin is-active ai-transparency
 
+      - name: Install AI Engine 3.7.7 discovery fixture
+        run: >-
+          bash bin/run-with-diagnostics.sh "AI Engine 3.7.7 fixture" --
+          npm exec -- wp-env run cli --
+          wp plugin install ai-engine --version=3.7.7 --activate --force
+
       - name: Run real migration smoke
         run: bash bin/run-with-diagnostics.sh "WordPress migration smoke" -- npm exec -- wp-env run cli -- wp eval-file wp-content/ai-transparency-runtime-tests/single-site-smoke.php
 
@@ -197,7 +203,7 @@ jobs:
             echo "WP_TEST_EDITOR_PASS=${EDITOR_PASS}"
           } >> "$GITHUB_ENV"
 
-      - name: Run CRUD, permission, responsive and accessibility acceptance
+      - name: Run CRUD, discovery, permission, responsive and accessibility acceptance
         env:
           WP_BASE_URL: http://localhost:8888
         run: bash bin/run-with-diagnostics.sh "WordPress browser acceptance" -- npm run test:e2e

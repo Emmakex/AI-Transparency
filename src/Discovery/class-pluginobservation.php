@@ -13,19 +13,39 @@ use InvalidArgumentException;
  * Immutable evidence observed from the WordPress plugin inventory.
  */
 final class PluginObservation {
-	/** @var string */
+	/**
+	 * WordPress plugin basename.
+	 *
+	 * @var string
+	 */
 	private $plugin_file;
 
-	/** @var string */
+	/**
+	 * Plugin header name.
+	 *
+	 * @var string
+	 */
 	private $name;
 
-	/** @var string */
+	/**
+	 * Plugin header version.
+	 *
+	 * @var string
+	 */
 	private $version;
 
-	/** @var string */
+	/**
+	 * Plugin header text domain.
+	 *
+	 * @var string
+	 */
 	private $text_domain;
 
-	/** @var bool */
+	/**
+	 * Whether WordPress reports the plugin as active.
+	 *
+	 * @var bool
+	 */
 	private $active;
 
 	/**
@@ -55,34 +75,58 @@ final class PluginObservation {
 		$this->active      = $active;
 	}
 
-	/** @return string */
+	/**
+	 * Get the WordPress plugin basename.
+	 *
+	 * @return string
+	 */
 	public function plugin_file(): string {
 		return $this->plugin_file;
 	}
 
-	/** @return string */
+	/**
+	 * Get the top-level plugin directory slug.
+	 *
+	 * @return string
+	 */
 	public function plugin_slug(): string {
 		$segments = explode( '/', $this->plugin_file );
 
 		return $segments[0];
 	}
 
-	/** @return string */
+	/**
+	 * Get the plugin header name.
+	 *
+	 * @return string
+	 */
 	public function name(): string {
 		return $this->name;
 	}
 
-	/** @return string */
+	/**
+	 * Get the plugin header version.
+	 *
+	 * @return string
+	 */
 	public function version(): string {
 		return $this->version;
 	}
 
-	/** @return string */
+	/**
+	 * Get the plugin header text domain.
+	 *
+	 * @return string
+	 */
 	public function text_domain(): string {
 		return $this->text_domain;
 	}
 
-	/** @return bool */
+	/**
+	 * Whether the plugin is active in the current WordPress context.
+	 *
+	 * @return bool
+	 */
 	public function active(): bool {
 		return $this->active;
 	}

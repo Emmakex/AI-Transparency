@@ -24,7 +24,7 @@ define( 'KAIROSETH_AI_TRANSPARENCY_VERSION', '0.1.0' );
 define( 'KAIROSETH_AI_TRANSPARENCY_FILE', __FILE__ );
 define( 'KAIROSETH_AI_TRANSPARENCY_PATH', plugin_dir_path( __FILE__ ) );
 
-require_once KAIROSETH_AI_TRANSPARENCY_PATH . 'src/Autoloader.php';
+require_once KAIROSETH_AI_TRANSPARENCY_PATH . 'src/class-autoloader.php';
 
 \Kairoseth\AITransparency\Autoloader::register();
 

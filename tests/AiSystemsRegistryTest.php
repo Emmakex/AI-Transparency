@@ -50,7 +50,7 @@ final class AiSystemsRegistryTest extends TestCase {
 				'source'                          => 'manual',
 				'interaction_disclosure_required' => true,
 			),
-			$system->toArray()
+			$system->to_array()
 		);
 	}
 }

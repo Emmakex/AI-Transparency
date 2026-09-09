@@ -1,0 +1,21 @@
+.ai-transparency-disclosure {
+	box-sizing: border-box;
+	margin: 1.5em 0;
+	padding: 1em 1.125em;
+	border: 1px solid currentColor;
+	border-radius: 0.5em;
+	max-width: 100%;
+	overflow-wrap: anywhere;
+}
+
+.ai-transparency-disclosure__title {
+	display: block;
+	margin: 0 0 0.5em;
+	font: inherit;
+	font-weight: 700;
+}
+
+.ai-transparency-disclosure__body {
+	margin: 0;
+	max-width: 100%;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "kairoseth/ai-transparency",
+  "description": "EU AI Act transparency readiness tooling for WordPress.",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "phpunit/phpunit": "^9.6",
+    "squizlabs/php_codesniffer": "^3.10",
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "phpcs --standard=phpcs.xml.dist",
+    "verify": [
+      "@lint",
+      "@test"
+    ]
+  }
+}

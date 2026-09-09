@@ -40,7 +40,19 @@ This applies to PHP quality, bilingual coverage, PHP syntax and package diagnost
 
 ## Verification
 
-Validation is performed by the next CI run after this fix. A future deliberately failing repository-controlled command should produce a downloadable diagnostics artifact as an explicit regression check when practical.
+Confirmed by CI run `34356351642` on PR #3 after the fix. The repository-controlled `PHP quality` failure generated three diagnostic files and `actions/upload-artifact@v4` successfully uploaded `php-quality-diagnostics.zip`.
+
+Evidence:
+
+```text
+artifact: php-quality-diagnostics
+artifact_id: 10105937328
+files uploaded: 3
+artifact size: 2339 bytes
+result: successfully finalized and uploaded
+```
+
+This verifies the hidden-directory upload boundary is fixed. The failing PHP quality command itself remained a separate WPCS formatting issue and was diagnosed from the structured output rather than conflated with the artifact transport fix.
 
 ## Related
 
@@ -48,3 +60,4 @@ Validation is performed by the next CI run after this fix. A future deliberately
 - `bin/run-with-diagnostics.sh`
 - `.github/workflows/ci.yml`
 - PR #3
+- CI run `34356351642`

@@ -60,22 +60,40 @@ Exit: bootstrap foundation merged with required public CI evidence. Engineering/
 
 ## Phase 2 — Persistent AI Systems Registry
 
+Status: **active — first functional increment implemented in PR #3; acceptance still pending.**
+
 Goal: let an administrator explicitly maintain a trustworthy local inventory.
 
-Planned:
+Implemented in the current Phase 2 workstream:
 
-- versioned registry schema;
-- WordPress persistence adapter;
-- add/edit/archive AI system records;
-- system type taxonomy;
-- source/origin metadata;
-- review status and timestamps;
-- **100% EN/ES admin UX in the same PRs**;
-- capability + nonce enforcement;
-- deterministic export shape;
-- migration tests;
-- Multisite storage decision and isolation acceptance;
-- responsive/accessibility acceptance for the registry UI.
+- [x] versioned registry schema (`schema_version = 1`)
+- [x] site-local WordPress Options persistence adapter
+- [x] add/edit/archive AI system records
+- [x] system type taxonomy
+- [x] source/origin metadata
+- [x] review status and timestamps
+- [x] interaction context and configured disclosure state
+- [x] **100% EN/ES admin UX in the same PR**
+- [x] capability + nonce enforcement for mutations
+- [x] deterministic persistence/export shape
+- [x] legacy migration tests
+- [x] simulated per-blog/site isolation contract test
+- [x] Multisite storage decision: current blog/site scope, no network-wide registry in v1
+- [x] diagnostics artifact regression fixed and recorded in failure memory
+
+Required before Phase 2 closure:
+
+- [ ] final CI green on the closing Phase 2 SHA
+- [ ] real WordPress add/edit/archive smoke
+- [ ] unauthorized-role mutation rejection in WordPress runtime
+- [ ] real Multisite isolation smoke
+- [ ] responsive admin acceptance
+- [ ] keyboard/accessibility acceptance
+- [ ] real upgrade/migration acceptance on WordPress
+- [ ] documentation/acceptance evidence synchronized
+- [ ] blockers = 0
+
+Implementation details and acceptance status: [`PHASE2_REGISTRY_IMPLEMENTATION.md`](PHASE2_REGISTRY_IMPLEMENTATION.md).
 
 Exit: registry CRUD and persistence accepted without external telemetry, with EN/ES coverage gate green and blockers 0.
 

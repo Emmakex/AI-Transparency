@@ -1,0 +1,17 @@
+{
+  "core": "WordPress/WordPress#7.1",
+  "phpVersion": "8.3",
+  "plugins": [
+    "./build/ai-transparency"
+  ],
+  "mappings": {
+    "wp-content/ai-transparency-runtime-tests": "./tests/runtime"
+  },
+  "port": 8888,
+  "testsPort": 8889,
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "SCRIPT_DEBUG": true
+  }
+}

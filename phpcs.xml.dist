@@ -4,7 +4,6 @@
 
 	<file>ai-transparency.php</file>
 	<file>src</file>
-	<file>tests</file>
 
 	<exclude-pattern>vendor/*</exclude-pattern>
 
@@ -22,7 +21,9 @@
 
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="kairoseth-ai-transparency"/>
+			<property name="text_domain" type="array">
+				<element value="kairoseth-ai-transparency"/>
+			</property>
 		</properties>
 	</rule>
 </ruleset>

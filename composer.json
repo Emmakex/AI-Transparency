@@ -22,9 +22,11 @@
   "scripts": {
     "test": "phpunit",
     "lint": "phpcs --standard=phpcs.xml.dist",
+    "i18n": "php bin/check-i18n.php",
     "verify": [
       "@lint",
-      "@test"
+      "@test",
+      "@i18n"
     ]
   }
 }

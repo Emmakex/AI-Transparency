@@ -15,10 +15,18 @@ use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
  * Renders deterministic readiness findings from current local registry state.
  */
 final class ReadinessPage {
-	/** @var WordPressOptionsRegistryRepository */
+	/**
+	 * Site-local registry repository.
+	 *
+	 * @var WordPressOptionsRegistryRepository
+	 */
 	private $repository;
 
-	/** @var FindingEngine */
+	/**
+	 * Deterministic readiness finding engine.
+	 *
+	 * @var FindingEngine
+	 */
 	private $engine;
 
 	/**

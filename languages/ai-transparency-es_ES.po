@@ -327,3 +327,33 @@ msgstr "Aviso de transparencia de IA"
 #, php-format
 msgid "This interaction uses the AI system “%s”. Review important information or outcomes before relying on them."
 msgstr "Esta interacción utiliza el sistema de IA «%s». Revisa la información o los resultados importantes antes de confiar en ellos."
+
+msgid "AI Evidence Export"
+msgstr "Exportación de evidencia de IA"
+
+msgid "Create a local JSON snapshot of the current site AI Systems Registry, technical findings and disclosure readiness."
+msgstr "Crea una instantánea JSON local del Registro de sistemas de IA del sitio actual, los hallazgos técnicos y la preparación de los avisos."
+
+msgid "This export is technical evidence for review. It is not legal certification, regulatory approval, a trusted timestamp or a digital signature."
+msgstr "Esta exportación es evidencia técnica para revisión. No es una certificación legal, una aprobación regulatoria, un sello de tiempo confiable ni una firma digital."
+
+msgid "Confidentiality:"
+msgstr "Confidencialidad:"
+
+msgid "The JSON file may contain administrator-authored operational context from the Registry. Review and store the downloaded file appropriately."
+msgstr "El archivo JSON puede contener contexto operativo escrito por el administrador en el Registro. Revisa y guarda adecuadamente el archivo descargado."
+
+msgid "Generation is user-initiated and local to this WordPress request. The plugin does not upload, email or persist the generated evidence file."
+msgstr "La generación la inicia el usuario y es local a esta solicitud de WordPress. El plugin no sube, envía por correo ni conserva el archivo de evidencia generado."
+
+msgid "The export always uses the complete current site-local Registry. Browser-selected system ids or evidence values are not accepted."
+msgstr "La exportación utiliza siempre el Registro local completo del sitio actual. No se aceptan identificadores de sistemas ni valores de evidencia seleccionados por el navegador."
+
+msgid "Download JSON evidence"
+msgstr "Descargar evidencia JSON"
+
+msgid "The evidence export could not be generated. No file was created."
+msgstr "No se pudo generar la exportación de evidencia. No se creó ningún archivo."
+
+msgid "Evidence export failed"
+msgstr "Error en la exportación de evidencia"

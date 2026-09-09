@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ruleset name="Kairoseth AI Transparency">
+	<description>WordPress coding standards and PHP 7.4+ compatibility.</description>
+
+	<file>ai-transparency.php</file>
+	<file>src</file>
+
+	<exclude-pattern>vendor/*</exclude-pattern>
+
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="PHPCompatibilityWP">
+		<config name="testVersion" value="7.4-"/>
+	</rule>
+
+	<config name="minimum_supported_wp_version" value="6.6"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="kairoseth-ai-transparency"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

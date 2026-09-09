@@ -1,9 +1,9 @@
 # Phase 6 — Evidence Export JSON Schema v1
 
-Status: **active contract — implementation not started**  
+Status: **accepted and implemented**  
 Last reviewed: 9 September 2026
 
-This document defines the canonical logical shape for Phase 6 JSON evidence export. It is a product contract, not a formal JSON Schema vocabulary document.
+This document defines the canonical logical shape for the accepted Phase 6 JSON evidence export. It is a product contract, not a formal JSON Schema vocabulary document.
 
 ## Root object
 
@@ -70,7 +70,7 @@ Required object:
 }
 ```
 
-`plugin_version` must come from the plugin runtime constant during generation.
+`plugin_version` comes from the plugin runtime constant during generation.
 
 ## `site`
 
@@ -85,6 +85,8 @@ Required object:
 ```
 
 No user identity, IP address, cookies, request headers or authentication metadata is part of this object.
+
+The accepted implementation resolves this state server-side from WordPress rather than browser input.
 
 ## `registry`
 
@@ -112,9 +114,9 @@ Every `systems[]` item uses this allow-list:
   "review_status": "reviewed",
   "interaction_context": "Customer support assistant on the help flow.",
   "interaction_disclosure_required": true,
-  "created_at": "2026-09-09T18:00:00Z",
-  "updated_at": "2026-09-09T18:10:00Z",
-  "reviewed_at": "2026-09-09T18:10:00Z"
+  "created_at": "...",
+  "updated_at": "...",
+  "reviewed_at": "..."
 }
 ```
 
@@ -234,8 +236,10 @@ Canonical construction rules:
 6. Preserve the accepted deterministic order of `reason_codes` returned by `DisclosureEngine`.
 7. Encode booleans as JSON booleans, integers as JSON integers, and all documented text/timestamps as JSON strings.
 8. Use UTF-8 JSON encoding without pretty-print whitespace as the canonical bytes used for hashing.
-9. A presentation/download copy may be pretty-printed only if the implementation proves that pretty printing is performed **after** the canonical signature bytes have been produced and does not alter signature semantics.
+9. The presentation/download copy may be pretty-printed only after the canonical signature bytes have been produced and without changing signature semantics.
 10. JSON encoding failure is fatal to generation; do not hash or emit partial bytes.
+
+The accepted implementation follows this separation: `EvidenceSnapshotBuilder` calculates the stable identity first and `EvidenceJsonEncoder` produces the readable download representation afterwards.
 
 ## Determinism examples
 
@@ -322,3 +326,17 @@ An exporter implementation that serializes arbitrary option arrays or request st
 ```
 
 An empty Registry is a valid signed evidence snapshot.
+
+## Acceptance evidence
+
+The schema v1 contract is implemented and validated by:
+
+```text
+Implementation PR: #15
+Accepted head: 2b9ebe93820e98d9ce6e0abb4deb235fdeeda57c
+PR-head CI: #91 / 34402108452 — 8/8 green
+Merge: bd07261751471fe7866e62049e3a66b7bd767afe
+Post-merge main CI: #92 / 34402685906 — 8/8 green
+```
+
+See [`PHASE6_RUNTIME_EVIDENCE.md`](PHASE6_RUNTIME_EVIDENCE.md).

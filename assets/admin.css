@@ -1,0 +1,51 @@
+.ai-transparency-admin {
+	max-width: 1100px;
+}
+
+.ai-transparency-admin .ai-transparency-table-wrap {
+	max-width: 100%;
+	overflow-x: auto;
+	margin-bottom: 24px;
+}
+
+.ai-transparency-admin .ai-transparency-table-wrap:focus {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.ai-transparency-admin .form-table input.regular-text,
+.ai-transparency-admin .form-table textarea,
+.ai-transparency-admin .form-table select {
+	max-width: 100%;
+}
+
+.ai-transparency-admin .button-link-delete {
+	margin-left: 8px;
+}
+
+@media screen and (max-width: 782px) {
+	.ai-transparency-admin .form-table th,
+	.ai-transparency-admin .form-table td {
+		display: block;
+		width: auto;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.ai-transparency-admin .form-table th {
+		padding-bottom: 4px;
+	}
+
+	.ai-transparency-admin .form-table td {
+		padding-top: 0;
+	}
+
+	.ai-transparency-admin .widefat {
+		min-width: 720px;
+	}
+
+	.ai-transparency-admin .button-link-delete {
+		min-height: 44px;
+		padding: 6px 8px;
+	}
+}

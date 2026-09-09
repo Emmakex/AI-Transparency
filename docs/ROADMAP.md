@@ -33,11 +33,11 @@ Canonical policies:
 | Phase | Status | Accepted outcome / target |
 |---|---|---|
 | 1 — Repository bootstrap | **Closed** | Safe public plugin foundation and CI |
-| 2 — Persistent AI Systems Registry | **Closed** | Local versioned registry + CRUD/review/archive |
+| 2 — Persistent AI Systems Registry | **Closed** | Local versioned Registry + CRUD/review/archive |
 | 3 — Deterministic discovery | **Closed** | Explainable AI Engine 3.7.7 detector |
 | 4 — Readiness findings & evidence | **Closed** | Deterministic Fact / Declaration / Guidance findings |
-| 5 — Disclosure tooling | **Closed** | Reviewed registry state → explicit public shortcode disclosure |
-| 6 — Evidence export | **Contract active / implementation not started** | Dated deterministic site-local JSON evidence snapshot |
+| 5 — Disclosure tooling | **Closed** | Reviewed Registry state → explicit public shortcode disclosure |
+| 6 — Evidence export | **Closed** | Deterministic site-local JSON technical evidence snapshot |
 | 7 — Contextual support/custom integration | Not started | User-initiated support/custom path |
 | 8 — First public release | Not started | Stable public release after all release gates |
 
@@ -66,7 +66,7 @@ Status: **closed — accepted, merged and verified on `main`.**
 
 Accepted:
 
-- versioned registry schema (`schema_version = 1`);
+- versioned Registry schema (`schema_version = 1`);
 - site-local WordPress Options persistence;
 - add/edit/review/archive records;
 - system type, source/origin, interaction context and disclosure-required declaration;
@@ -86,8 +86,6 @@ Post-merge CI: #61 / 34368648895
 Final Phase 2 docs main CI: #63 / 34369796882
 ```
 
-Implementation: [`PHASE2_REGISTRY_IMPLEMENTATION.md`](PHASE2_REGISTRY_IMPLEMENTATION.md).
-
 Exit: **complete.**
 
 ## Phase 3 — Deterministic discovery
@@ -104,18 +102,6 @@ validated version: 3.7.7
 active required: yes
 ```
 
-Accepted:
-
-- immutable WordPress `PluginObservation`;
-- deterministic `DiscoveryResult` + SHA-256 evidence signature;
-- exact version boundary and unsupported-version state;
-- **Tools → AI Discovery** administrator review surface;
-- server re-observation before persistence;
-- explicit `manage_options` + nonce acceptance;
-- candidate enters registry as discovered + pending review;
-- real WordPress fixture and Playwright evidence;
-- inherited registry + Multisite regression coverage.
-
 Closure evidence:
 
 ```text
@@ -129,30 +115,21 @@ Closure docs merge: fbb1eaac71a2b0a026c7633549bc0704bbd1d42f
 Final Phase 3 main CI: #71 / 34378441934
 ```
 
-Implementation: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).  
-Runtime evidence: [`PHASE3_RUNTIME_EVIDENCE.md`](PHASE3_RUNTIME_EVIDENCE.md).
-
 Exit: **complete.**
 
 ## Phase 4 — Readiness findings and evidence
 
 Status: **closed — accepted, merged and verified on `main`.**
 
-Accepted:
+Accepted rules:
 
-- immutable `Finding` model;
-- pure deterministic `FindingEngine`;
-- findings generated on demand from current registry state;
-- stable ids and SHA-256 evidence signatures;
-- archived systems ignored;
-- `registry_review_pending_v1`;
-- `interaction_context_missing_v1`;
-- `configured_disclosure_review_v1`;
-- Fact / Administrator declaration / Guidance kept distinct;
-- **Tools → AI Readiness** read-only administrator surface;
-- no automatic legal classification or certification.
+```text
+registry_review_pending_v1
+interaction_context_missing_v1
+configured_disclosure_review_v1
+```
 
-Implementation evidence:
+Closure evidence:
 
 ```text
 Accepted PR head: 926a154930042e53af0b082795be155389cc6916
@@ -167,17 +144,11 @@ Final Phase 4 main CI: #78 / 34390407476
 Blockers: 0
 ```
 
-Implementation: [`PHASE4_FINDINGS_IMPLEMENTATION.md`](PHASE4_FINDINGS_IMPLEMENTATION.md).  
-Acceptance: [`PHASE4_ACCEPTANCE.md`](PHASE4_ACCEPTANCE.md).  
-Runtime evidence: [`PHASE4_RUNTIME_EVIDENCE.md`](PHASE4_RUNTIME_EVIDENCE.md).
-
 Exit: **complete.**
 
 ## Phase 5 — Disclosure tooling
 
-Status: **closed — accepted, merged, documented and verified on `main` on 9 September 2026.**
-
-Goal achieved: turn explicit reviewed registry configuration into a deliberately placed public disclosure without allowing browser content or plugin presence to become disclosure authority.
+Status: **closed — accepted, merged, documented and verified on `main`.**
 
 Accepted eligibility:
 
@@ -191,32 +162,13 @@ trim(interaction_context) != empty
 Accepted flow:
 
 ```text
-site-local registry
+site-local Registry
 → DisclosureEngine
 → Tools → AI Disclosure = Ready / Not ready
 → [kairoseth_ai_disclosure system="SYSTEM_ID"]
-→ server-side registry lookup and eligibility
+→ server-side Registry lookup and eligibility
 → escaped EN/ES public notice
 ```
-
-Accepted:
-
-- immutable bounded `Disclosure` model;
-- deterministic `DisclosureEngine` reason codes;
-- no Phase 5 registry migration;
-- read-only **Tools → AI Disclosure** protected by `manage_options`;
-- exact shortcode for ready systems;
-- ineligible records render no public disclosure;
-- server-authoritative registry lookup on every render;
-- public output limited to localized copy + reviewed system name;
-- no JS dependency;
-- scoped `assets/frontend.css` with production-package build gate;
-- EN/ES 100% runtime coverage and compiled Spanish `.mo`;
-- real anonymous frontend E2E;
-- 390 px + 200% text + axe accessibility acceptance;
-- disabling disclosure removes output in uncached runtime;
-- inherited Registry / Discovery / Readiness / Multisite gates green;
-- no telemetry, cookies, cloud dependency or legal compliance claim.
 
 Implementation and closure evidence:
 
@@ -236,120 +188,134 @@ Final Phase 5 main CI: #85 / 34396547978
 Blockers: 0
 ```
 
-Resolved non-behavioral CI incident:
-
-```text
-CI #81 / 34394493780
-PHP Quality → composer verify → exit 2
-src/Admin/class-disclosurepage.php lines 114–116
-0 errors / 3 WPCS alignment warnings
-signature 073cfa47b6645c467d89e94ad0e5ebe5441cf298acde8c998c47322bda2b00f8
-fixed by assignment alignment
-validated by CI #82 and #83
-```
-
-Implementation: [`PHASE5_DISCLOSURE_IMPLEMENTATION.md`](PHASE5_DISCLOSURE_IMPLEMENTATION.md).  
-Acceptance: [`PHASE5_ACCEPTANCE.md`](PHASE5_ACCEPTANCE.md).  
-Runtime evidence: [`PHASE5_RUNTIME_EVIDENCE.md`](PHASE5_RUNTIME_EVIDENCE.md).
-
 Exit: **complete.**
 
 ## Phase 6 — Evidence export
 
-Status: **contract active / implementation not started.**
+Status: **closed — accepted, merged and verified on `main` on 9 September 2026.**
 
-Goal: produce a dated, reviewable, privacy-safe and deterministic **site-local JSON technical evidence snapshot** without leaking secrets or turning technical evidence into legal certification.
+Goal achieved: produce a dated, reviewable, privacy-safe and deterministic **site-local JSON technical evidence snapshot** without leaking secrets or turning technical evidence into legal certification.
 
-Active v1 contract:
+Accepted v1 flow:
 
 ```text
 WordPress administrator
 → Tools → AI Evidence Export
-→ explicit POST action
+→ explicit POST
 → manage_options + nonce
 → current site-local Registry loaded server-side
-→ Registry + persisted Discovery references
+→ RegistrySchema + persisted Discovery references
 → FindingEngine output
 → DisclosureEngine readiness
 → canonical allow-list snapshot
 → SHA-256 snapshot_signature
+→ EvidenceJsonEncoder
 → direct JSON attachment download
 ```
 
-Contracted v1 boundaries:
+Accepted boundaries:
 
 - JSON only; `export_schema_version = 1`;
 - current site/blog only in Multisite, never network-wide aggregation;
 - complete current site-local Registry, including archived records;
-- deterministic system/finding/readiness ordering;
-- normalized historical discovery signature references when persisted source shape is valid;
+- empty Registry is a valid signed export;
+- deterministic system, Discovery-reference, finding and readiness ordering;
+- normalized historical Discovery references only when persisted source shape is structurally valid;
 - Phase 4 `FindingEngine` reused, not reimplemented;
 - Phase 5 `DisclosureEngine` reused, not reimplemented;
-- root UTC `generated_at` metadata;
+- UTC `generated_at` metadata;
 - stable SHA-256 `snapshot_signature` excludes volatile generation time;
-- same technical state + same contract → same `snapshot_signature` even at another generation time;
-- meaningful exported technical-state change → different `snapshot_signature`;
-- `interaction_context` is included only in the privileged administrative evidence artifact and the UI must warn that the file may contain confidential operational context;
-- no credentials, tokens, cookies, nonces, request headers, user identities, prompts, conversations, customer content, logs, DB dumps or arbitrary WordPress/plugin options;
-- no persistence to Media Library/options/custom table;
-- no email, telemetry, Kairoseth upload, provider call or cloud account;
-- technical snapshot signature is **not** a digital/legal signature, trusted timestamp, non-repudiation proof or compliance certification;
-- empty Registry remains a valid signed export;
-- customer-facing export UI must ship EN/ES together and pass responsive/accessibility acceptance.
+- same technical state + same export contract → same signature across generation times;
+- meaningful exported technical-state change → different signature;
+- `interaction_context` is included only in the privileged administrative evidence artifact with a confidentiality warning;
+- credentials, tokens, cookies, nonces, request headers, user identities, prompts, conversations, customer content, logs, DB dumps and arbitrary WordPress/plugin options are excluded from the allow-list;
+- no Media Library persistence, export-history storage, email, telemetry, Kairoseth upload, provider call or cloud account;
+- technical snapshot identity is **not** a legal/digital signature, trusted timestamp, non-repudiation proof or certification;
+- customer-facing export UI ships EN/ES together and passes responsive/accessibility acceptance.
 
-Canonical contract documents:
-
-- [`PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
-- [`PHASE6_ACCEPTANCE.md`](PHASE6_ACCEPTANCE.md)
-- [`PHASE6_JSON_SCHEMA_V1.md`](PHASE6_JSON_SCHEMA_V1.md)
-
-Planned implementation architecture after this contract is merged and verified:
+Accepted implementation classes:
 
 ```text
 src/Export/class-evidencesnapshot.php
 src/Export/class-evidencesnapshotbuilder.php
-src/Export/class-jsonexporter.php
+src/Export/class-evidencejsonencoder.php
 src/Admin/class-evidenceexportpage.php
 ```
 
-Exact class names may simplify during implementation, but the allow-list, deterministic-signature, server-authority, privacy and local-only boundaries are blocking.
-
-Required implementation evidence will include:
+Implementation and verification evidence:
 
 ```text
-unit determinism/privacy tests
-+ real protected administrator JSON download
-+ repeated unchanged export → same signature
-+ real Registry change → different signature
-+ Editor denied
-+ EN/ES admin UX
-+ 390 px / 200% / axe acceptance
-+ production-package Plugin Check
-+ inherited Registry / Discovery / Readiness / Disclosure regressions
-+ site-local Multisite export isolation
-+ PR merge
-+ post-merge main CI
-+ synchronized closure evidence
-+ blockers = 0
+Contract PR: #14
+Implementation PR: #15
+Accepted implementation head: 2b9ebe93820e98d9ce6e0abb4deb235fdeeda57c
+PR-head CI: #91 / 34402108452 — SUCCESS — 8/8 jobs green
+Implementation merge: bd07261751471fe7866e62049e3a66b7bd767afe
+Post-merge main CI: #92 / 34402685906 — SUCCESS — 8/8 jobs green
+Blockers: 0
 ```
 
-Phase 6 production implementation must remain separate from this documentation contract. It may start only after the contract PR is merged and its post-merge `main` verification is green.
+Runtime acceptance proved:
 
-Exit target: one real administrator-generated JSON evidence export passes the complete Registry → Findings → Disclosure readiness → canonical snapshot → deterministic signature → protected local download workflow, with privacy and Multisite boundaries validated.
+```text
+real administrator page/action
++ attachment JSON response
++ response headers/cache policy
++ valid schema v1
++ stable unchanged-state signature
++ changed Registry → changed signature
++ archived record retention
++ empty Registry validity
++ valid historical Discovery-reference normalization
++ malformed Discovery source rejection
++ current FindingEngine output
++ current DisclosureEngine readiness
++ forbidden sensitive/user/request fields absent
++ Editor denied
++ 390 px / 200% / axe serious+critical = 0
++ real site-local Multisite export isolation
++ inherited Phase 2–5 regressions green
+```
+
+Resolved implementation-CI incidents:
+
+```text
+CI #88 / 34401564420
+PHP Quality → composer verify → exit 2
+signature: 2a713bc20438829d660dc95e2e37ae7ee4f63636d066a158e0ddf13c82bcb26e
+cause: WPCS short ternary / @throws formatting / assignment alignment
+
+CI #90 / 34401789546
+PHP Quality → composer verify → exit 1
+signature: 6b48a8a870fbf9e3431c98705136950325a21c62cd988d4b69f3048dda33ed09
+cause: Squiz @throws interpretation on EvidenceSnapshotBuilder::build()
+
+Both fixed without behavior change and validated by CI #91 and #92.
+```
+
+References:
+
+- [`PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
+- [`PHASE6_ACCEPTANCE.md`](PHASE6_ACCEPTANCE.md)
+- [`PHASE6_JSON_SCHEMA_V1.md`](PHASE6_JSON_SCHEMA_V1.md)
+- [`PHASE6_RUNTIME_EVIDENCE.md`](PHASE6_RUNTIME_EVIDENCE.md)
+
+Exit: **complete.**
 
 ## Phase 7 — Contextual support/custom integration path
 
-Status: **not started.**
+Status: **not started — unblocked after Phase 6 closure documentation is merged and verified.**
 
-Planned:
+Planned contract topics:
 
 - plugin-owned Help/About CTA;
 - EN/ES copy;
 - user-initiated action only;
 - bounded non-sensitive context;
-- no automatic telemetry/lead submission.
+- no automatic telemetry/lead submission;
+- no credentials, logs, prompts, conversations or arbitrary site data;
+- clear boundary between local Free functionality and optional Kairoseth support/custom work.
 
-Exit target: user-initiated support/custom path works end-to-end without weakening privacy or WordPress UX.
+Exit target: user-initiated support/custom path works end-to-end without weakening privacy, WordPress authority or local-first behavior.
 
 ## Phase 8 — First public release
 

@@ -1,40 +1,39 @@
 # Kairoseth AI Transparency — Implementation Architecture
 
-Status: active development — **Phases 1–5 closed; Phase 6 Evidence Export contract active, implementation not started**  
+Status: active development — **Phases 1–6 closed and verified on `main`; Phase 7 not started**  
 Last reviewed: 9 September 2026
 
 ## Product boundary
 
-Kairoseth AI Transparency is a WordPress plugin for technical AI-transparency readiness. It currently provides:
+Kairoseth AI Transparency is a local-first WordPress plugin for technical AI-transparency readiness. The accepted architecture now provides:
 
 ```text
 local AI Systems Registry
-+ deterministic supported integration discovery
-+ deterministic readiness findings
-+ explicit administrator-controlled public disclosure tooling
++ deterministic supported integration Discovery
++ deterministic Readiness findings
++ explicit administrator-controlled public Disclosure tooling
++ privileged deterministic JSON Evidence Export
 ```
 
-Phase 6 is now designing a local, administrator-generated evidence snapshot on top of those accepted capabilities. The export is not implemented yet.
-
-It is **not** a legal certification engine. It does not infer legal obligations from plugin presence, probabilistic guesses, arbitrary content or weak contextual evidence.
+It is **not** a legal certification engine and does not infer legal obligations from plugin presence, probabilistic guesses, arbitrary content or weak contextual evidence.
 
 ## Architectural principles
 
-1. **Local-first baseline.** Core Registry, Discovery, Readiness and Disclosure workflows require no automatic external account, telemetry or off-site transfer.
-2. **Evidence before conclusions.** Discovery and Readiness report only bounded technical state and explicit administrator declarations.
+1. **Local-first baseline.** Registry, Discovery, Readiness, Disclosure and Evidence Export require no automatic external account, telemetry or off-site transfer.
+2. **Evidence before conclusions.** Discovery and Readiness report bounded technical state and explicit administrator declarations.
 3. **FACT / DECLARATION / GUIDANCE separation.** Phase 4 findings preserve these concepts independently.
-4. **Explicit disclosure authority.** Phase 5 disclosure renders only from reviewed administrator-configured registry state.
-5. **Allow-list evidence export.** Phase 6 may serialize only explicitly contracted evidence fields; arbitrary options/request/session data are never export input.
-6. **Stable evidence identity.** Export generation time is metadata, not part of the stable technical snapshot identity.
+4. **Explicit disclosure authority.** Phase 5 renders only from reviewed administrator-configured Registry state.
+5. **Allow-list evidence export.** Phase 6 serializes only contracted evidence fields; arbitrary option/request/session data never become export input.
+6. **Stable evidence identity.** `generated_at` is metadata and is excluded from the Phase 6 stable `snapshot_signature`.
 7. **Server-authoritative permissions/state.** Browser/client values never grant WordPress privileges, disclosure eligibility or export evidence authority.
-8. **Browser input is a selector/action, not evidence.** Discovery re-observes WordPress server-side; Readiness loads the registry server-side; Disclosure resolves the current registry server-side; Export will build the complete current-site snapshot server-side.
-9. **WordPress-native security.** Validate/sanitize input and escape/output-encode for its context.
+8. **Browser input is an action/selector, not evidence.** Discovery re-observes WordPress server-side; Readiness, Disclosure and Export load authoritative Registry state server-side.
+9. **WordPress-native security.** Capability checks, nonces, validation/sanitization and context-correct output encoding remain mandatory.
 10. **Domain separated from adapters.** Deterministic Registry/Discovery/Finding/Disclosure/Export logic stays independently testable where practical.
 11. **EN/ES ships together.** Customer-facing changes require complete English and Spanish runtime catalogs in the same change.
-12. **Responsive/accessibility acceptance.** Plugin-owned admin/frontend surfaces pass the relevant browser gates.
+12. **Responsive/accessibility acceptance.** Plugin-owned admin/frontend surfaces pass relevant browser gates.
 13. **Production package is release authority.** Plugin Check and runtime acceptance validate `build/ai-transparency/`.
-14. **Failures become reusable knowledge.** CI/runtime failures produce actionable diagnostics; material regressions become durable failure memory.
-15. **Finish before advancing.** A dependent next phase cannot begin before the current phase implementation, required gates, merge, verification and docs are complete.
+14. **Failures become reusable knowledge.** Material CI/runtime failures produce actionable diagnostics and durable failure-memory records.
+15. **Finish before advancing.** A dependent next phase cannot begin before implementation, required gates, merge, verification and documentation are complete.
 
 Canonical policies:
 
@@ -57,7 +56,8 @@ AI-Transparency/
 │   │   ├── class-adminpage.php
 │   │   ├── class-discoverypage.php
 │   │   ├── class-readinesspage.php
-│   │   └── class-disclosurepage.php
+│   │   ├── class-disclosurepage.php
+│   │   └── class-evidenceexportpage.php
 │   ├── Domain/
 │   │   └── class-aisystem.php
 │   ├── Registry/
@@ -66,10 +66,6 @@ AI-Transparency/
 │   ├── Persistence/
 │   │   └── class-wordpressoptionsregistryrepository.php
 │   ├── Discovery/
-│   │   ├── class-pluginobservation.php
-│   │   ├── class-discoveryresult.php
-│   │   ├── class-aienginedetector.php
-│   │   └── class-wordpressplugininventory.php
 │   ├── Evidence/
 │   │   ├── class-finding.php
 │   │   └── class-findingengine.php
@@ -77,22 +73,16 @@ AI-Transparency/
 │   │   ├── class-disclosure.php
 │   │   ├── class-disclosureengine.php
 │   │   └── class-disclosureshortcode.php
-│   └── Export/                    Phase 6 — contract active; implementation not started
+│   └── Export/
+│       ├── class-evidencesnapshot.php
+│       ├── class-evidencesnapshotbuilder.php
+│       └── class-evidencejsonencoder.php
 ├── assets/
-│   ├── admin.css
-│   └── frontend.css
 ├── languages/
-│   ├── ai-transparency.pot
-│   ├── ai-transparency-es_ES.po
-│   └── compiled .mo in production package
 ├── bin/
-│   ├── build-plugin.sh
-│   ├── check-i18n.php
-│   ├── compile-po.php
-│   └── run-with-diagnostics.sh
 ├── tests/
-│   ├── DisclosureEngineTest.php
-│   ├── e2e/
+│   ├── EvidenceSnapshotBuilderTest.php
+│   ├── e2e/evidence-export.spec.js
 │   └── runtime/
 ├── docs/
 └── .github/workflows/
@@ -111,13 +101,12 @@ source repository
 → release candidate
 ```
 
-Development-only files are intentionally absent from the generated plugin package.
+Development-only files remain absent from the generated plugin package.
 
 ## Internationalization architecture
 
-Source language: English. Runtime domain:
-
 ```text
+source language: English
 text domain: ai-transparency
 Spanish source: languages/ai-transparency-es_ES.po
 compiled Spanish: build/ai-transparency/languages/ai-transparency-es_ES.mo
@@ -144,66 +133,31 @@ configured interaction-disclosure requirement
 created / updated / reviewed timestamps
 ```
 
-Manual records use WordPress-generated UUIDs. Discovered records use stable detector-derived ids. Archive changes lifecycle state rather than deleting the record.
-
-### Schema and persistence
-
-`RegistrySchema::VERSION = 1` remains authoritative after Phase 5:
-
-```text
-{
-  schema_version: 1,
-  systems: [ ...deterministically ordered records... ]
-}
-```
-
 Persistence:
 
 ```text
+schema_version: 1
 option: kairoseth_ai_transparency_registry
 API: get_option() / update_option()
 autoload: false on writes
 scope: current WordPress blog/site
 ```
 
-The repository migrates the earlier bootstrap shape, skips invalid individual records, fails safe on unknown future schema versions and preserves site-local Multisite separation.
-
-### Registry administration
-
-**Tools → AI Transparency** supports:
-
-```text
-list
-add
-edit
-review state
-interaction context
-disclosure-required declaration
-archive
-```
-
-Mutations use `admin-post.php`, `manage_options`, nonce verification and server-side validation/sanitization.
+Archive changes lifecycle state rather than deleting the record. The repository migrates the earlier bootstrap shape, skips invalid individual records, fails safe on unknown future schema versions and preserves site-local Multisite separation.
 
 ## Deterministic Discovery — Phase 3 accepted
-
-**Tools → AI Discovery** converts supported WordPress evidence into reviewable candidates.
 
 ```text
 WordPressPluginInventory
 → PluginObservation[]
 → detector
 → DiscoveryResult
-   detector id
-   observed version
-   validated boundary
-   explainable evidence
-   SHA-256 signature
 → explicit administrator acceptance
 → server re-observation
-→ registry candidate
+→ Registry candidate
 ```
 
-Accepted AI Engine detector v1:
+First validated detector:
 
 ```text
 plugin file: ai-engine/ai-engine.php
@@ -213,33 +167,16 @@ active: required
 validated version: 3.7.7
 ```
 
-The detector proves only the supported WordPress plugin identity/version/activation state. It does not read AI Engine provider credentials, models, prompts, conversations or internal workflow configuration.
-
-Accepted discovered candidate defaults:
-
-```text
-type: other
-source_origin: discovered
-review_status: pending
-interaction_context: empty
-interaction_disclosure_required: false
-```
-
-This prevents plugin presence from becoming evidence that a particular chatbot/workflow exists or that disclosure is required.
-
-Implementation: [`PHASE3_DISCOVERY_IMPLEMENTATION.md`](PHASE3_DISCOVERY_IMPLEMENTATION.md).  
-Runtime: [`PHASE3_RUNTIME_EVIDENCE.md`](PHASE3_RUNTIME_EVIDENCE.md).
+Discovery proves only the supported WordPress plugin identity/version/activation state. It does not infer provider, model, chatbot, prompt or workflow configuration and does not inspect provider credentials.
 
 ## Readiness Findings — Phase 4 accepted
-
-**Tools → AI Readiness** is a read-only `manage_options` surface.
 
 ```text
 WordPressOptionsRegistryRepository
 → AiSystemsRegistry
 → FindingEngine
 → Finding[]
-→ ReadinessPage
+→ Tools → AI Readiness
 ```
 
 Findings are calculated on demand rather than persisted separately.
@@ -252,208 +189,70 @@ interaction_context_missing_v1
 configured_disclosure_review_v1
 ```
 
-Presentation semantics remain separate:
+Presentation semantics remain distinct:
 
 ```text
-FACT        — technically observed local state
-DECLARATION — explicit administrator state
-GUIDANCE    — technical review/completion action
+FACT
+ADMINISTRATOR DECLARATION
+GUIDANCE
 ```
-
-The disclosure-related finding reports the administrator's declaration. It does not infer that law creates a disclosure duty.
-
-Implementation: [`PHASE4_FINDINGS_IMPLEMENTATION.md`](PHASE4_FINDINGS_IMPLEMENTATION.md).  
-Acceptance: [`PHASE4_ACCEPTANCE.md`](PHASE4_ACCEPTANCE.md).  
-Runtime: [`PHASE4_RUNTIME_EVIDENCE.md`](PHASE4_RUNTIME_EVIDENCE.md).
 
 ## Disclosure Tooling — Phase 5 accepted
 
-Phase 5 introduces the first public frontend component while preserving Registry authority.
-
-### Eligibility architecture
+Eligibility remains server-authoritative:
 
 ```text
-AiSystem
-→ DisclosureEngine::reason_codes()
-→ eligible only when:
-   status = active
-   review_status = reviewed
-   interaction_disclosure_required = true
-   trim(interaction_context) != empty
-→ Disclosure or null
+status = active
+review_status = reviewed
+interaction_disclosure_required = true
+trim(interaction_context) != empty
 ```
 
-Deterministic ineligibility codes:
-
-```text
-archived
-pending_review
-missing_interaction_context
-disclosure_not_configured
-```
-
-`source_origin` does not grant eligibility.
-
-### Disclosure model
-
-`Disclosure` is immutable and intentionally bounded:
-
-```text
-subject_system_id      internal model identity
-subject_system_name    reviewed public value
-copy_version           inline_v1
-```
-
-The internal id is not emitted in the disclosure markup.
-
-### Administrator surface
-
-**Tools → AI Disclosure**:
-
-- requires `manage_options`;
-- is read-only with respect to Registry state;
-- shows `Ready` + exact shortcode for eligible systems;
-- shows `Not ready` + bounded reasons for ineligible systems;
-- links back to Registry editing when correction is needed.
-
-Configuration remains in **Tools → AI Transparency**, retaining its capability + nonce mutation boundary.
-
-### Public shortcode
-
-Accepted contract:
+Accepted public contract:
 
 ```text
 [kairoseth_ai_disclosure system="SYSTEM_ID"]
 ```
 
-Runtime authority:
+A shortcode attribute is only a lookup selector. It cannot force an ineligible record to render.
 
-```text
-attribute
-→ shortcode_atts
-→ sanitize + length bound
-→ exact site-local registry lookup
-→ server-side DisclosureEngine
-→ Disclosure or empty string
-→ escaped localized markup
-```
+Public output may expose only localized disclosure copy and the reviewed system name. It does not automatically expose Registry ids, `interaction_context`, source metadata, timestamps, provider/model configuration, credentials, prompts, conversations or private logs.
 
-A page author cannot force an ineligible system to render by changing the shortcode.
+## Evidence Export — Phase 6 accepted
 
-### Public output boundary
+Phase 6 is **implemented, merged and verified on `main`**.
 
-Public disclosure may expose only:
-
-```text
-localized title/body
-administrator-reviewed system name
-```
-
-It does not expose automatically:
-
-```text
-interaction_context
-system id in markup
-source/source_origin
-review timestamps
-provider/model configuration
-credentials/API keys
-prompts/conversations
-customer content/private logs
-```
-
-No automatic telemetry, cookies, remote API request or Kairoseth cloud dependency is introduced.
-
-### Frontend presentation
-
-Accepted semantic shape:
-
-```html
-<aside class="ai-transparency-disclosure" aria-label="AI transparency notice">
-  <strong class="ai-transparency-disclosure__title">AI transparency notice</strong>
-  <p class="ai-transparency-disclosure__body">…</p>
-</aside>
-```
-
-`assets/frontend.css` uses only the disclosure namespace and has no JavaScript dependency. It is conditionally loaded for supported singular content that contains the shortcode.
-
-The production build explicitly requires this stylesheet.
-
-### Accepted runtime evidence
-
-```text
-unique reviewed/configured runtime system
-→ Tools → AI Disclosure = Ready
-→ shortcode on real public page
-→ anonymous visitor sees disclosure
-→ internal interaction_context absent
-→ 390 px green
-→ 200% text green
-→ axe serious/critical = 0
-→ disable disclosure configuration
-→ system = Not ready
-→ same page no longer emits disclosure
-```
-
-Implementation PR #12:
-
-```text
-Accepted head: 37ac6f8a3adf6ae33c98910fc0b2ff816789a697
-CI: #82 / 34394624556
-Merge: 2770c7b7982ffbbe07ba58e8cedebd12d0add14a
-Post-merge CI: #83 / 34395173777
-Blockers: 0
-```
-
-Implementation: [`PHASE5_DISCLOSURE_IMPLEMENTATION.md`](PHASE5_DISCLOSURE_IMPLEMENTATION.md).  
-Acceptance: [`PHASE5_ACCEPTANCE.md`](PHASE5_ACCEPTANCE.md).  
-Runtime: [`PHASE5_RUNTIME_EVIDENCE.md`](PHASE5_RUNTIME_EVIDENCE.md).
-
-## Evidence Export — Phase 6 contract active
-
-Phase 6 is now in **active design / contract**. Production implementation has not started.
-
-### First supported architecture
+### Runtime authority
 
 ```text
 Tools → AI Evidence Export
-→ explicit POST action
+→ explicit POST
 → manage_options + nonce
 → current site-local WordPressOptionsRegistryRepository
 → EvidenceSnapshotBuilder
-   ├ Registry schema + all current systems
-   ├ persisted discovery evidence references where valid
-   ├ FindingEngine output
-   ├ DisclosureEngine readiness
+   ├ RegistrySchema::encode()
+   ├ persisted Discovery source references where structurally valid
+   ├ FindingEngine
+   ├ DisclosureEngine
    ├ deterministic ordering
-   └ canonical stable payload
+   └ canonical allow-list payload
 → SHA-256 snapshot_signature
-→ JsonExporter
-→ direct browser download
+→ EvidenceJsonEncoder
+→ direct JSON attachment download
 ```
 
-No export file is persisted by the plugin and no remote service participates in the v1 flow.
+The browser supplies no Registry payload, findings, readiness values, signature, site identity or trusted timestamp. WordPress server state resolves the current site with `home_url()`, `is_multisite()` and `get_current_blog_id()`.
 
-### Proposed export classes
+### Accepted classes
 
 ```text
 src/Export/class-evidencesnapshot.php
 src/Export/class-evidencesnapshotbuilder.php
-src/Export/class-jsonexporter.php
+src/Export/class-evidencejsonencoder.php
 src/Admin/class-evidenceexportpage.php
 ```
 
-Names may be simplified during implementation, but responsibility boundaries are blocking.
-
-### JSON-only v1
-
-The accepted first format is JSON:
-
-```text
-export_schema_version = 1
-```
-
-Canonical top-level sections:
+### JSON v1
 
 ```text
 export_schema_version
@@ -471,8 +270,6 @@ Canonical schema: [`PHASE6_JSON_SCHEMA_V1.md`](PHASE6_JSON_SCHEMA_V1.md).
 
 ### Stable snapshot identity
 
-Phase 6 separates generation metadata from evidence identity:
-
 ```text
 same technical state + same export contract
 → same snapshot_signature
@@ -480,33 +277,25 @@ same technical state + same export contract
 different generated_at only
 → same snapshot_signature
 
-meaningful exported technical state change
+meaningful exported technical-state change
 → different snapshot_signature
 ```
 
-`snapshot_signature` is SHA-256 over a plugin-built canonical allow-list payload. `generated_at`, HTTP response data, current user/request/session data and localized UI text are excluded from the hash.
+The signature is SHA-256 over the stable plugin-built allow-list payload. `generated_at`, filename/HTTP headers, current user/request/session state and localized UI prose are excluded.
 
-This is a technical snapshot identity. It is not a digital signature, trusted timestamp, non-repudiation proof or legal certification.
+This is a technical snapshot identity, not a digital/legal signature, trusted timestamp, non-repudiation proof or regulatory certification.
 
-### Registry evidence boundary
+### Registry / Discovery / derived evidence
 
-The privileged JSON snapshot includes all current site-local records, including archived records, sorted by stable id.
+The export includes all current site-local Registry records, including archived records, sorted deterministically. `interaction_context` is present because the privileged file is administrative evidence; the UI warns that the downloaded file may contain confidential operational context.
 
-`interaction_context` is included because it is administrator-authored technical evidence used by Phases 4 and 5. Therefore the export is an administrative artifact that may contain confidential operational context.
-
-This does not weaken Phase 5 public rendering: public disclosure still excludes `interaction_context`.
-
-### Discovery evidence boundary
-
-Persisted discovered records may expose a normalized historical source reference when their source matches:
+Persisted discovered records may expose a normalized historical reference only when their source matches the accepted structural form:
 
 ```text
 detector:<detector_id>:<source_signature>
 ```
 
-The exporter must not call that historical signature a fresh observation. Discovery re-observation at export time is deferred.
-
-### Derived evidence
+This is not represented as a fresh observation.
 
 Phase 6 reuses existing engines:
 
@@ -518,11 +307,11 @@ DisclosureEngine
 → eligible + deterministic reason_codes
 ```
 
-No rules are duplicated in exporter code.
+No Readiness or Disclosure rule is duplicated inside export code.
 
 ### Security/privacy boundary
 
-Serialization is allow-list only. Phase 6 v1 must not include automatically:
+Serialization is allow-list only and excludes automatically:
 
 ```text
 wp-config/salts/database secrets
@@ -536,17 +325,6 @@ arbitrary third-party options
 browser storage
 ```
 
-The browser never supplies the evidence payload or selected system list. The server exports the complete current site-local Registry.
-
-### Multisite boundary
-
-```text
-current blog/site only
-≠ network-wide export
-```
-
-The current server blog context is authoritative. Browser-supplied blog identifiers cannot override it.
-
 ### No persistence / no cloud
 
 ```text
@@ -556,38 +334,46 @@ build in memory
 → request ends
 ```
 
-No Media Library file, export-history option/table, email, Kairoseth upload, telemetry or cloud account is created in v1.
+No Media Library file, export-history option/table, email, telemetry, Kairoseth upload, provider call or cloud account is created in v1.
 
-### Contract references
+### Multisite boundary
 
-Implementation/design: [`PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md).  
-Acceptance: [`PHASE6_ACCEPTANCE.md`](PHASE6_ACCEPTANCE.md).  
-JSON schema v1: [`PHASE6_JSON_SCHEMA_V1.md`](PHASE6_JSON_SCHEMA_V1.md).
+```text
+current authoritative blog/site only
+≠ network-wide export
+```
 
-No `src/Export/` code may be treated as implemented until this contract is merged and the separate implementation PR satisfies the Phase 6 acceptance gates.
+Browser-supplied blog ids cannot override the server context.
+
+### Accepted evidence
+
+```text
+Contract PR: #14
+Implementation PR: #15
+Accepted head: 2b9ebe93820e98d9ce6e0abb4deb235fdeeda57c
+PR-head CI: #91 / 34402108452 — 8/8 green
+Implementation merge: bd07261751471fe7866e62049e3a66b7bd767afe
+Post-merge main CI: #92 / 34402685906 — 8/8 green
+Blockers: 0
+```
+
+Validated runtime evidence includes real browser attachment download, JSON/header checks, repeated unchanged-state signature stability, signature change after Registry mutation, forbidden-field absence, Editor denial, 390 px, 200% text, axe serious/critical = 0 and site-local Multisite export isolation.
+
+References:
+
+- [`PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
+- [`PHASE6_ACCEPTANCE.md`](PHASE6_ACCEPTANCE.md)
+- [`PHASE6_JSON_SCHEMA_V1.md`](PHASE6_JSON_SCHEMA_V1.md)
+- [`PHASE6_RUNTIME_EVIDENCE.md`](PHASE6_RUNTIME_EVIDENCE.md)
 
 ## WordPress compatibility baseline
 
 - Requires WordPress: 6.6+
 - Tested-up-to target: 7.1
 - Requires PHP: 7.4+
-- AI Engine runtime fixture: 3.7.7, requiring its compatible runtime lane
+- AI Engine runtime fixture: 3.7.7
 
-The plugin source remains PHP 7.4 compatible; CI validates PHP 7.4 / 8.1 / 8.3 / 8.5 syntax.
-
-## Security/privacy boundary
-
-The public plugin must never silently collect or expose:
-
-- customer/provider secrets;
-- API keys/model credentials;
-- private prompts/conversations;
-- customer-specific private mappings;
-- private customer data fixtures;
-- hidden remote execution paths;
-- browser/model output capable of granting WordPress privileges.
-
-Registry, Discovery, Readiness and Disclosure make no automatic external Kairoseth request. The Phase 6 contract preserves this local-first boundary for evidence export.
+CI validates PHP 7.4 / 8.1 / 8.3 / 8.5 syntax.
 
 ## CI / release gates
 
@@ -615,17 +401,15 @@ WordPress Plugin Check
 └ exact build/ai-transparency package
 
 WordPress runtime acceptance
-├ production activation
-├ schema migration
+├ activation + migration
 ├ Registry CRUD/permissions
 ├ AI Engine 3.7.7 Discovery
-├ Discovery → Registry → Readiness
-├ Phase 5 Registry → Disclosure Admin → anonymous frontend
+├ Readiness
+├ Disclosure Admin → anonymous frontend
+├ Evidence Export protected download + deterministic signature
 ├ responsive/accessibility
-└ Multisite registry isolation
+└ Multisite Registry + Evidence Export isolation
 ```
-
-When Phase 6 implementation changes runtime/UI, its required contract additionally includes protected export download, deterministic signature checks, secret exclusion and site-local Multisite export isolation.
 
 Repository-controlled failures use `bin/run-with-diagnostics.sh` and `.ci-diagnostics/` artifacts where configured.
 
@@ -635,6 +419,7 @@ Repository-controlled failures use `bin/run-with-diagnostics.sh` and `.ci-diagno
 - Phase 2 Persistent AI Systems Registry: closed and verified on `main`.
 - Phase 3 Deterministic Discovery: closed and verified on `main`.
 - Phase 4 Readiness Findings & Evidence: closed and verified on `main`.
-- Phase 5 Disclosure Tooling: **closed and verified on `main` via PR #12, CI #82 and post-merge CI #83; closure docs merged via PR #13**.
-- Phase 6 Evidence Export: **contract active / implementation not started**.
-- Phases 7–8: not started.
+- Phase 5 Disclosure Tooling: closed and verified on `main`.
+- Phase 6 Evidence Export: **closed and verified on `main` via PR #15, CI #91 and post-merge CI #92**.
+- Phase 7 Contextual support/custom integration: not started.
+- Phase 8 First public release: not started.

@@ -22,10 +22,25 @@
 	width: 220px;
 }
 
-.ai-transparency-admin .ai-transparency-discovery-evidence code {
+.ai-transparency-admin .ai-transparency-discovery-evidence code,
+.ai-transparency-admin .ai-transparency-signature {
 	white-space: normal;
 	overflow-wrap: anywhere;
 	word-break: break-word;
+}
+
+.ai-transparency-admin .ai-transparency-findings {
+	max-width: 900px;
+}
+
+.ai-transparency-admin .ai-transparency-finding {
+	margin: 16px 0;
+	padding: 16px;
+	border: 1px solid currentColor;
+}
+
+.ai-transparency-admin .ai-transparency-finding h2 {
+	margin-top: 0;
 }
 
 .ai-transparency-admin .form-table input.regular-text,
@@ -67,6 +82,10 @@
 
 	.ai-transparency-admin .ai-transparency-discovery-evidence th {
 		width: 42%;
+	}
+
+	.ai-transparency-admin .ai-transparency-finding {
+		padding: 12px;
 	}
 
 	.ai-transparency-admin .button-link-delete {

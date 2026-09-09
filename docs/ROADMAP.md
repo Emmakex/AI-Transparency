@@ -161,11 +161,11 @@ Exit: **complete.**
 
 ## Phase 4 — Readiness findings and evidence
 
-Status: **active implementation — first deterministic registry-driven findings.**
+Status: **closed — accepted, merged and verified on `main` on 9 September 2026.**
 
 Goal: convert registry/discovery state into evidence-backed technical findings while preserving the boundary between observed facts, administrator declarations and guidance.
 
-Current contract:
+Accepted contract:
 
 ```text
 Finding
@@ -181,7 +181,7 @@ Finding
 └ generated_at metadata
 ```
 
-Current workstream:
+Accepted:
 
 - [x] immutable `Finding` domain model
 - [x] pure-PHP deterministic `FindingEngine`
@@ -200,15 +200,17 @@ Current workstream:
 - [x] PHPUnit coverage for rule semantics, determinism and correction/removal behavior
 - [x] Playwright Discovery → Registry → Readiness path
 - [x] Editor access denial coverage
-- [ ] final PR-head CI green
-- [ ] WordPress Plugin Check green on exact package
-- [ ] runtime Readiness acceptance green
-- [ ] inherited Phase 2/3 regression suite green
-- [ ] PR merged to `main`
-- [ ] post-merge `main` verification green
-- [ ] blockers = 0
+- [x] final PR-head CI green
+- [x] WordPress Plugin Check green on exact package
+- [x] runtime Readiness acceptance green
+- [x] inherited Phase 2/3 regression suite green
+- [x] Multisite isolation green
+- [x] PR #9 merged to `main`
+- [x] post-merge `main` verification green
+- [x] engineering failure memory updated for the stateful Playwright recurrence
+- [x] blockers = 0
 
-First real runtime expectation:
+Accepted real runtime path:
 
 ```text
 AI Engine 3.7.7
@@ -216,28 +218,42 @@ AI Engine 3.7.7
 → explicit Add to registry
 → discovered + pending review + empty interaction context
 → Tools → AI Readiness
-→ exactly two initial technical findings
-   1. pending administrator review
-   2. missing interaction context
+→ exactly two AI Engine technical findings
+   1. registry_review_pending_v1
+   2. interaction_context_missing_v1
+→ Fact / Administrator declaration / Guidance remain separate
+→ 64-character SHA-256 evidence signatures
 ```
 
-Rules:
+Closure evidence:
 
-- findings must be deterministic and reproducible;
-- correcting registry state must remove obsolete findings on the next evaluation;
-- observed facts, administrator declarations and guidance must never be conflated;
+```text
+Accepted PR head: 926a154930042e53af0b082795be155389cc6916
+Pre-merge CI: #75 / 34381590429
+Implementation PR: #9
+Implementation merge commit: 836abfeca4c199930b74ba32547f9037f7fcb4de
+Implementation post-merge CI: #76 / 34382057838
+Blockers: 0
+```
+
+Rules preserved:
+
+- findings are deterministic and reproducible;
+- correcting registry state removes obsolete findings on the next evaluation;
+- observed facts, administrator declarations and guidance are never conflated;
 - findings are technical review signals, not legal decisions or certification;
 - customer-facing findings ship EN/ES together;
 - no automatic external telemetry is introduced.
 
 Implementation details: [`PHASE4_FINDINGS_IMPLEMENTATION.md`](PHASE4_FINDINGS_IMPLEMENTATION.md).  
-Acceptance checklist: [`PHASE4_ACCEPTANCE.md`](PHASE4_ACCEPTANCE.md).
+Acceptance checklist: [`PHASE4_ACCEPTANCE.md`](PHASE4_ACCEPTANCE.md).  
+Runtime evidence: [`PHASE4_RUNTIME_EVIDENCE.md`](PHASE4_RUNTIME_EVIDENCE.md).
 
-Exit: at least one real registry/discovery state produces reproducible, bilingual findings with explicit evidence, merged code, green post-merge verification and no legal overclaim.
+Exit: **complete.**
 
 ## Phase 5 — Disclosure tooling
 
-Status: **not started — blocked by Phase 4 closure.**
+Status: **not started — unblocked by Phase 4 closure.**
 
 Goal: provide accessible, explicit disclosure components for supported configured contexts.
 

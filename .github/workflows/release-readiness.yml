@@ -189,7 +189,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp plugin install wp-content/ai-transparency-release-artifacts/ai-transparency-1.0.0.zip --network-activate --force
+          npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp plugin install wp-content/ai-transparency-release-artifacts/ai-transparency-1.0.0.zip --force
+          npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp plugin activate ai-transparency --network
           npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-multisite-lifecycle.php seed
 
       - name: Prove explicit Multisite uninstall scope

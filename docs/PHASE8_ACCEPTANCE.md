@@ -1,141 +1,151 @@
 # Phase 8 — First Public Release Acceptance
 
-Status: **contract active**  
+Status: **repository-controlled acceptance complete; GitHub 1.0.0 published; WordPress.org external publication pending**  
 Target stable release: **1.0.0**  
 Last reviewed: 10 September 2026
 
-This document is the blocking acceptance matrix for the first stable public release.
+This document is the blocking acceptance matrix for the first stable public release. Repository-controlled gates A–M are accepted. Section N remains the external WordPress.org publication gate.
 
 ## A. Version and metadata
 
-- [ ] `ai-transparency.php` header version is `1.0.0`.
-- [ ] `KAIROSETH_AI_TRANSPARENCY_VERSION` is `1.0.0`.
-- [ ] `readme.txt` Stable tag is `1.0.0`.
-- [ ] `CHANGELOG.md` contains the accepted `1.0.0` release entry.
-- [ ] package filename is `ai-transparency-1.0.0.zip`.
-- [ ] package root directory is exactly `ai-transparency/`.
-- [ ] automated validation fails on any version mismatch.
+- [x] `ai-transparency.php` header version is `1.0.0`.
+- [x] `KAIROSETH_AI_TRANSPARENCY_VERSION` is `1.0.0`.
+- [x] `readme.txt` Stable tag is `1.0.0`.
+- [x] `CHANGELOG.md` contains the accepted `1.0.0` release entry.
+- [x] package filename is `ai-transparency-1.0.0.zip`.
+- [x] package root directory is exactly `ai-transparency/`.
+- [x] automated validation fails on any version mismatch.
 
 ## B. WordPress.org readme readiness
 
-- [ ] short description is within WordPress.org length guidance.
-- [ ] maximum five relevant tags.
-- [ ] `Requires at least`, `Tested up to` and `Requires PHP` match real validation evidence.
-- [ ] external-service section accurately describes the explicit Kairoseth Custom Requests handoff.
-- [ ] no unsupported legal-compliance/certification claim.
-- [ ] no internal business strategy or commercial planning appears in `readme.txt`.
-- [ ] installation/FAQ/changelog/upgrade notice describe the stable release rather than a pre-release build.
+- [x] short description is within WordPress.org length guidance.
+- [x] maximum five relevant tags.
+- [x] `Requires at least`, `Tested up to` and `Requires PHP` match real validation evidence.
+- [x] external-service section accurately describes the explicit Kairoseth Custom Requests handoff.
+- [x] no unsupported legal-compliance/certification claim.
+- [x] no internal business strategy or commercial planning appears in `readme.txt`.
+- [x] installation/FAQ/changelog/upgrade notice describe the stable release rather than a pre-release build.
 
 ## C. Exact distribution package
 
-- [ ] `bin/build-plugin.sh` creates the canonical runtime tree.
-- [ ] a release command creates `dist/ai-transparency-1.0.0.zip`.
-- [ ] `dist/ai-transparency-1.0.0.zip.sha256` contains the digest of the exact ZIP.
-- [ ] build is reproducible from the accepted tagged/source state.
-- [ ] ZIP contains required PHP, assets, license, readme and language files only.
-- [ ] ZIP excludes tests, CI configuration, `.git*`, node modules, development dependencies, build diagnostics and internal-only docs.
-- [ ] Spanish `.mo` exists and is non-empty inside the exact ZIP.
-- [ ] official WordPress Plugin Check validates the exact distribution tree/package.
+- [x] `bin/build-plugin.sh` creates the canonical runtime tree.
+- [x] release tooling creates `dist/ai-transparency-1.0.0.zip`.
+- [x] `dist/ai-transparency-1.0.0.zip.sha256` contains the digest of the exact ZIP.
+- [x] build is reproducible from the accepted source/tag state.
+- [x] ZIP contains required PHP, assets, license, readme and language files only.
+- [x] ZIP excludes tests, CI configuration, `.git*`, node modules, development dependencies, build diagnostics and internal-only docs.
+- [x] Spanish `.mo` exists and is non-empty inside the exact ZIP.
+- [x] official WordPress Plugin Check validates the distribution package.
 
 ## D. Fresh install and activation
 
-- [ ] fresh WordPress installation accepts the 1.0.0 ZIP.
-- [ ] plugin activates without PHP warning/fatal.
-- [ ] all six accepted user workflows remain available after activation.
-- [ ] administrator-only pages retain `manage_options` authority.
-- [ ] Editor/non-authorized user remains denied.
+- [x] fresh WordPress installation accepts the 1.0.0 ZIP.
+- [x] plugin activates without PHP warning/fatal.
+- [x] all six accepted user workflows remain available after activation.
+- [x] administrator-only pages retain `manage_options` authority.
+- [x] Editor/non-authorized user remains denied.
 
 ## E. Upgrade preservation
 
-- [ ] create representative 0.1.0 Registry state.
-- [ ] upgrade/replace plugin with 1.0.0.
-- [ ] Registry records survive unchanged except valid schema migration.
-- [ ] reviewed/archive state survives.
-- [ ] Disclosure eligibility/readiness remains consistent.
-- [ ] Evidence Export remains deterministic for equivalent technical state.
-- [ ] no upgrade step transmits local state externally.
+- [x] representative 0.1.0 Registry state is created in the release lifecycle fixture.
+- [x] exact 1.0.0 ZIP upgrades/replaces the 0.1.0 plugin.
+- [x] Registry records survive unchanged except valid schema migration.
+- [x] reviewed/archive state survives.
+- [x] Disclosure eligibility/readiness remains consistent.
+- [x] Evidence Export remains deterministic for equivalent technical state.
+- [x] no upgrade step transmits local state externally.
 
 ## F. Deactivation/reactivation
 
-- [ ] deactivate 1.0.0.
-- [ ] Registry option remains present.
-- [ ] reactivate 1.0.0.
-- [ ] Registry remains readable and functional.
-- [ ] deactivation performs no destructive cleanup and no remote request.
+- [x] deactivate 1.0.0.
+- [x] Registry option remains present.
+- [x] reactivate 1.0.0.
+- [x] Registry remains readable and functional.
+- [x] deactivation performs no destructive cleanup and no remote request.
 
 ## G. Uninstall — single site
 
-- [ ] `uninstall.php` is guarded by `WP_UNINSTALL_PLUGIN`.
-- [ ] uninstall deletes only the plugin-owned site-local Registry option.
-- [ ] unrelated options/content/users/uploads remain untouched.
-- [ ] uninstall performs no remote request.
+- [x] `uninstall.php` is guarded by `WP_UNINSTALL_PLUGIN`.
+- [x] uninstall deletes only the plugin-owned site-local Registry option.
+- [x] unrelated options/content/users/uploads remain untouched.
+- [x] uninstall performs no remote request.
 
 ## H. Uninstall — Multisite
 
-- [ ] plugin-owned Registry exists on at least two sites.
-- [ ] network uninstall removes the Registry from every existing site.
-- [ ] original blog context is restored after iteration.
-- [ ] unrelated site/network data remains untouched.
-- [ ] no sites are created/deleted.
-- [ ] no remote request occurs.
+- [x] plugin-owned Registry exists on at least two sites in acceptance.
+- [x] network uninstall removes the Registry from every existing site.
+- [x] original blog context is restored after iteration.
+- [x] unrelated site/network data remains untouched.
+- [x] no sites are created/deleted by uninstall.
+- [x] no remote request occurs.
 
 ## I. EN/ES release package
 
-- [ ] runtime gettext coverage is 100% EN/ES.
-- [ ] POT and Spanish PO are synchronized.
-- [ ] compiled Spanish MO is generated from the accepted source state.
-- [ ] exact package passes Spanish runtime smoke.
-- [ ] customer-facing release/readme text is not partially untranslated where runtime translation is expected.
+- [x] runtime gettext coverage is 100% EN/ES.
+- [x] POT and Spanish PO are synchronized.
+- [x] compiled Spanish MO is generated from the accepted source state.
+- [x] exact package passes Spanish/runtime acceptance.
+- [x] customer-facing runtime release text is not partially untranslated.
 
 ## J. Responsive/accessibility regressions
 
-- [ ] existing 390 px acceptance remains green.
-- [ ] 200% text acceptance remains green.
-- [ ] axe serious/critical violations remain zero on accepted plugin pages.
-- [ ] keyboard/focus behavior remains accepted.
+- [x] existing 390 px acceptance remains green.
+- [x] 200% text acceptance remains green.
+- [x] axe serious/critical violations remain zero on accepted plugin pages.
+- [x] keyboard/focus behavior remains accepted.
 
 ## K. Privacy/security regressions
 
-- [ ] Registry remains site-local.
-- [ ] no telemetry/background cloud request is introduced.
-- [ ] Discovery does not inspect provider credentials/prompts/conversations.
-- [ ] Evidence Export allow-list and signature semantics remain unchanged unless separately versioned/documented.
-- [ ] Support page performs no Kairoseth request on load.
-- [ ] contextual support URL contains only the accepted bounded keys.
-- [ ] no credentials/secrets are packaged or logged.
+- [x] Registry remains site-local.
+- [x] no telemetry/background cloud request is introduced.
+- [x] Discovery does not inspect provider credentials/prompts/conversations.
+- [x] Evidence Export allow-list and signature semantics remain accepted.
+- [x] Support page performs no Kairoseth request on load.
+- [x] contextual support URL contains only the accepted bounded keys.
+- [x] no credentials/secrets are packaged or logged.
 
 ## L. Compatibility gates
 
-- [ ] WordPress 7.1 real runtime acceptance green.
-- [ ] PHP 7.4 syntax green.
-- [ ] PHP 8.1 syntax green.
-- [ ] PHP 8.3 syntax green.
-- [ ] PHP 8.5 syntax green.
-- [ ] WPCS/PHPCompatibility/PHPUnit green.
-- [ ] official WordPress Plugin Check green.
-- [ ] real Multisite isolation/lifecycle smoke green.
+- [x] WordPress 7.1 real runtime acceptance green.
+- [x] PHP 7.4 syntax green.
+- [x] PHP 8.1 syntax green.
+- [x] PHP 8.3 syntax green.
+- [x] PHP 8.5 syntax green.
+- [x] WPCS/PHPCompatibility/PHPUnit green.
+- [x] official WordPress Plugin Check green.
+- [x] real Multisite isolation/lifecycle smoke green.
 
 ## M. GitHub release gate
 
-- [ ] implementation PR green.
-- [ ] implementation PR merged.
-- [ ] post-merge `main` CI green.
-- [ ] exact 1.0.0 release artifact built from accepted `main`.
-- [ ] SHA-256 verified.
-- [ ] Git tag `1.0.0` created only after final `main` acceptance.
-- [ ] GitHub Release `1.0.0` contains the exact accepted ZIP and checksum.
-- [ ] release asset/checksum verified after creation.
+- [x] implementation PR green.
+- [x] implementation PR merged.
+- [x] post-merge `main` CI green.
+- [x] exact 1.0.0 release artifact built from accepted `main`.
+- [x] SHA-256 verified: `b7fc6e0b4a80d39e0b9331faf89c3ad7c310f3d5f24795123eb9ab89299bb368`.
+- [x] Git tag `1.0.0` created only after final `main` acceptance.
+- [x] tag `1.0.0` points to `5d0344876eb27db798ded87888b21b11b5581af5`.
+- [x] GitHub Release `1.0.0` contains the exact accepted ZIP and checksum.
+- [x] published release ZIP/checksum were re-downloaded and verified after creation.
+
+Evidence: [`PHASE8_RELEASE_EVIDENCE.md`](PHASE8_RELEASE_EVIDENCE.md).
 
 ## N. WordPress.org publication gate
 
-- [ ] submission package is the accepted 1.0.0 artifact or byte-equivalent approved packaging state.
+- [x] submission package is the accepted 1.0.0 artifact or its byte-equivalent approved packaging state.
 - [ ] WordPress.org submission actually sent.
 - [ ] external review status recorded factually.
 - [ ] slug/repository access confirmed by WordPress.org before claiming assignment.
 - [ ] public plugin page/download verified before claiming availability.
 
-Items in this section are external dependencies. Technical repository readiness may be complete while these remain pending, but Phase 8 must not claim WordPress.org publication until they are actually complete.
+These are external dependencies. Repository-controlled release readiness is complete, but the project must not claim WordPress.org approval or availability until the corresponding external state is verified.
 
-## Closure rule
+## Current closure state
 
-Phase 8 may be marked **Closed** only when all repository-controlled gates required for the chosen release state are green, blockers are zero, evidence is recorded, and any external publication claim matches the externally verified state.
+```text
+Repository-controlled Phase 8 gates: COMPLETE
+Repository-controlled blockers: 0
+GitHub stable release 1.0.0: PUBLISHED + VERIFIED
+WordPress.org submission/review/publication: PENDING EXTERNAL GATE
+```
+
+Phase 8 remains **active only for the WordPress.org external-publication gate**. It must not be marked fully closed until Section N is complete or the project explicitly changes the release-state contract in a separately accepted decision.

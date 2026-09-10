@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST_ROOT="${ROOT_DIR}/dist"
-VERSION="1.0.0"
+VERSION="${AI_TRANSPARENCY_EXPECTED_VERSION:-1.0.0}"
 ZIP_NAME="ai-transparency-${VERSION}.zip"
 ZIP_PATH="${DIST_ROOT}/${ZIP_NAME}"
 CHECKSUM_PATH="${ZIP_PATH}.sha256"

@@ -1,6 +1,6 @@
 # Phase 8 — WP-CLI Multisite network activation flag
 
-Status: resolved pending final green regression verification  
+Status: resolved and regression-verified  
 First observed: 10 September 2026  
 Affected area: Phase 8 Release Readiness / exact ZIP Multisite lifecycle  
 Severity: medium
@@ -45,31 +45,33 @@ wp eval-file .../release-multisite-lifecycle.php seed
 
 ## Verification
 
-Final verification is the next `Release Readiness` run on the corrected PR head. It must pass both:
+Regression verification passed on `Release Readiness #8` / run `34443049889`:
 
 ```text
-Reproducible 1.0.0 package
-Exact ZIP lifecycle acceptance
+Reproducible 1.0.0 package — SUCCESS
+Exact ZIP lifecycle acceptance — SUCCESS
+Multisite install + explicit network activation — SUCCESS
+Multisite seed across two sites — SUCCESS
+Multisite uninstall isolation — SUCCESS
 ```
-
-including the Multisite seed and uninstall assertions.
 
 ## Related evidence
 
 ```text
 PR: #21
-Release Readiness: #3
-Run: 34442517930
-Job: 102760414027 — Exact ZIP lifecycle acceptance
+Failed Release Readiness: #3 / 34442517930
+Failed job: 102760414027 — Exact ZIP lifecycle acceptance
 Failure step: Install exact 1.0.0 ZIP network-wide and seed two sites
 Single-site lifecycle before failure: PASS
+Regression Release Readiness: #8 / 34443049889 — SUCCESS
+Regression lifecycle job: 102761975110 — SUCCESS
 ```
 
 ---
 
 ## Español
 
-Estado: resuelto, pendiente de la verificación de regresión verde final  
+Estado: resuelto y verificado mediante regresión  
 Primera observación: 10 de septiembre de 2026  
 Área afectada: Release Readiness de Fase 8 / lifecycle Multisite del ZIP exacto  
 Severidad: media
@@ -105,4 +107,4 @@ Los lifecycle tests de Multisite deben modelar instalación y activación como o
 
 ### Verificación
 
-El siguiente `Release Readiness` del head corregido debe completar ambos jobs y, en particular, el seed + uninstall Multisite.
+`Release Readiness #8` / `34443049889` pasó los dos jobs, incluido instalación + network activation, seed en dos sites y uninstall Multisite aislado.

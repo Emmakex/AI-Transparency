@@ -70,8 +70,8 @@ final class SupportContext {
 	 * @param string $locale                Current WordPress locale.
 	 */
 	public function __construct( string $extension_version, string $host_platform_version, string $locale ) {
-		$this->extension_version     = self::bounded_version( $extension_version, 'extensionVersion' );
-		$this->host_platform_version = self::bounded_version( $host_platform_version, 'hostPlatformVersion' );
+		$this->extension_version     = self::bounded_version( $extension_version );
+		$this->host_platform_version = self::bounded_version( $host_platform_version );
 		$this->locale                = self::normalize_locale( $locale );
 	}
 
@@ -119,15 +119,14 @@ final class SupportContext {
 	 * Enforce a compact version-token boundary.
 	 *
 	 * @param string $value Version value.
-	 * @param string $field Diagnostic field name.
 	 * @return string
 	 * @throws InvalidArgumentException When the version is empty, oversized or malformed.
 	 */
-	private static function bounded_version( string $value, string $field ): string {
+	private static function bounded_version( string $value ): string {
 		$value = trim( $value );
 
 		if ( '' === $value || strlen( $value ) > 40 || 1 !== preg_match( '/^[A-Za-z0-9][A-Za-z0-9._+\-]*$/', $value ) ) {
-			throw new InvalidArgumentException( $field . ' is not a valid bounded version token.' );
+			throw new InvalidArgumentException( 'Support context contains an invalid bounded version token.' );
 		}
 
 		return $value;

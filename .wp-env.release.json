@@ -1,0 +1,15 @@
+{
+  "core": "WordPress/WordPress#7.1",
+  "phpVersion": "8.3",
+  "mappings": {
+    "wp-content/ai-transparency-release-artifacts": "./dist",
+    "wp-content/ai-transparency-runtime-tests": "./tests/runtime"
+  },
+  "port": 8888,
+  "testsEnvironment": false,
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "SCRIPT_DEBUG": true
+  }
+}

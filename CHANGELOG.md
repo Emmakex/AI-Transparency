@@ -8,6 +8,13 @@ The project follows semantic versioning for public releases.
 
 No changes yet.
 
+## [1.0.1] - 2026-09-10
+
+### Changed
+
+- `Plugin URI` now points to the dedicated Kairoseth AI Transparency product page at `https://kairoseth.com/products/ai-transparency` while `Author URI` remains `https://kairoseth.com/`, satisfying the WordPress.org requirement that plugin and author URIs are not identical.
+- No runtime behavior, Registry schema, privacy boundary or stored-data lifecycle changes.
+
 ## [1.0.0] - 2026-09-10
 
 ### Added

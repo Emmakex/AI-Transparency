@@ -47,8 +47,10 @@ concurrency:
 
 jobs:
   release-package:
-    name: Reproducible 1.0.0 package
+    name: Reproducible stable package
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release-version.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -59,18 +61,31 @@ jobs:
           php-version: '8.3'
           coverage: none
 
+      - name: Resolve canonical release version
+        id: release-version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(php bin/check-release.php --print-version)"
+          if [[ ! "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Release metadata did not resolve to semantic version X.Y.Z." >&2
+            exit 1
+          fi
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "Release Readiness target: ${VERSION}"
+
       - name: Build and verify exact release package twice
         env:
-          AI_TRANSPARENCY_EXPECTED_VERSION: '1.0.0'
-        run: bash bin/run-with-diagnostics.sh "Phase 8 reproducible release package" -- bash bin/verify-release-package.sh
+          AI_TRANSPARENCY_EXPECTED_VERSION: ${{ steps.release-version.outputs.version }}
+        run: bash bin/run-with-diagnostics.sh "Release Readiness reproducible package" -- bash bin/verify-release-package.sh
 
       - name: Upload exact release candidate
         uses: actions/upload-artifact@v4
         with:
-          name: ai-transparency-1.0.0-release-candidate
+          name: ai-transparency-${{ steps.release-version.outputs.version }}-release-candidate
           path: |
-            dist/ai-transparency-1.0.0.zip
-            dist/ai-transparency-1.0.0.zip.sha256
+            dist/ai-transparency-${{ steps.release-version.outputs.version }}.zip
+            dist/ai-transparency-${{ steps.release-version.outputs.version }}.zip.sha256
           if-no-files-found: error
           retention-days: 14
 
@@ -78,7 +93,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: phase8-release-package-diagnostics
+          name: release-package-diagnostics
           path: .ci-diagnostics/
           include-hidden-files: true
           if-no-files-found: ignore
@@ -89,6 +104,8 @@ jobs:
     needs: release-package
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      RELEASE_VERSION: ${{ needs.release-package.outputs.version }}
     steps:
       - name: Checkout full history for 0.1.0 upgrade fixture
         uses: actions/checkout@v7
@@ -109,18 +126,18 @@ jobs:
       - name: Install pinned WordPress runtime tooling
         run: npm install --no-audit --no-fund
 
-      - name: Download accepted 1.0.0 release candidate
+      - name: Download accepted stable release candidate
         uses: actions/download-artifact@v4
         with:
-          name: ai-transparency-1.0.0-release-candidate
+          name: ai-transparency-${{ needs.release-package.outputs.version }}-release-candidate
           path: dist
 
-      - name: Verify downloaded 1.0.0 checksum
+      - name: Verify downloaded stable checksum
         shell: bash
         run: |
           set -euo pipefail
-          EXPECTED="$(awk '{print $1}' dist/ai-transparency-1.0.0.zip.sha256)"
-          ACTUAL="$(php -r 'echo hash_file("sha256", $argv[1]);' dist/ai-transparency-1.0.0.zip)"
+          EXPECTED="$(awk '{print $1}' "dist/ai-transparency-${RELEASE_VERSION}.zip.sha256")"
+          ACTUAL="$(php -r 'echo hash_file("sha256", $argv[1]);' "dist/ai-transparency-${RELEASE_VERSION}.zip")"
           test "${EXPECTED}" = "${ACTUAL}"
 
       - name: Build 0.1.0 upgrade fixture from accepted pre-implementation main
@@ -140,7 +157,7 @@ jobs:
           test -s dist/ai-transparency-0.1.0.zip
 
       - name: Start exact-package single-site WordPress
-        run: bash bin/run-with-diagnostics.sh "Phase 8 single-site release start" -- npm exec -- wp-env start --config=.wp-env.release.json
+        run: bash bin/run-with-diagnostics.sh "Release Readiness single-site start" -- npm exec -- wp-env start --config=.wp-env.release.json
 
       - name: Install and seed real 0.1.0 baseline
         shell: bash
@@ -149,12 +166,12 @@ jobs:
           npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin install wp-content/ai-transparency-release-artifacts/ai-transparency-0.1.0.zip --activate --force
           npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php seed-baseline
 
-      - name: Upgrade baseline to exact 1.0.0 ZIP
+      - name: Upgrade baseline to exact stable ZIP
         shell: bash
         run: |
           set -euo pipefail
-          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin install wp-content/ai-transparency-release-artifacts/ai-transparency-1.0.0.zip --activate --force
-          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-upgraded
+          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin install "wp-content/ai-transparency-release-artifacts/ai-transparency-${RELEASE_VERSION}.zip" --activate --force
+          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-upgraded "${RELEASE_VERSION}"
 
       - name: Prove deactivation and reactivation preserve Registry
         shell: bash
@@ -163,7 +180,7 @@ jobs:
           npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin deactivate ai-transparency
           npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-deactivated
           npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin activate ai-transparency
-          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-upgraded
+          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-upgraded "${RELEASE_VERSION}"
 
       - name: Prove explicit single-site uninstall scope
         shell: bash
@@ -173,27 +190,27 @@ jobs:
           npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin uninstall ai-transparency
           npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-uninstalled
 
-      - name: Prove fresh 1.0.0 ZIP install
+      - name: Prove fresh stable ZIP install
         shell: bash
         run: |
           set -euo pipefail
-          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin install wp-content/ai-transparency-release-artifacts/ai-transparency-1.0.0.zip --activate --force
-          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-fresh
+          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp plugin install "wp-content/ai-transparency-release-artifacts/ai-transparency-${RELEASE_VERSION}.zip" --activate --force
+          npm exec -- wp-env run cli --config=.wp-env.release.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-single-site-lifecycle.php assert-fresh "${RELEASE_VERSION}"
 
       - name: Stop exact-package single-site WordPress
         if: always()
         run: npm exec -- wp-env stop --config=.wp-env.release.json || true
 
       - name: Start exact-package Multisite WordPress
-        run: bash bin/run-with-diagnostics.sh "Phase 8 Multisite release start" -- npm exec -- wp-env start --config=.wp-env.release.multisite.json
+        run: bash bin/run-with-diagnostics.sh "Release Readiness Multisite start" -- npm exec -- wp-env start --config=.wp-env.release.multisite.json
 
-      - name: Install exact 1.0.0 ZIP network-wide and seed two sites
+      - name: Install exact stable ZIP network-wide and seed two sites
         shell: bash
         run: |
           set -euo pipefail
-          npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp plugin install wp-content/ai-transparency-release-artifacts/ai-transparency-1.0.0.zip --force
+          npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp plugin install "wp-content/ai-transparency-release-artifacts/ai-transparency-${RELEASE_VERSION}.zip" --force
           npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp plugin activate ai-transparency --network
-          npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-multisite-lifecycle.php seed
+          npm exec -- wp-env run cli --config=.wp-env.release.multisite.json -- wp eval-file wp-content/ai-transparency-runtime-tests/release-multisite-lifecycle.php seed "${RELEASE_VERSION}"
 
       - name: Prove explicit Multisite uninstall scope
         shell: bash
@@ -211,7 +228,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: phase8-release-lifecycle-diagnostics
+          name: release-lifecycle-diagnostics
           path: .ci-diagnostics/
           include-hidden-files: true
           if-no-files-found: ignore

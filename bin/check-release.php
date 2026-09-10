@@ -57,6 +57,16 @@ $slug = $extract(
 	$plugin,
 	'plugin slug constant'
 );
+$plugin_uri = $extract(
+	'/^\s*\*\s*Plugin URI:\s*([^\r\n]+)$/m',
+	$plugin,
+	'Plugin URI'
+);
+$author_uri = $extract(
+	'/^\s*\*\s*Author URI:\s*([^\r\n]+)$/m',
+	$plugin,
+	'Author URI'
+);
 
 $versions = array_filter(
 	array(
@@ -90,6 +100,21 @@ if ( 'ai-transparency' !== $text_domain ) {
 
 if ( 'ai-transparency' !== $slug ) {
 	$failures[] = sprintf( 'Plugin slug constant must remain ai-transparency; found %s.', $slug );
+}
+
+$expected_plugin_uri = 'https://kairoseth.com/products/ai-transparency';
+$expected_author_uri = 'https://kairoseth.com/';
+
+if ( $expected_plugin_uri !== $plugin_uri ) {
+	$failures[] = sprintf( 'Plugin URI must remain %s; found %s.', $expected_plugin_uri, $plugin_uri );
+}
+
+if ( $expected_author_uri !== $author_uri ) {
+	$failures[] = sprintf( 'Author URI must remain %s; found %s.', $expected_author_uri, $author_uri );
+}
+
+if ( '' !== $plugin_uri && '' !== $author_uri && $plugin_uri === $author_uri ) {
+	$failures[] = 'Plugin URI and Author URI must be different for WordPress.org submission.';
 }
 
 if ( '' !== $header_version && false === strpos( $changelog, '## [' . $header_version . ']' ) ) {
@@ -152,8 +177,9 @@ if ( in_array( '--print-version', $argv, true ) ) {
 }
 
 printf(
-	"Release metadata gate passed for %s: slug=%s, short_description=%d chars.\n",
+	"Release metadata gate passed for %s: slug=%s, short_description=%d chars, plugin_uri=%s.\n",
 	$header_version,
 	$slug,
-	$short_length
+	$short_length,
+	$plugin_uri
 );

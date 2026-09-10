@@ -12,6 +12,7 @@ use Kairoseth\AITransparency\Admin\DisclosurePage;
 use Kairoseth\AITransparency\Admin\DiscoveryPage;
 use Kairoseth\AITransparency\Admin\EvidenceExportPage;
 use Kairoseth\AITransparency\Admin\ReadinessPage;
+use Kairoseth\AITransparency\Admin\SupportPage;
 use Kairoseth\AITransparency\Disclosure\DisclosureShortcode;
 
 /**
@@ -66,6 +67,7 @@ final class Plugin {
 			( new ReadinessPage() )->register();
 			( new DisclosurePage() )->register();
 			( new EvidenceExportPage() )->register();
+			( new SupportPage() )->register();
 		}
 	}
 

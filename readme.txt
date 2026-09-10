@@ -4,7 +4,7 @@ Tags: ai transparency, eu ai act, ai disclosure, article 50, artificial intellig
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: MIT
 License URI: https://opensource.org/license/mit/
 
@@ -14,7 +14,7 @@ Local-first AI transparency readiness for WordPress with AI inventory, disclosur
 
 Kairoseth AI Transparency helps WordPress site owners maintain a reviewable technical inventory of AI systems used on their websites and turn that state into bounded technical evidence.
 
-Version 1.0.0 includes:
+The stable release includes:
 
 * a local AI Systems Registry under **Tools > AI Transparency**;
 * deterministic AI integration discovery under **Tools > AI Discovery**;
@@ -136,6 +136,10 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 
 == Changelog ==
 
+= 1.0.1 =
+* Uses the dedicated Kairoseth AI Transparency product page as Plugin URI so plugin and author metadata remain distinct for WordPress.org validation.
+* No runtime behavior or stored-data schema changes.
+
 = 1.0.0 =
 * First stable release candidate.
 * Versioned site-local AI Systems Registry with administrator CRUD/review/archive.
@@ -153,6 +157,9 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 * Development baseline used before the first stable release.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Metadata-only patch for WordPress.org submission readiness. Runtime behavior and Registry data remain unchanged.
 
 = 1.0.0 =
 First stable release. Existing Registry state from the development baseline is preserved during upgrade. Review your AI systems and disclosure readiness after updating.

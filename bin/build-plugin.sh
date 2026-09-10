@@ -14,6 +14,7 @@ mkdir -p "${LANGUAGE_DIR}"
 php "${ROOT_DIR}/bin/check-i18n.php"
 
 cp "${ROOT_DIR}/ai-transparency.php" "${PLUGIN_DIR}/"
+cp "${ROOT_DIR}/uninstall.php" "${PLUGIN_DIR}/"
 cp "${ROOT_DIR}/readme.txt" "${PLUGIN_DIR}/"
 cp "${ROOT_DIR}/LICENSE" "${PLUGIN_DIR}/"
 cp -R "${ROOT_DIR}/src" "${PLUGIN_DIR}/src"
@@ -31,6 +32,11 @@ if [[ ! -s "${LANGUAGE_DIR}/ai-transparency-es_ES.mo" ]]; then
   exit 1
 fi
 
+if [[ ! -s "${PLUGIN_DIR}/uninstall.php" ]]; then
+  echo "WordPress uninstall entrypoint is missing from the production package." >&2
+  exit 1
+fi
+
 if [[ ! -s "${PLUGIN_DIR}/assets/admin.css" ]]; then
   echo "Plugin admin stylesheet is missing from the production package." >&2
   exit 1
@@ -41,4 +47,4 @@ if [[ ! -s "${PLUGIN_DIR}/assets/frontend.css" ]]; then
   exit 1
 fi
 
-printf 'Built production plugin at %s with complete EN/ES translation assets.\n' "${PLUGIN_DIR}"
+printf 'Built production plugin at %s with complete EN/ES translation assets and uninstall lifecycle support.\n' "${PLUGIN_DIR}"

@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const { readFileSync } = require('fs');
 const { test, expect } = require('@playwright/test');
 const AxeBuilder = require('@axe-core/playwright').default;
 
@@ -6,6 +7,13 @@ const adminUser = process.env.WP_TEST_ADMIN_USER;
 const adminPass = process.env.WP_TEST_ADMIN_PASS;
 const editorUser = process.env.WP_TEST_EDITOR_USER;
 const editorPass = process.env.WP_TEST_EDITOR_PASS;
+
+const pluginSource = readFileSync('ai-transparency.php', 'utf8');
+const pluginVersionMatch = pluginSource.match(/^\s*\*\s*Version:\s*(\d+\.\d+\.\d+)\s*$/m);
+if (!pluginVersionMatch) {
+  throw new Error('Could not resolve the current plugin version from ai-transparency.php.');
+}
+const expectedPluginVersion = pluginVersionMatch[1];
 
 async function login(page, username, password) {
   if (!username || !password) {
@@ -149,7 +157,7 @@ test.describe('Phase 6 Evidence Export runtime acceptance', () => {
     expect(first.generator).toEqual({
       plugin_slug: 'ai-transparency',
       plugin_name: 'Kairoseth AI Transparency',
-      plugin_version: '1.0.0',
+      plugin_version: expectedPluginVersion,
     });
     expect(first.site.blog_id).toBeGreaterThan(0);
     expect(typeof first.site.is_multisite).toBe('boolean');

@@ -3,7 +3,17 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST_ROOT="${ROOT_DIR}/dist"
-VERSION="${AI_TRANSPARENCY_EXPECTED_VERSION:-1.0.0}"
+VERSION="${AI_TRANSPARENCY_EXPECTED_VERSION:-}"
+
+if [[ -z "${VERSION}" ]]; then
+  VERSION="$(php "${ROOT_DIR}/bin/check-release.php" --print-version)"
+fi
+
+if [[ ! "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "Release verification requires a semantic version in X.Y.Z form; found ${VERSION}." >&2
+  exit 1
+fi
+
 ZIP_NAME="ai-transparency-${VERSION}.zip"
 ZIP_PATH="${DIST_ROOT}/${ZIP_NAME}"
 CHECKSUM_PATH="${ZIP_PATH}.sha256"

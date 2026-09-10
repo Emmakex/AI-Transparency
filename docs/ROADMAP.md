@@ -39,7 +39,7 @@ Canonical policies:
 | 5 — Disclosure tooling | **Closed** | Reviewed Registry state → explicit public shortcode disclosure |
 | 6 — Evidence export | **Closed** | Deterministic site-local JSON technical evidence snapshot |
 | 7 — Contextual support/custom integration | **Closed** | User-initiated bounded WordPress → Kairoseth Custom Requests flow with production SMTP proof |
-| 8 — First public release | **Not started** | Stable public release after all release gates |
+| 8 — First public release | **Active — contract defined** | Stable 1.0.0 release after reproducible package/lifecycle/release/publication gates |
 
 ---
 
@@ -372,26 +372,60 @@ Exit: **complete.**
 
 ## Phase 8 — First public release
 
-Status: **not started.**
+Status: **active — contract defined; implementation pending.**
 
-Required release evidence:
+Target stable release:
+
+```text
+version: 1.0.0
+technical slug: ai-transparency
+WordPress.org target slug: ai-transparency
+release ZIP: dist/ai-transparency-1.0.0.zip
+checksum: dist/ai-transparency-1.0.0.zip.sha256
+```
+
+Release work is divided into three gates:
+
+```text
+8A — reproducible release candidate
+8B — lifecycle + exact-package acceptance
+8C — stable GitHub release and externally verified WordPress.org publication state
+```
+
+Blocking repository-controlled evidence includes:
 
 ```text
 functional Free value
++ exact 1.0.0 version/readme/changelog/package consistency
 + EN/ES 100% customer-facing coverage
 + compiled Spanish catalog in exact release package
++ deterministic production tree + versioned ZIP + SHA-256
++ WordPress.org-ready readme
 + supported WordPress/PHP compatibility evidence
-+ security/privacy review
++ security/privacy regression review
 + accessibility/responsive acceptance
-+ Plugin Check green
-+ install/activation/deactivation/uninstall tests
-+ release ZIP
-+ README/readme/version consistency
-+ documentation synchronized
++ official Plugin Check green
++ fresh install/activation
++ 0.1.0 → 1.0.0 upgrade data preservation
++ deactivation/reactivation data preservation
++ safe single-site uninstall
++ safe Multisite uninstall
++ inherited runtime/regression suite green
++ implementation PR green and merged
++ final main CI green
 + blockers = 0
 ```
 
-Only then may the project claim a stable public release or WordPress.org availability.
+Uninstall is the only destructive lifecycle action. Deactivation and upgrade must preserve Registry data. Explicit uninstall removes only plugin-owned site-local Registry state and performs no remote request.
+
+Git tag/GitHub Release `1.0.0` may be created only after the implementation is merged and final `main` validation is green. WordPress.org assignment/approval/publication is an external gate and must never be claimed before it is actually confirmed.
+
+References:
+
+- [`PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md`](PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md)
+- [`PHASE8_ACCEPTANCE.md`](PHASE8_ACCEPTANCE.md)
+
+Exit: **open.**
 
 ## Deferred until justified
 

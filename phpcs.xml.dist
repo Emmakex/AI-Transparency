@@ -3,6 +3,7 @@
 	<description>WordPress coding standards and PHP 7.4+ compatibility.</description>
 
 	<file>ai-transparency.php</file>
+	<file>uninstall.php</file>
 	<file>src</file>
 
 	<exclude-pattern>vendor/*</exclude-pattern>

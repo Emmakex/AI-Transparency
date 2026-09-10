@@ -2,105 +2,94 @@
 
 [English](#english) · [Español](#español)
 
-Status: **active contract — implementation not started**  
-Last reviewed / Última revisión: **9 September 2026 / 9 de septiembre de 2026**
+Status: **closed — accepted, merged and verified end-to-end**  
+Last reviewed / Última revisión: **10 September 2026 / 10 de septiembre de 2026**
+
+Canonical destination: `https://kairoseth.com/custom-requests`
 
 ---
 
 ## English
 
-### Goal
+### Goal achieved
 
-Phase 7 adds an explicit, optional and privacy-bounded path from the WordPress plugin to Kairoseth support/custom work without weakening the local-first Free product.
+Phase 7 adds an explicit, optional and privacy-bounded path from the WordPress plugin to Kairoseth support/custom work without weakening the local-first product.
 
-The user must deliberately choose to leave the WordPress admin surface. The plugin must not automatically create leads, transmit Registry/evidence content, send telemetry or call Kairoseth in the background.
+The user deliberately chooses to leave the WordPress admin surface. The plugin does not automatically create leads, transmit Registry/evidence content, send telemetry or call Kairoseth in the background.
 
-### Product boundary
-
-The accepted commercial model for this plugin remains:
-
-```text
-useful local Free product
-→ optional Kairoseth support/custom CTA
-→ user explicitly opens Kairoseth
-→ user reviews/submits a request there
-→ no local feature becomes conditional on submission
-```
-
-Phase 7 does **not** introduce:
-
-```text
-paid local feature locks
-trial expiry
-remote entitlement checks
-mandatory Kairoseth account
-background lead submission
-automatic telemetry
-cloud dependency for Registry/Discovery/Readiness/Disclosure/Evidence Export
-```
-
-### First supported WordPress surface
-
-Planned first surface:
+### Accepted WordPress surface
 
 ```text
 Tools → AI Transparency Support
-```
-
-Access:
-
-```text
-manage_options
+capability: manage_options
 ```
 
 The page is informational and read-only with respect to Registry state.
 
-It should provide two clearly separated user-initiated actions:
+Accepted actions:
 
 ```text
 Get support
+→ requestType=implementation_support
+
 Request custom integration
+→ requestType=third_party_integration
 ```
 
-Both actions may resolve to the same Kairoseth Custom Requests intake with different bounded `requestType` values.
-
-### Kairoseth dependency
-
-The final destination belongs to the shared **Kairoseth Platform Custom Requests** module.
-
-Phase 7 may not hard-code an invented production route while that route is unverified.
-
-Implementation requires one verified canonical HTTPS destination under the Kairoseth-controlled domain:
-
-```text
-https://kairoseth.com/<verified-custom-request-route>
-```
-
-The exact route becomes a release-authoritative plugin constant/config value only after the destination exists and is validated end-to-end.
-
-Phase 7 can be implemented and accepted only when the real target is available. Documentation may proceed before that dependency.
+Both navigate to the same verified Kairoseth Custom Requests intake with different bounded request types.
 
 ### Navigation architecture
-
-Accepted direction:
 
 ```text
 administrator
 → Tools → AI Transparency Support
-→ explicit click
+→ page load remains local
+→ explicit CTA click
 → plugin builds bounded contextual URL server-side
-→ browser navigates to canonical Kairoseth HTTPS destination
-→ Kairoseth form shows context
-→ user decides what personal/business information to submit
+→ browser navigates to https://kairoseth.com/custom-requests
+→ Kairoseth normalizes/uses allowed context
+→ user decides what personal/business information to enter
+→ explicit consent + submit on Kairoseth
 ```
 
-No server-to-server request is required from the WordPress plugin for the first increment.
+No server-to-server request is made by the WordPress plugin.
+
+### Implemented architecture
+
+```text
+src/Support/class-supportcontext.php
+src/Support/class-supporturlbuilder.php
+src/Admin/class-supportpage.php
+```
+
+Responsibilities:
+
+```text
+SupportContext
+  immutable bounded non-sensitive product/host context
+  extension identity fixed by plugin code
+  plugin and WordPress versions bounded
+  WordPress locale normalized to en/es
+
+SupportUrlBuilder
+  exact canonical destination validation
+  requestType allow-list
+  exact query-key allow-list
+  RFC3986 query encoding
+  fail-closed HTTP/foreign-host/wrong-path/userinfo/port/query/fragment handling
+
+SupportPage
+  Tools UI
+  manage_options authority
+  EN/ES copy
+  explicit support/custom actions
+  no Registry mutation
+  no automatic network request
+```
 
 ### Context allow-list
 
-The plugin may include only non-sensitive technical/product context needed to prefill the Kairoseth request surface.
-
-Allowed initial context:
+The plugin generates only:
 
 ```text
 source=extension
@@ -109,11 +98,11 @@ extensionName=Kairoseth AI Transparency
 extensionVersion=<real plugin version>
 hostPlatform=wordpress
 hostPlatformVersion=<real WordPress version>
-locale=<current locale>
+locale=<current locale normalized to en|es>
 requestType=<bounded enum>
 ```
 
-Accepted first `requestType` values:
+Accepted `requestType` values:
 
 ```text
 implementation_support
@@ -124,11 +113,9 @@ additional_feature
 other
 ```
 
-The plugin may add a canonical Kairoseth product route later when that route exists and is verified.
-
 ### Forbidden automatically transmitted context
 
-Phase 7 must **not** automatically place any of the following in query parameters, POST bodies, headers or background requests:
+The plugin does **not** automatically place any of the following in the contextual URL or a background request:
 
 ```text
 site URL / home URL
@@ -152,57 +139,56 @@ database contents
 arbitrary WordPress options
 ```
 
-If a future workflow genuinely needs site URL or diagnostic material, the user must provide it explicitly on the Kairoseth side under a separate accepted privacy contract.
+If support requires site URL or diagnostic material, the user chooses whether to provide it on the Kairoseth form.
 
 ### Server authority
 
-The browser must not supply trusted product identity or host-version context to the WordPress page for the plugin to echo back blindly.
-
-The plugin resolves context server-side from authoritative constants/functions:
+Trusted context is resolved by plugin/server state:
 
 ```text
 plugin slug/name = plugin-owned constants
 plugin version = KAIROSETH_AI_TRANSPARENCY_VERSION
 host platform = wordpress
-WordPress version = server runtime global/API
+WordPress version = runtime WordPress state
 locale = WordPress locale API
-requestType = server-side allow-list selected by explicit action
-canonical Kairoseth base URL = plugin-owned verified HTTPS configuration
+requestType = SupportUrlBuilder allow-list
+canonical destination = KAIROSETH_AI_TRANSPARENCY_CUSTOM_REQUESTS_URL
 ```
 
-### URL safety
+Browser/client values do not grant permissions, select the destination or override product identity.
 
-The contextual destination must satisfy all of these rules:
+### Destination safety
+
+The accepted destination must satisfy:
 
 ```text
 scheme = https
-host = kairoseth.com or explicitly accepted Kairoseth subdomain
-path = verified canonical Custom Requests route
-no credentials/userinfo in URL
-no fragment-based sensitive payload
-query keys = allow-list only
-query values = bounded + encoded
+host = kairoseth.com
+path = /custom-requests
+no URL userinfo/password
+no custom port
+no preloaded query
+no fragment
 ```
 
-If the configured destination fails validation, the plugin must fail closed and show a bounded local error rather than redirect to an arbitrary host.
+Anything else fails closed.
 
 ### User-initiated privacy model
 
-Opening the CTA is the first network interaction introduced by Phase 7.
-
 ```text
-page GET inside WordPress
-→ no Kairoseth request
+GET WordPress support page
+→ zero Kairoseth request
 
 explicit CTA click
 → normal browser navigation to Kairoseth
+→ bounded technical/product query only
 ```
 
-The WordPress plugin itself does not submit the lead/request. The Kairoseth destination owns its own form, privacy notice, consent and final submission.
+The WordPress plugin does not submit the request. Kairoseth owns the form, privacy notice, consent, backend validation, rate limiting and final delivery.
 
-### Local Free independence
+### Local independence
 
-All accepted local product capabilities remain available without Phase 7 use:
+These local capabilities remain operational without using Kairoseth:
 
 ```text
 Registry
@@ -212,111 +198,75 @@ Disclosure
 Evidence Export
 ```
 
-Failure/unavailability of Kairoseth Support/Custom Requests must not break those workflows.
+Kairoseth availability is not an entitlement, licensing or feature-unlock dependency.
 
-### Planned implementation architecture
+### Kairoseth production contract
 
-```text
-src/Support/class-supportcontext.php
-src/Support/class-supporturlbuilder.php
-src/Admin/class-supportpage.php
-```
-
-Responsibilities:
+Production route:
 
 ```text
-SupportContext
-  immutable bounded non-sensitive product/host context
-
-SupportUrlBuilder
-  verified Kairoseth base URL
-  requestType allow-list
-  query allow-list + encoding
-  host/scheme validation
-
-SupportPage
-  Tools UI
-  manage_options
-  EN/ES copy
-  explicit support/custom actions
-  no Registry mutation
+https://kairoseth.com/custom-requests
+POST https://kairoseth.com/api/public/custom-requests
 ```
 
-Exact class names may simplify, but privacy, server-authority and fail-closed URL validation are blocking.
+The Kairoseth backend re-normalizes incoming extension context and discards unknown context fields. The request form requires explicit consent and user-entered request/contact details.
 
-### EN/ES and accessibility
-
-Customer-facing Phase 7 UI must ship English and Spanish together.
-
-Acceptance requires:
+Recipient authority is server-side:
 
 ```text
-390 px
-200% text
-keyboard navigation
-visible focus
-no color-only meaning
-axe serious/critical = 0
+CUSTOM_REQUESTS_TO
+→ otherwise SMTP_USER
+→ otherwise fail closed
 ```
 
-The page must clearly state:
+No browser, extension query parameter or form field can choose the destination mailbox.
 
-- local plugin features continue to work without contacting Kairoseth;
-- clicking a CTA opens Kairoseth;
-- no Registry/evidence/personal data is automatically attached;
-- the user chooses what to submit on the Kairoseth form.
+### Validation evidence
 
-### Analytics / telemetry boundary
+WordPress tests prove:
 
-The WordPress plugin does not add analytics or telemetry for CTA impressions/clicks in Phase 7.
+- exact context/query allow-lists;
+- bounded plugin/WordPress versions;
+- locale normalization;
+- every accepted request type and rejection of arbitrary types;
+- RFC3986 encoding;
+- canonical HTTPS Kairoseth destination only;
+- rejection of HTTP, foreign/lookalike host, wrong path, userinfo, custom port, preloaded query and fragment;
+- no Kairoseth request on support-page load;
+- exact bounded URLs for both CTAs;
+- Editor denied;
+- 390 px and 200% acceptance;
+- axe serious/critical = 0;
+- inherited local workflow and Multisite regressions green.
 
-If Kairoseth Platform measures arrival/submission, that is handled on the Kairoseth destination under its own privacy/analytics contract.
-
-### Validation strategy
-
-Unit tests should prove:
-
-- only accepted `requestType` values build URLs;
-- plugin/WordPress version context comes from server-authoritative input;
-- context key allow-list is exact;
-- forbidden keys cannot be introduced by arbitrary input;
-- query values are bounded and encoded;
-- non-HTTPS destination fails closed;
-- non-Kairoseth host fails closed;
-- destination with userinfo/unsafe structure fails closed;
-- EN/ES runtime strings remain complete.
-
-Real WordPress acceptance must prove:
+Closure evidence:
 
 ```text
-administrator opens Tools → AI Transparency Support
-→ no automatic network request occurs
-→ explicit support CTA contains only bounded context
-→ explicit custom CTA contains only bounded context
-→ destination host/scheme are canonical
-→ Editor denied
-→ Registry unchanged
-→ existing local workflows remain functional when destination is unreachable
-→ 390 px / 200% / axe acceptance green
+Contract PR: #17
+Contract CI: #95 / 34405157557 — SUCCESS
+Contract merge: cbc04eea07b20af60f3ec4b3621a9aa89c92ae84
+Contract post-merge CI: #96 / 34405183831 — SUCCESS
+
+Implementation PR: #18
+Accepted head: e49721eb00b85b0a4cfbf72d53e876d80dc96f44
+PR-head CI: #101 / 34436069862 — SUCCESS — 8/8 green
+Implementation merge: f225646808f604b5758bbc960417451af8c31738
+Post-merge main CI: #102 / 34436374187 — SUCCESS — 8/8 green
+
+Kairoseth final merge: 5c01adfd40151da6392c8d780203230c315c19fb
+Kairoseth post-merge CI #897 / 34437075381 — SUCCESS
+Kairoseth Production Smoke #119 / 34437075355 — SUCCESS
+Synthetic SMTP E2E proof #4 / 34437244753 — SUCCESS
+Blockers: 0
 ```
 
-Full end-to-end Phase 7 closure additionally requires the real Kairoseth Custom Requests destination to receive the bounded context and let the user reach a working request form.
-
-### Dependency / blocker
-
-Current external dependency:
-
-```text
-verified production Kairoseth Custom Requests route
-```
-
-Until that route exists and is validated, Phase 7 may be **contracted** but not declared implemented/closed.
+Full evidence: [`PHASE7_RUNTIME_EVIDENCE.md`](PHASE7_RUNTIME_EVIDENCE.md).
 
 ### Explicitly deferred
 
 ```text
-automatic lead submission
-server-to-server support API
+automatic lead submission from WordPress
+server-to-server support API from WordPress
 uploading Evidence Export files
 automatic diagnostic bundle
 site URL transmission
@@ -326,97 +276,84 @@ remote entitlement/licensing
 paid local feature gating
 in-plugin chat
 CRM synchronization from WordPress
-telemetry/click tracking in plugin
+plugin telemetry/click tracking
 ```
 
 ### Phase 7 exit
 
-Phase 7 closes only when:
-
-```text
-verified canonical Kairoseth Custom Requests route exists
-+ bounded support/custom context implemented
-+ HTTPS/Kairoseth host fail-closed validation implemented
-+ Tools support surface accepted
-+ manage_options enforced
-+ no automatic network request on page load
-+ no sensitive/Registry/evidence context transmitted
-+ local Free workflows remain independent
-+ real user-initiated navigation reaches working Kairoseth intake
-+ EN/ES 100%
-+ responsive/accessibility green
-+ required CI green
-+ implementation PR merged
-+ post-merge main verification green
-+ documentation synchronized
-+ blockers = 0
-```
+Phase 7 exit: **complete.**
 
 ---
 
 ## Español
 
-### Objetivo
+### Objetivo alcanzado
 
-La Fase 7 añade una vía explícita, opcional y acotada por privacidad desde el plugin WordPress hacia soporte/trabajo personalizado de Kairoseth sin debilitar el producto Free local-first.
+La Fase 7 añade una ruta explícita, opcional y acotada por privacidad desde el plugin WordPress hacia soporte/trabajo personalizado de Kairoseth sin debilitar el funcionamiento local-first.
 
-El usuario debe elegir conscientemente salir del admin de WordPress. El plugin no crea leads automáticamente, no transmite Registry/evidencia, no añade telemetría y no llama a Kairoseth en segundo plano.
+El usuario decide salir del administrador de WordPress. El plugin no crea leads automáticamente, no transmite Registry/evidencias, no añade telemetría y no llama a Kairoseth en segundo plano.
 
-### Frontera de producto
-
-```text
-producto Free local útil
-→ CTA opcional de soporte/personalización
-→ usuario abre Kairoseth explícitamente
-→ usuario revisa y envía la solicitud allí
-→ ninguna función local depende del envío
-```
-
-No se introducen bloqueos de funciones locales, trial, entitlement remoto, cuenta Kairoseth obligatoria ni dependencia cloud para Registry/Discovery/Readiness/Disclosure/Evidence Export.
-
-### Primera superficie
-
-Objetivo:
+### Superficie WordPress aceptada
 
 ```text
 Herramientas → AI Transparency Support
+capability: manage_options
 ```
 
-Solo `manage_options`.
+La página es informativa y de solo lectura respecto al Registry.
 
 Acciones:
 
 ```text
-Obtener soporte
-Solicitar integración personalizada
+Get support
+→ requestType=implementation_support
+
+Request custom integration
+→ requestType=third_party_integration
 ```
 
-### Dependencia Kairoseth
-
-El destino pertenece al módulo compartido **Kairoseth Platform Custom Requests**.
-
-No se inventará una ruta productiva. La implementación requiere una URL HTTPS real y verificada bajo dominio Kairoseth:
+### Arquitectura de navegación
 
 ```text
-https://kairoseth.com/<ruta-custom-requests-verificada>
+administrador
+→ Herramientas → AI Transparency Support
+→ la carga permanece local
+→ clic explícito
+→ el plugin construye server-side la URL contextual acotada
+→ navegador abre https://kairoseth.com/custom-requests
+→ Kairoseth normaliza el contexto permitido
+→ el usuario decide qué información personal/empresarial introducir
+→ consentimiento + envío explícito en Kairoseth
 ```
 
-Hasta que exista, Fase 7 puede tener contrato pero no cerrarse.
+El plugin WordPress no realiza una petición server-to-server.
 
-### Contexto permitido
+### Arquitectura implementada
+
+```text
+src/Support/class-supportcontext.php
+src/Support/class-supporturlbuilder.php
+src/Admin/class-supportpage.php
+```
+
+`SupportContext` mantiene el contexto técnico no sensible e inmutable; `SupportUrlBuilder` aplica allow-lists, codificación y validación fail-closed; `SupportPage` implementa la UI de Herramientas bajo `manage_options`, EN/ES y sin mutar el Registry.
+
+### Allow-list automática
+
+El plugin genera únicamente:
 
 ```text
 source=extension
 extensionSlug=ai-transparency
 extensionName=Kairoseth AI Transparency
-extensionVersion=<versión real>
+extensionVersion=<versión real del plugin>
 hostPlatform=wordpress
-hostPlatformVersion=<versión real WordPress>
-locale=<locale actual>
+hostPlatformVersion=<versión real de WordPress>
+locale=<locale actual normalizado a en|es>
 requestType=<enum acotado>
 ```
 
-`requestType` inicial:
+Tipos aceptados:
 
 ```text
 implementation_support
@@ -427,91 +364,108 @@ additional_feature
 other
 ```
 
-### Contexto prohibido automáticamente
+### Contexto prohibido
 
-No se transmiten automáticamente:
+No se adjuntan automáticamente URL del sitio, identidad de administrador/cliente, Registry, nombres de sistemas IA, `interaction_context`, Discovery, findings, Disclosure, Evidence Export/firma, inventario de plugins/temas, paths/IP, cookies/nonces/sesión, credenciales/tokens, prompts/conversaciones/contenido cliente, logs, BD ni options arbitrarias.
 
-```text
-URL del sitio
-identidad/email/id del administrador
-identidades de clientes/usuarios
-contenido del Registry
-nombres de sistemas IA
-interaction_context
-evidencia Discovery
-findings Readiness
-estado Disclosure
-Evidence Export / snapshot_signature
-inventario plugins/themes
-rutas servidor
-IP
-cookies/nonces/sesión
-credenciales/tokens
-prompts/conversaciones/contenido cliente
-logs
-BD
-options arbitrarias
-```
+Si soporte necesita URL del sitio o material diagnóstico, el usuario decide si lo introduce directamente en el formulario de Kairoseth.
 
-Si en el futuro se necesita información diagnóstica, el usuario la aportará deliberadamente en Kairoseth bajo un contrato de privacidad separado.
-
-### Autoridad y seguridad de URL
-
-Producto, versión, WordPress, locale, `requestType` y URL base se resuelven server-side.
-
-El destino debe cumplir:
+### Autoridad server-side
 
 ```text
-HTTPS
-host Kairoseth aceptado
-ruta Custom Requests verificada
-sin userinfo
-query allow-list
-valores acotados y codificados
+slug/nombre plugin = constantes del plugin
+versión plugin = KAIROSETH_AI_TRANSPARENCY_VERSION
+host = wordpress
+versión WordPress = runtime WordPress
+locale = API de locale WordPress
+requestType = allow-list SupportUrlBuilder
+destino = KAIROSETH_AI_TRANSPARENCY_CUSTOM_REQUESTS_URL
 ```
 
-Una URL inválida falla cerrada y no redirige a hosts arbitrarios.
+El navegador no puede conceder permisos, cambiar la identidad del producto ni seleccionar un destino alternativo.
 
-### Privacidad user-initiated
+### Seguridad del destino
+
+Solo se acepta:
 
 ```text
-GET página WordPress
-→ cero petición a Kairoseth
-
-click explícito CTA
-→ navegación normal del navegador a Kairoseth
+https://kairoseth.com/custom-requests
 ```
 
-El plugin no envía la solicitud final. El formulario Kairoseth controla datos personales, privacidad, consentimiento y envío.
+HTTP, host distinto/lookalike, ruta incorrecta, userinfo, puerto personalizado, query preexistente o fragment hacen fallar la construcción de forma cerrada.
 
-### Independencia del Free local
-
-Siguen funcionando sin Kairoseth:
+### Privacidad iniciada por el usuario
 
 ```text
-Registry
-Discovery
-Readiness
-Disclosure
-Evidence Export
+GET página soporte WordPress
+→ 0 peticiones Kairoseth
+
+clic CTA explícito
+→ navegación normal del navegador
+→ solo contexto técnico/producto permitido
 ```
 
-Una caída del destino de soporte no puede romperlos.
+Kairoseth controla el formulario, aviso de privacidad, consentimiento, validación backend, rate limit y entrega final.
 
-### Arquitectura planificada
+### Independencia local
+
+Registry, Discovery, Readiness, Disclosure y Evidence Export continúan funcionando sin utilizar Kairoseth. No existe dependencia de entitlement, licencia ni desbloqueo de funciones.
+
+### Contrato producción Kairoseth
 
 ```text
-src/Support/class-supportcontext.php
-src/Support/class-supporturlbuilder.php
-src/Admin/class-supportpage.php
+https://kairoseth.com/custom-requests
+POST https://kairoseth.com/api/public/custom-requests
 ```
 
-### Aceptación
+El backend vuelve a normalizar el contexto de extensión y descarta campos desconocidos. El destinatario se resuelve solo en servidor:
 
-Debe probarse EN/ES, `manage_options`, ausencia de red automática, allow-list estricta, destino HTTPS/Kairoseth, Editor bloqueado, Registry intacto, independencia local, 390 px, 200%, teclado/focus y axe serious/critical = 0.
+```text
+CUSTOM_REQUESTS_TO
+→ si no existe, SMTP_USER
+→ si tampoco existe, fail closed
+```
 
-El cierre E2E requiere además que la navegación real llegue al formulario funcional de Kairoseth Custom Requests con el contexto acotado correcto.
+Ningún valor enviado por navegador, plugin o formulario puede elegir el buzón de destino.
 
-### Cierre
+### Evidencia de cierre
 
-Fase 7 solo se marca `CLOSED` cuando exista la ruta productiva verificada, la integración local esté aceptada, el E2E Kairoseth funcione, CI/post-merge estén verdes, documentación esté sincronizada y bloqueadores = 0.
+```text
+PR contrato: #17
+CI contrato: #95 / 34405157557 — SUCCESS
+Merge contrato: cbc04eea07b20af60f3ec4b3621a9aa89c92ae84
+CI post-merge contrato: #96 / 34405183831 — SUCCESS
+
+PR implementación: #18
+Head aceptado: e49721eb00b85b0a4cfbf72d53e876d80dc96f44
+CI PR: #101 / 34436069862 — SUCCESS — 8/8 verde
+Merge implementación: f225646808f604b5758bbc960417451af8c31738
+CI main post-merge: #102 / 34436374187 — SUCCESS — 8/8 verde
+
+Merge final Kairoseth: 5c01adfd40151da6392c8d780203230c315c19fb
+CI Kairoseth #897 / 34437075381 — SUCCESS
+Production Smoke #119 / 34437075355 — SUCCESS
+Prueba SMTP E2E #4 / 34437244753 — SUCCESS
+Bloqueadores: 0
+```
+
+Evidencia completa: [`PHASE7_RUNTIME_EVIDENCE.md`](PHASE7_RUNTIME_EVIDENCE.md).
+
+### Diferido explícitamente
+
+```text
+envío automático de leads desde WordPress
+API server-to-server de soporte desde WordPress
+subida de Evidence Export
+bundle diagnóstico automático
+transmisión automática de URL del sitio
+transmisión de Registry/findings
+historial de tickets dentro de WordPress
+entitlement/licencias remotas
+bloqueo de funciones locales de pago
+chat dentro del plugin
+sincronización CRM desde WordPress
+telemetría/click tracking del plugin
+```
+
+Salida Fase 7: **completa.**

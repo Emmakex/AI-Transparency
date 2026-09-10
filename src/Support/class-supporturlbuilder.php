@@ -87,13 +87,16 @@ final class SupportUrlBuilder {
 	/**
 	 * Validate the plugin-owned destination and fail closed.
 	 *
+	 * This class intentionally uses PHP's native URL parser so domain unit tests
+	 * remain independent of a running WordPress bootstrap.
+	 *
 	 * @param string $destination Candidate destination.
 	 * @return string
 	 * @throws InvalidArgumentException When the destination violates the contract.
 	 */
 	private function validate_destination( string $destination ): string {
 		$destination = trim( $destination );
-		$parts       = wp_parse_url( $destination );
+		$parts       = parse_url( $destination );
 
 		if ( false === $parts || ! is_array( $parts ) ) {
 			throw new InvalidArgumentException( 'Kairoseth support destination is invalid.' );

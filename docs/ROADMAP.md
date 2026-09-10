@@ -1,7 +1,7 @@
 # Kairoseth AI Transparency — Technical Roadmap
 
 Status: active development  
-Last reviewed: 9 September 2026
+Last reviewed: 10 September 2026
 
 ## Cross-cutting release invariants
 
@@ -38,8 +38,8 @@ Canonical policies:
 | 4 — Readiness findings & evidence | **Closed** | Deterministic Fact / Declaration / Guidance findings |
 | 5 — Disclosure tooling | **Closed** | Reviewed Registry state → explicit public shortcode disclosure |
 | 6 — Evidence export | **Closed** | Deterministic site-local JSON technical evidence snapshot |
-| 7 — Contextual support/custom integration | **Contract active / implementation not started** | User-initiated bounded support/custom path to verified Kairoseth Custom Requests |
-| 8 — First public release | Not started | Stable public release after all release gates |
+| 7 — Contextual support/custom integration | **Closed** | User-initiated bounded WordPress → Kairoseth Custom Requests flow with production SMTP proof |
+| 8 — First public release | **Not started** | Stable public release after all release gates |
 
 ---
 
@@ -221,8 +221,7 @@ Accepted boundaries:
 - empty Registry is a valid signed export;
 - deterministic system, Discovery-reference, finding and readiness ordering;
 - normalized historical Discovery references only when persisted source shape is structurally valid;
-- Phase 4 `FindingEngine` reused, not reimplemented;
-- Phase 5 `DisclosureEngine` reused, not reimplemented;
+- Phase 4 `FindingEngine` and Phase 5 `DisclosureEngine` reused, not reimplemented;
 - UTC `generated_at` metadata;
 - stable SHA-256 `snapshot_signature` excludes volatile generation time;
 - same technical state + same export contract → same signature across generation times;
@@ -232,15 +231,6 @@ Accepted boundaries:
 - no Media Library persistence, export-history storage, email, telemetry, Kairoseth upload, provider call or cloud account;
 - technical snapshot identity is **not** a legal/digital signature, trusted timestamp, non-repudiation proof or certification;
 - customer-facing export UI ships EN/ES together and passes responsive/accessibility acceptance.
-
-Accepted implementation classes:
-
-```text
-src/Export/class-evidencesnapshot.php
-src/Export/class-evidencesnapshotbuilder.php
-src/Export/class-evidencejsonencoder.php
-src/Admin/class-evidenceexportpage.php
-```
 
 Implementation and verification evidence:
 
@@ -257,28 +247,6 @@ Final Phase 6 main CI: #94 / 34404252257 — SUCCESS — 8/8 jobs green
 Blockers: 0
 ```
 
-Runtime acceptance proved:
-
-```text
-real administrator page/action
-+ attachment JSON response
-+ response headers/cache policy
-+ valid schema v1
-+ stable unchanged-state signature
-+ changed Registry → changed signature
-+ archived record retention
-+ empty Registry validity
-+ valid historical Discovery-reference normalization
-+ malformed Discovery source rejection
-+ current FindingEngine output
-+ current DisclosureEngine readiness
-+ forbidden sensitive/user/request fields absent
-+ Editor denied
-+ 390 px / 200% / axe serious+critical = 0
-+ real site-local Multisite export isolation
-+ inherited Phase 2–5 regressions green
-```
-
 References:
 
 - [`PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
@@ -290,23 +258,26 @@ Exit: **complete.**
 
 ## Phase 7 — Contextual support/custom integration path
 
-Status: **contract active — implementation not started.**
+Status: **closed — accepted, merged and verified end-to-end on 10 September 2026.**
 
-Goal: provide an optional, user-initiated route from the WordPress admin to Kairoseth support/custom work while preserving the useful local Free product and strict privacy/data-minimization boundaries.
+Goal achieved: provide an optional, user-initiated route from the WordPress admin to Kairoseth support/custom work while preserving the useful local Free product and strict privacy/data-minimization boundaries.
 
-Accepted contract direction:
+Accepted flow:
 
 ```text
 administrator
 → Tools → AI Transparency Support
-→ explicit support/custom CTA click
-→ server-built bounded contextual URL
-→ verified canonical HTTPS Kairoseth Custom Requests route
-→ user reviews/enters personal or business details on Kairoseth
-→ user explicitly submits there
+→ page load stays local
+→ explicit Get support / Request custom integration click
+→ plugin builds bounded contextual URL server-side
+→ https://kairoseth.com/custom-requests
+→ Kairoseth shows bounded product/platform context
+→ user decides what personal/business information to enter
+→ user explicitly consents and submits
+→ Kairoseth backend validates, rate-limits and sends through SMTP
 ```
 
-Allowed automatic context is limited to:
+Allowed automatic context is exactly:
 
 ```text
 source=extension
@@ -319,24 +290,85 @@ locale=<current locale>
 requestType=<bounded enum>
 ```
 
-The plugin must not automatically transmit site URL, user identity, Registry contents, `interaction_context`, Discovery evidence, Readiness findings, Disclosure state, Evidence Export data/signature, plugin inventory, credentials, prompts, conversations, logs, DB content or arbitrary options.
+Accepted request types:
+
+```text
+implementation_support
+third_party_integration
+business_customization
+automation
+additional_feature
+other
+```
+
+The plugin does not automatically transmit site/home URL, user identity, Registry contents, AI-system names, `interaction_context`, Discovery evidence, Readiness findings, Disclosure state, Evidence Export data/signature, plugin inventory, credentials, prompts, conversations, logs, database content or arbitrary options.
 
 Phase 7 introduces no automatic network request on page load, no background lead submission, no telemetry, no remote entitlement and no cloud dependency for existing local workflows.
 
-Current external blocker:
+Implemented classes:
 
 ```text
-verified production Kairoseth Custom Requests route
+src/Support/class-supportcontext.php
+src/Support/class-supporturlbuilder.php
+src/Admin/class-supportpage.php
 ```
 
-The route must be real and verified before implementation can claim availability. The plugin must fail closed for non-HTTPS, non-Kairoseth or structurally unsafe destinations.
+WordPress implementation evidence:
 
-Contract documents:
+```text
+Contract PR: #17
+Contract head: 703e04cd073e2c7572ec65b367ef5cbfd5b9c78a
+Contract PR CI: #95 / 34405157557 — SUCCESS
+Contract merge: cbc04eea07b20af60f3ec4b3621a9aa89c92ae84
+Contract post-merge CI: #96 / 34405183831 — SUCCESS
+Implementation PR: #18
+Accepted implementation head: e49721eb00b85b0a4cfbf72d53e876d80dc96f44
+PR-head CI: #101 / 34436069862 — SUCCESS — 8/8 jobs green
+Implementation merge: f225646808f604b5758bbc960417451af8c31738
+Post-merge main CI: #102 / 34436374187 — SUCCESS — 8/8 jobs green
+```
+
+Kairoseth production evidence:
+
+```text
+Custom Requests implementation PR: kairoseth-platform #211
+Implementation merge: 6855dfacd3ce6616c2f58d254e058ad3df59416c
+Permanent production-proof PR: kairoseth-platform #212
+Production-proof merge: 7d8752634e9b5e186a794080cb557c7b8cc6f349
+Production Smoke #116 / 34434998950 — SUCCESS
+SMTP recipient fallback PR: kairoseth-platform #213
+Fallback merge: 5c01adfd40151da6392c8d780203230c315c19fb
+Post-merge CI #897 / 34437075381 — SUCCESS
+Post-merge Production Smoke #119 / 34437075355 — SUCCESS
+Final synthetic SMTP proof #4 / 34437244753 — SUCCESS
+Blockers: 0
+```
+
+Runtime acceptance proved:
+
+```text
+real administrator Tools page
++ manage_options authority
++ Editor denied
++ no Kairoseth request on page load
++ exact 8-key bounded context
++ canonical HTTPS kairoseth.com/custom-requests destination
++ no forbidden private/sensitive automatic context
++ 390 px / 200% / axe serious+critical = 0
++ inherited Registry/Discovery/Readiness/Disclosure/Evidence Export regressions green
++ real Multisite isolation green
++ production form route green
++ production backend validation/rate-limit green
++ SMTP delivery green
+```
+
+References:
 
 - [`PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md`](PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md)
 - [`PHASE7_ACCEPTANCE.md`](PHASE7_ACCEPTANCE.md)
+- [`PHASE7_RUNTIME_EVIDENCE.md`](PHASE7_RUNTIME_EVIDENCE.md)
 
-Phase 7 implementation may start only after this contract PR is merged and verified. Closure additionally requires a real WordPress → Kairoseth Custom Requests E2E, EN/ES, responsive/accessibility, required CI/post-merge verification and blockers = 0.
+Exit: **complete.**
 
 ## Phase 8 — First public release
 

@@ -1,6 +1,6 @@
 # Phase 8 — First Public Release Implementation Contract
 
-Status: **active contract — implementation not yet accepted**  
+Status: **repository-controlled implementation accepted; GitHub 1.0.0 published; WordPress.org external publication pending**  
 Target release: **1.0.0**  
 Target WordPress.org slug: **`ai-transparency`**  
 Last reviewed: 10 September 2026
@@ -9,15 +9,50 @@ Last reviewed: 10 September 2026
 
 Prepare the first stable public release of Kairoseth AI Transparency as a reproducible, installable and reviewable WordPress plugin package without weakening the local-first/privacy, authorization, EN/ES, accessibility, Multisite or deterministic-evidence guarantees accepted in Phases 1–7.
 
-Phase 8 is release engineering. It must not silently expand product scope.
+Phase 8 is release engineering. It does not silently expand product scope.
+
+## Accepted repository outcome
+
+The repository-controlled implementation is complete and accepted.
+
+```text
+stable version: 1.0.0
+accepted main/tag SHA: 5d0344876eb27db798ded87888b21b11b5581af5
+release ZIP: ai-transparency-1.0.0.zip
+SHA-256: b7fc6e0b4a80d39e0b9331faf89c3ad7c310f3d5f24795123eb9ab89299bb368
+Git tag: 1.0.0
+GitHub Release: Kairoseth AI Transparency 1.0.0
+repository-controlled blockers: 0
+```
+
+Canonical evidence is recorded in [`PHASE8_RELEASE_EVIDENCE.md`](PHASE8_RELEASE_EVIDENCE.md).
+
+Final accepted gates:
+
+```text
+Implementation PR #21
+→ PR-head CI #125 / 34443466518 — SUCCESS — 8/8
+→ PR-head Release Readiness #11 / 34443466517 — SUCCESS — 2/2
+→ merge 9fea609de553e10af1618d385ccb85e4ab695ffe
+→ post-merge CI #126 / 34443762226 — SUCCESS — 8/8
+→ post-merge Release Readiness #12 / 34443762222 — SUCCESS — 2/2
+
+Release automation PR #22
+→ PR-head CI #128 / 34444548560 — SUCCESS — 8/8
+→ PR-head Release Readiness #14 / 34444548568 — SUCCESS — 2/2
+→ accepted main merge 5d0344876eb27db798ded87888b21b11b5581af5
+→ final main CI #129 / 34449448225 — SUCCESS — 8/8
+→ final main Release Readiness #15 / 34449448874 — SUCCESS — 2/2
+→ Stable Release #1 / 34449679699 — SUCCESS
+```
 
 ## Version contract
 
-The first stable public release is **1.0.0**.
+The first stable public repository release is **1.0.0**.
 
-`0.1.0` remains the historical development baseline and must not be presented as the first stable public release.
+`0.1.0` remains the historical development baseline and is not presented as the first stable public release.
 
-For the accepted release candidate, all release metadata must agree exactly:
+The accepted release state agrees exactly on:
 
 ```text
 ai-transparency.php Version: 1.0.0
@@ -26,31 +61,35 @@ readme.txt Stable tag: 1.0.0
 CHANGELOG.md release heading = 1.0.0
 release ZIP filename = ai-transparency-1.0.0.zip
 release package root directory = ai-transparency/
-Git tag after final acceptance = 1.0.0
-GitHub Release after final acceptance = 1.0.0
+Git tag = 1.0.0
+GitHub Release = 1.0.0
 ```
 
-A mismatch is a blocking release defect.
+A future mismatch remains a blocking release defect.
 
-## Release stages
+## 8A — Reproducible release candidate
 
-### 8A — Reproducible release candidate
-
-Required:
+Accepted:
 
 - production package generated only from repository-controlled inputs;
 - release ZIP built deterministically from `build/ai-transparency/`;
 - SHA-256 checksum generated for the exact ZIP;
-- package contains only runtime/distribution files;
-- no development tests, CI config, `.git*`, node modules, Composer dev dependencies, debug artifacts or internal strategy documentation inside the distributed plugin;
+- package contains runtime/distribution files only;
+- development tests, CI config, `.git*`, node modules, Composer dev dependencies, debug artifacts and internal strategy documentation are excluded from the distributed plugin;
 - compiled Spanish `.mo` is present and non-empty;
 - package root is exactly `ai-transparency/`;
 - version/readme metadata consistency is checked automatically;
-- official WordPress Plugin Check runs against the exact distribution package.
+- official WordPress Plugin Check validates the distribution package.
 
-### 8B — Lifecycle and upgrade acceptance
+The final accepted SHA-256 is:
 
-Required lifecycle behavior:
+```text
+b7fc6e0b4a80d39e0b9331faf89c3ad7c310f3d5f24795123eb9ab89299bb368
+```
+
+## 8B — Lifecycle and upgrade acceptance
+
+The exact release ZIP passed:
 
 ```text
 fresh install → activation → use
@@ -60,53 +99,21 @@ existing 0.1.0 site → replace/upgrade to 1.0.0 → existing Registry survives
 explicit uninstall → plugin-owned local Registry removed
 ```
 
-Deactivation must never delete Registry data.
-
-Upgrade must never delete or reset Registry data.
-
-Uninstall is the only destructive lifecycle action and is limited to plugin-owned data.
+Deactivation and upgrade preserve Registry data. Uninstall is the only destructive lifecycle action and is limited to plugin-owned data.
 
 ## Uninstall contract
 
-The plugin must include `uninstall.php` guarded by `WP_UNINSTALL_PLUGIN`.
+`uninstall.php` is guarded by `WP_UNINSTALL_PLUGIN`.
 
-Single-site behavior:
+Single-site acceptance proved that uninstall deletes only `kairoseth_ai_transparency_registry` and does not remove unrelated content, users, uploads or options, and makes no remote request.
 
-- delete only `kairoseth_ai_transparency_registry` from the current site;
-- do not delete posts, users, uploads, unrelated options, transients or third-party plugin data;
-- do not make remote calls.
-
-Multisite behavior:
-
-- when WordPress uninstalls the plugin network-wide, iterate existing sites and remove the plugin-owned site-local Registry option from each site;
-- restore the original blog context after iteration;
-- do not create/delete sites;
-- do not aggregate or transmit data;
-- do not delete network options unless Phase 8 introduces an explicitly documented plugin-owned network option (none is planned).
+Multisite acceptance proved that explicit network uninstall iterates existing sites, removes the plugin-owned site-local Registry option, restores blog context and preserves unrelated site/network data. It does not create or delete sites and does not aggregate or transmit site data.
 
 Future plugin-owned persistent keys may only be added to uninstall after their ownership and lifecycle are documented.
 
-## WordPress.org boundary
-
-The target slug is `ai-transparency`, but the project must not claim that the slug is assigned, approved or publicly available until WordPress.org confirms the plugin and grants the corresponding repository access.
-
-Before submission, the repository must provide a WordPress.org-ready `readme.txt` with:
-
-- accurate plugin name and contributor identity;
-- five or fewer relevant tags;
-- current minimum WordPress and PHP requirements;
-- supported/tested WordPress version based on real acceptance evidence;
-- concise description within WordPress.org length guidance;
-- accurate external-service disclosure for Kairoseth Custom Requests;
-- stable `1.0.0` changelog/upgrade notice;
-- no unsupported compliance/certification claims;
-- no internal business strategy.
-
-Actual WordPress.org submission/review/approval is an external dependency and is not considered completed merely because the repository is technically ready.
-
 ## Supported platform contract for 1.0.0
 
-Release metadata is currently targeted as:
+Accepted release metadata:
 
 ```text
 Requires at least: WordPress 6.6
@@ -114,13 +121,11 @@ Tested up to: WordPress 7.1
 Requires PHP: 7.4
 ```
 
-The release candidate must retain the existing PHP 7.4/8.1/8.3/8.5 syntax gates and real WordPress 7.1 runtime acceptance. Any change to these values requires matching validation evidence.
+The accepted release retains PHP 7.4/8.1/8.3/8.5 syntax gates and real WordPress runtime acceptance.
 
 ## EN/ES contract
 
-The existing 100% runtime English/Spanish policy remains blocking.
-
-The exact release package must contain:
+The exact release package contains:
 
 ```text
 languages/ai-transparency.pot
@@ -128,11 +133,11 @@ languages/ai-transparency-es_ES.po
 languages/ai-transparency-es_ES.mo
 ```
 
-Release validation must prove the compiled Spanish catalog belongs to the same source state as the packaged PHP/runtime strings.
+Runtime English/Spanish coverage remains blocking for customer-facing changes.
 
 ## Privacy and authority regression contract
 
-Phase 8 must prove no regression to these accepted guarantees:
+Phase 8 acceptance preserved these guarantees:
 
 - administrator capabilities/nonces remain server-authoritative;
 - Registry remains site-local;
@@ -142,56 +147,52 @@ Phase 8 must prove no regression to these accepted guarantees:
 - Evidence Export retains its strict allow-list and deterministic signature behavior;
 - Support page performs no Kairoseth request on load;
 - contextual handoff remains exact allow-list only;
-- no telemetry, hidden cloud dependency or automatic sensitive-data upload is introduced by release tooling.
+- no telemetry, hidden cloud dependency or automatic sensitive-data upload was introduced by release tooling.
 
-## Release artifact contract
+## Stable GitHub release contract
 
-The canonical release command will produce:
-
-```text
-build/ai-transparency/
-dist/ai-transparency-1.0.0.zip
-dist/ai-transparency-1.0.0.zip.sha256
-```
-
-The checksum file must contain the SHA-256 digest of the exact ZIP that is attached to the GitHub Release or submitted for external review.
-
-A CI artifact may be used for acceptance, but a release must be reproducible from the tagged repository state.
-
-## GitHub release contract
-
-A tag/release must not be created until the Phase 8 implementation PR is merged and the final `main` validation is green.
-
-Required sequence:
+The stable-release automation now enforces:
 
 ```text
-feature branch
-→ implementation PR
-→ all required CI green
-→ merge
-→ main CI green
-→ build exact 1.0.0 artifact from accepted main
-→ verify checksum/package metadata
-→ create immutable 1.0.0 tag/release
-→ verify attached asset/checksum
+accepted main source
+→ successful CI for exact SHA
+→ successful Release Readiness for exact SHA
+→ stable tag absent or already pointing to same accepted source
+→ exact artifact rebuilt
+→ ZIP + checksum published
+→ published assets downloaded again
+→ byte-for-byte/checksum verification
 ```
 
-No release workflow may bypass existing CI acceptance.
+The workflow refuses to move a conflicting existing version tag or overwrite an existing release during first publication. Its recovery path may verify an existing release only when its tag resolves to the same accepted source SHA.
 
-## External publication contract
+This is a repository engineering immutability policy. It does not claim GitHub's optional native release `immutable` property is enabled.
 
-WordPress.org availability is a separate final publication gate:
+## WordPress.org boundary
+
+The target slug remains `ai-transparency`, but the project must not claim that the WordPress.org slug is assigned, approved or publicly available until WordPress.org confirms it.
+
+The repository has a WordPress.org-ready `readme.txt` and the accepted 1.0.0 submission artifact. Actual submission/review/approval is an external dependency.
+
+Current external state:
 
 ```text
-repository release-ready
-→ submit plugin to WordPress.org
-→ external review
-→ slug/repository access confirmed
-→ publish approved package/SVN state
-→ verify public directory page/download
+accepted submission artifact: READY
+WordPress.org submission: PENDING / not recorded as sent
+external review: PENDING
+slug/repository access: NOT VERIFIED
+public WordPress.org page/download: NOT VERIFIED
 ```
 
-Until the external review completes, the repository may state **release candidate ready for WordPress.org submission** but not **available on WordPress.org**.
+Allowed statement:
+
+**Stable 1.0.0 released on GitHub and ready for WordPress.org submission.**
+
+Not allowed until externally verified:
+
+- available on WordPress.org;
+- approved by WordPress.org;
+- WordPress.org slug assigned.
 
 ## Out of scope for Phase 8
 
@@ -205,4 +206,6 @@ Until the external review completes, the repository may state **release candidat
 
 ## Exit
 
-Phase 8 closes only when every item in `PHASE8_ACCEPTANCE.md` is satisfied, the stable artifact is reproducible, `main` is green after merge, release evidence is recorded, blockers are zero, and any claimed external publication state is actually verified.
+Repository-controlled Phase 8 implementation and GitHub stable release gates are **complete**, with repository-controlled blockers at zero.
+
+Phase 8 remains **active only for the external WordPress.org publication gate** defined in Section N of [`PHASE8_ACCEPTANCE.md`](PHASE8_ACCEPTANCE.md). It must not be marked fully closed until that external state is actually verified, unless the release-state contract is deliberately changed in a separately accepted decision.

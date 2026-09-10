@@ -1,6 +1,6 @@
 # Kairoseth AI Transparency — Technical Roadmap
 
-Status: active development  
+Status: **stable 1.0.0 released on GitHub; WordPress.org external publication pending**  
 Last reviewed: 10 September 2026
 
 ## Cross-cutting release invariants
@@ -39,7 +39,7 @@ Canonical policies:
 | 5 — Disclosure tooling | **Closed** | Reviewed Registry state → explicit public shortcode disclosure |
 | 6 — Evidence export | **Closed** | Deterministic site-local JSON technical evidence snapshot |
 | 7 — Contextual support/custom integration | **Closed** | User-initiated bounded WordPress → Kairoseth Custom Requests flow with production SMTP proof |
-| 8 — First public release | **Active — contract defined** | Stable 1.0.0 release after reproducible package/lifecycle/release/publication gates |
+| 8 — First public release | **Active — GitHub 1.0.0 released; WordPress.org external gate pending** | Repository release complete; external directory submission/review remains |
 
 ---
 
@@ -92,7 +92,7 @@ Exit: **complete.**
 
 Status: **closed — accepted, merged and verified on `main`.**
 
-First accepted detector boundary:
+Accepted detector boundary:
 
 ```text
 WordPress.org slug: ai-engine
@@ -105,9 +105,9 @@ active required: yes
 Closure evidence:
 
 ```text
+Implementation PR: #7
 Accepted PR head: af44fe2156bde2947519e78112ea1d7a39abb0ff
 Pre-merge CI: #68 / 34373934127
-Implementation PR: #7
 Implementation merge: d595819a7a8f7d292bb23a7c919bec22f6138381
 Post-merge CI: #69 / 34377130702
 Closure docs PR: #8
@@ -132,13 +132,12 @@ configured_disclosure_review_v1
 Closure evidence:
 
 ```text
+Implementation PR: #9
 Accepted PR head: 926a154930042e53af0b082795be155389cc6916
 Pre-merge CI: #75 / 34381590429
-Implementation PR: #9
 Implementation merge: 836abfeca4c199930b74ba32547f9037f7fcb4de
 Implementation post-merge CI: #76 / 34382057838
 Closure docs PR: #10
-Closure docs PR CI: #77 / 34390042410
 Closure docs merge: 40d7aee73015c2e7185bde156349d106e72a4e18
 Final Phase 4 main CI: #78 / 34390407476
 Blockers: 0
@@ -170,19 +169,15 @@ site-local Registry
 → escaped EN/ES public notice
 ```
 
-Implementation and closure evidence:
+Closure evidence:
 
 ```text
 Contract PR: #11
-Contract merge: d95483e74f7b1045f2d497219fb70d7d71165faf
-Contract post-merge CI: #80 / 34391946448
 Implementation PR: #12
-Accepted head: 37ac6f8a3adf6ae33c98910fc0b2ff816789a697
+Accepted implementation head: 37ac6f8a3adf6ae33c98910fc0b2ff816789a697
 PR-head CI: #82 / 34394624556
 Implementation merge: 2770c7b7982ffbbe07ba58e8cedebd12d0add14a
-Implementation post-merge main CI: #83 / 34395173777
 Closure docs PR: #13
-Closure docs PR CI: #84 / 34396119654
 Closure docs merge: 0912cf2a21956d25b8c77b1ffec3668d041def42
 Final Phase 5 main CI: #85 / 34396547978
 Blockers: 0
@@ -192,58 +187,32 @@ Exit: **complete.**
 
 ## Phase 6 — Evidence export
 
-Status: **closed — accepted, merged and verified on `main` on 9 September 2026.**
+Status: **closed — accepted, merged and verified on `main`.**
 
-Goal achieved: produce a dated, reviewable, privacy-safe and deterministic **site-local JSON technical evidence snapshot** without leaking secrets or turning technical evidence into legal certification.
+Accepted outcome:
 
-Accepted v1 flow:
+- JSON-only deterministic site-local evidence snapshot;
+- complete current Registry including archived records;
+- stable SHA-256 `snapshot_signature` for equivalent technical state;
+- deterministic Discovery/findings/disclosure-readiness ordering;
+- privileged `manage_options` + nonce export;
+- explicit confidentiality boundary for `interaction_context`;
+- credentials, tokens, user identities, prompts, conversations, logs, DB dumps and arbitrary options excluded;
+- no persistence, telemetry, email, provider call or Kairoseth upload;
+- current-blog isolation in Multisite;
+- technical evidence is not represented as legal certification.
 
-```text
-WordPress administrator
-→ Tools → AI Evidence Export
-→ explicit POST
-→ manage_options + nonce
-→ current site-local Registry loaded server-side
-→ RegistrySchema + persisted Discovery references
-→ FindingEngine output
-→ DisclosureEngine readiness
-→ canonical allow-list snapshot
-→ SHA-256 snapshot_signature
-→ EvidenceJsonEncoder
-→ direct JSON attachment download
-```
-
-Accepted boundaries:
-
-- JSON only; `export_schema_version = 1`;
-- current site/blog only in Multisite, never network-wide aggregation;
-- complete current site-local Registry, including archived records;
-- empty Registry is a valid signed export;
-- deterministic system, Discovery-reference, finding and readiness ordering;
-- normalized historical Discovery references only when persisted source shape is structurally valid;
-- Phase 4 `FindingEngine` and Phase 5 `DisclosureEngine` reused, not reimplemented;
-- UTC `generated_at` metadata;
-- stable SHA-256 `snapshot_signature` excludes volatile generation time;
-- same technical state + same export contract → same signature across generation times;
-- meaningful exported technical-state change → different signature;
-- `interaction_context` is included only in the privileged administrative evidence artifact with a confidentiality warning;
-- credentials, tokens, cookies, nonces, request headers, user identities, prompts, conversations, customer content, logs, DB dumps and arbitrary WordPress/plugin options are excluded from the allow-list;
-- no Media Library persistence, export-history storage, email, telemetry, Kairoseth upload, provider call or cloud account;
-- technical snapshot identity is **not** a legal/digital signature, trusted timestamp, non-repudiation proof or certification;
-- customer-facing export UI ships EN/ES together and passes responsive/accessibility acceptance.
-
-Implementation and verification evidence:
+Closure evidence:
 
 ```text
 Contract PR: #14
 Implementation PR: #15
 Accepted implementation head: 2b9ebe93820e98d9ce6e0abb4deb235fdeeda57c
-PR-head CI: #91 / 34402108452 — SUCCESS — 8/8 jobs green
+PR-head CI: #91 / 34402108452 — SUCCESS — 8/8
 Implementation merge: bd07261751471fe7866e62049e3a66b7bd767afe
-Post-merge main CI: #92 / 34402685906 — SUCCESS — 8/8 jobs green
 Closure docs PR: #16
 Closure docs merge: baaeb200c7aa0a7625923515f8f1637e973797d9
-Final Phase 6 main CI: #94 / 34404252257 — SUCCESS — 8/8 jobs green
+Final Phase 6 main CI: #94 / 34404252257 — SUCCESS — 8/8
 Blockers: 0
 ```
 
@@ -260,106 +229,33 @@ Exit: **complete.**
 
 Status: **closed — accepted, merged and verified end-to-end on 10 September 2026.**
 
-Goal achieved: provide an optional, user-initiated route from the WordPress admin to Kairoseth support/custom work while preserving the useful local Free product and strict privacy/data-minimization boundaries.
-
 Accepted flow:
 
 ```text
 administrator
 → Tools → AI Transparency Support
 → page load stays local
-→ explicit Get support / Request custom integration click
-→ plugin builds bounded contextual URL server-side
+→ explicit support/custom CTA
+→ server-built bounded contextual HTTPS URL
 → https://kairoseth.com/custom-requests
-→ Kairoseth shows bounded product/platform context
-→ user decides what personal/business information to enter
-→ user explicitly consents and submits
-→ Kairoseth backend validates, rate-limits and sends through SMTP
+→ user decides what personal/business data to enter
+→ explicit consent + submit
+→ Kairoseth validates, rate-limits and sends through SMTP
 ```
 
-Allowed automatic context is exactly:
+The plugin automatically generates only the accepted eight context keys and does not automatically transmit site URL, user identity, Registry content, AI-system names, evidence, credentials, prompts, conversations, logs or arbitrary WordPress data.
 
-```text
-source=extension
-extensionSlug=ai-transparency
-extensionName=Kairoseth AI Transparency
-extensionVersion=<real plugin version>
-hostPlatform=wordpress
-hostPlatformVersion=<real WordPress version>
-locale=<current locale>
-requestType=<bounded enum>
-```
-
-Accepted request types:
-
-```text
-implementation_support
-third_party_integration
-business_customization
-automation
-additional_feature
-other
-```
-
-The plugin does not automatically transmit site/home URL, user identity, Registry contents, AI-system names, `interaction_context`, Discovery evidence, Readiness findings, Disclosure state, Evidence Export data/signature, plugin inventory, credentials, prompts, conversations, logs, database content or arbitrary options.
-
-Phase 7 introduces no automatic network request on page load, no background lead submission, no telemetry, no remote entitlement and no cloud dependency for existing local workflows.
-
-Implemented classes:
-
-```text
-src/Support/class-supportcontext.php
-src/Support/class-supporturlbuilder.php
-src/Admin/class-supportpage.php
-```
-
-WordPress implementation evidence:
+Closure evidence:
 
 ```text
 Contract PR: #17
-Contract head: 703e04cd073e2c7572ec65b367ef5cbfd5b9c78a
-Contract PR CI: #95 / 34405157557 — SUCCESS
-Contract merge: cbc04eea07b20af60f3ec4b3621a9aa89c92ae84
-Contract post-merge CI: #96 / 34405183831 — SUCCESS
 Implementation PR: #18
 Accepted implementation head: e49721eb00b85b0a4cfbf72d53e876d80dc96f44
-PR-head CI: #101 / 34436069862 — SUCCESS — 8/8 jobs green
+PR-head CI: #101 / 34436069862 — SUCCESS — 8/8
 Implementation merge: f225646808f604b5758bbc960417451af8c31738
-Post-merge main CI: #102 / 34436374187 — SUCCESS — 8/8 jobs green
-```
-
-Kairoseth production evidence:
-
-```text
-Custom Requests implementation PR: kairoseth-platform #211
-Implementation merge: 6855dfacd3ce6616c2f58d254e058ad3df59416c
-Permanent production-proof PR: kairoseth-platform #212
-Production-proof merge: 7d8752634e9b5e186a794080cb557c7b8cc6f349
-Production Smoke #116 / 34434998950 — SUCCESS
-SMTP recipient fallback PR: kairoseth-platform #213
-Fallback merge: 5c01adfd40151da6392c8d780203230c315c19fb
-Post-merge CI #897 / 34437075381 — SUCCESS
-Post-merge Production Smoke #119 / 34437075355 — SUCCESS
-Final synthetic SMTP proof #4 / 34437244753 — SUCCESS
+Post-merge main CI: #102 / 34436374187 — SUCCESS — 8/8
+Kairoseth production delivery proof: #4 / 34437244753 — SUCCESS
 Blockers: 0
-```
-
-Runtime acceptance proved:
-
-```text
-real administrator Tools page
-+ manage_options authority
-+ Editor denied
-+ no Kairoseth request on page load
-+ exact 8-key bounded context
-+ canonical HTTPS kairoseth.com/custom-requests destination
-+ no forbidden private/sensitive automatic context
-+ 390 px / 200% / axe serious+critical = 0
-+ inherited Registry/Discovery/Readiness/Disclosure/Evidence Export regressions green
-+ real Multisite isolation green
-+ production form route green
-+ production backend validation/rate-limit green
-+ SMTP delivery green
 ```
 
 References:
@@ -372,60 +268,82 @@ Exit: **complete.**
 
 ## Phase 8 — First public release
 
-Status: **active — contract defined; implementation pending.**
+Status: **repository-controlled release complete — GitHub 1.0.0 published and verified; WordPress.org external gate pending.**
 
-Target stable release:
+Accepted stable release:
 
 ```text
 version: 1.0.0
 technical slug: ai-transparency
 WordPress.org target slug: ai-transparency
-release ZIP: dist/ai-transparency-1.0.0.zip
-checksum: dist/ai-transparency-1.0.0.zip.sha256
+accepted main/tag SHA: 5d0344876eb27db798ded87888b21b11b5581af5
+release ZIP: ai-transparency-1.0.0.zip
+SHA-256: b7fc6e0b4a80d39e0b9331faf89c3ad7c310f3d5f24795123eb9ab89299bb368
+Git tag: 1.0.0
+GitHub Release: Kairoseth AI Transparency 1.0.0
 ```
 
-Release work is divided into three gates:
+Repository-controlled gates completed:
 
 ```text
-8A — reproducible release candidate
-8B — lifecycle + exact-package acceptance
-8C — stable GitHub release and externally verified WordPress.org publication state
-```
+8A reproducible exact package
++ version/readme/changelog consistency
++ EN/ES 100% + compiled Spanish catalog
++ official WordPress Plugin Check
++ PHP 7.4/8.1/8.3/8.5
++ WordPress runtime acceptance
++ responsive/accessibility regressions
++ privacy/authority regressions
 
-Blocking repository-controlled evidence includes:
+8B exact ZIP lifecycle
++ real 0.1.0 → 1.0.0 Registry-preserving upgrade
++ deactivate/reactivate preservation
++ explicit single-site uninstall isolation
++ fresh install
++ Multisite network activation + uninstall isolation
 
-```text
-functional Free value
-+ exact 1.0.0 version/readme/changelog/package consistency
-+ EN/ES 100% customer-facing coverage
-+ compiled Spanish catalog in exact release package
-+ deterministic production tree + versioned ZIP + SHA-256
-+ WordPress.org-ready readme
-+ supported WordPress/PHP compatibility evidence
-+ security/privacy regression review
-+ accessibility/responsive acceptance
-+ official Plugin Check green
-+ fresh install/activation
-+ 0.1.0 → 1.0.0 upgrade data preservation
-+ deactivation/reactivation data preservation
-+ safe single-site uninstall
-+ safe Multisite uninstall
-+ inherited runtime/regression suite green
-+ implementation PR green and merged
+8C repository/GitHub release
++ implementation PR accepted and merged
++ release automation PR accepted and merged
 + final main CI green
-+ blockers = 0
++ final main Release Readiness green
++ stable tag created from accepted SHA
++ GitHub Release published
++ ZIP/checksum re-downloaded and verified byte-for-byte
 ```
 
-Uninstall is the only destructive lifecycle action. Deactivation and upgrade must preserve Registry data. Explicit uninstall removes only plugin-owned site-local Registry state and performs no remote request.
+Final evidence:
 
-Git tag/GitHub Release `1.0.0` may be created only after the implementation is merged and final `main` validation is green. WordPress.org assignment/approval/publication is an external gate and must never be claimed before it is actually confirmed.
+```text
+Implementation PR: #21
+Implementation merge: 9fea609de553e10af1618d385ccb85e4ab695ffe
+Release automation PR: #22
+Accepted main/tag SHA: 5d0344876eb27db798ded87888b21b11b5581af5
+Final main CI: #129 / 34449448225 — SUCCESS — 8/8
+Final main Release Readiness: #15 / 34449448874 — SUCCESS — 2/2
+Stable Release: #1 / 34449679699 — SUCCESS
+Repository-controlled blockers: 0
+```
+
+External WordPress.org state:
+
+```text
+accepted 1.0.0 submission artifact: READY
+WordPress.org submission: PENDING / not recorded as sent
+external review: PENDING
+slug/repository assignment: NOT VERIFIED
+public directory page/download: NOT VERIFIED
+```
+
+The project may state **stable 1.0.0 released on GitHub and ready for WordPress.org submission**. It must not state that the plugin is approved or available on WordPress.org until that is actually verified.
 
 References:
 
 - [`PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md`](PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md)
 - [`PHASE8_ACCEPTANCE.md`](PHASE8_ACCEPTANCE.md)
+- [`PHASE8_RELEASE_EVIDENCE.md`](PHASE8_RELEASE_EVIDENCE.md)
 
-Exit: **open.**
+Exit: **repository-controlled exit complete; overall Phase 8 remains open only for the external WordPress.org publication gate.**
 
 ## Deferred until justified
 

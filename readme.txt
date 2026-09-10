@@ -20,7 +20,8 @@ The current pre-release development build includes:
 * deterministic AI integration discovery under **Tools > AI Discovery**;
 * deterministic technical readiness findings under **Tools > AI Readiness**;
 * explicit administrator-controlled disclosure readiness under **Tools > AI Disclosure**;
-* privileged local JSON evidence export under **Tools > AI Evidence Export**.
+* privileged local JSON evidence export under **Tools > AI Evidence Export**;
+* an optional, administrator-initiated Kairoseth support bridge under **Tools > AI Transparency Support**.
 
 An authorized administrator can add, edit, review and archive AI system records. Registry data is stored locally in the current WordPress site's Options storage with a versioned schema.
 
@@ -59,6 +60,31 @@ The privileged export may contain administrator-authored `interaction_context`, 
 
 The plugin does not perform generic probabilistic detection of whether arbitrary text was written by AI.
 
+== External services ==
+
+The plugin is local-first. Registry, Discovery, Readiness, Disclosure and Evidence Export do not require Kairoseth or automatically send their state to an external service.
+
+**Kairoseth Custom Requests** is an optional support/custom-integration service used only after an administrator deliberately clicks a link on **Tools > AI Transparency Support**. Loading the WordPress support page itself makes no Kairoseth request.
+
+The explicit browser navigation goes to `https://kairoseth.com/custom-requests` and includes only this bounded technical/product context in the URL:
+
+* source: `extension`;
+* extension slug: `ai-transparency`;
+* extension name: `Kairoseth AI Transparency`;
+* installed plugin version;
+* host platform: `wordpress`;
+* installed WordPress version;
+* bounded English/Spanish locale;
+* the administrator-selected bounded request type.
+
+The plugin does **not** automatically attach or transmit the site URL, administrator identity, Registry contents, AI system names, interaction context, Discovery evidence, Readiness findings, Disclosure state, Evidence Export JSON/signature, plugin/theme inventory, server paths, credentials, prompts, conversations, logs or database contents.
+
+After reaching Kairoseth, the administrator decides what contact, business or request information to enter and submit. Kairoseth owns the request form, its consent flow and final submission.
+
+Service provider: Kairoseth  
+Service URL: https://kairoseth.com/custom-requests  
+Privacy policy: https://kairoseth.com/privacy
+
 == Installation ==
 
 1. Upload the plugin directory to `/wp-content/plugins/` or install the packaged ZIP.
@@ -68,6 +94,7 @@ The plugin does not perform generic probabilistic detection of whether arbitrary
 5. Open **Tools > AI Readiness** to review current technical findings.
 6. Open **Tools > AI Disclosure** to review disclosure readiness and copy a shortcode for an eligible system.
 7. Open **Tools > AI Evidence Export** to download the current site-local JSON evidence snapshot.
+8. Optionally open **Tools > AI Transparency Support** for an explicit privacy-bounded handoff to Kairoseth support/custom requests.
 
 == Frequently Asked Questions ==
 
@@ -77,7 +104,7 @@ No. It provides technical readiness, evidence and workflow tooling. It does not 
 
 = Does the plugin automatically send Registry, Discovery, Readiness, Disclosure or Evidence Export data to an external service? =
 
-No. The accepted workflows remain local to the WordPress site and do not automatically send their state or generated evidence file to an external service.
+No. The accepted local workflows remain inside the WordPress site and do not automatically send their state or generated evidence file to an external service. The optional support page only opens Kairoseth after an administrator deliberately clicks a support/custom-request link, and it sends only the bounded context documented above.
 
 = What does AI Discovery detect? =
 
@@ -112,6 +139,7 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 * Deterministic AI Readiness findings with Fact / Administrator declaration / Guidance separation.
 * Explicit AI Disclosure readiness and public shortcode output.
 * Administrator-generated deterministic JSON Evidence Export with SHA-256 snapshot identity.
+* Optional administrator-initiated Kairoseth support/custom-integration handoff with a strict technical-context allow-list.
 * Local-first privacy boundary and site-local Multisite isolation.
 * Mandatory English/Spanish runtime coverage and compiled Spanish catalog.
 * Public CI, real WordPress runtime acceptance and official WordPress Plugin Check baseline.

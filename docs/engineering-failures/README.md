@@ -37,6 +37,7 @@ Root cause must not repeat the symptom. If evidence is incomplete, mark it `prob
 - [`2026-09-09-playwright-retry-residual-state.md`](2026-09-09-playwright-retry-residual-state.md) — persisted WordPress state made a fixed-name CRUD test ambiguous on Playwright retry; runtime records now use unique identifiers.
 - [`2026-09-09-runtime-credential-log-masking.md`](2026-09-09-runtime-credential-log-masking.md) — dynamically generated disposable WordPress passwords must be masked before any CI command can echo them.
 - [`2026-09-09-phase6-wpcs-docblock-formatting.md`](2026-09-09-phase6-wpcs-docblock-formatting.md) — Phase 6 CI #88/#90 exposed repository WPCS requirements for explicit ternaries, alignment and method-local `@throws` documentation before PHPUnit can be considered reached.
+- [`2026-09-10-phase7-wpcs-exception-and-eof.md`](2026-09-10-phase7-wpcs-exception-and-eof.md) — Phase 7 CI #97 captured the POSIX final-newline requirement and WPCS treatment of dynamic exception messages as output.
 
 ---
 
@@ -71,3 +72,4 @@ La causa raíz no puede limitarse a repetir el síntoma. Si no existe evidencia 
 - [`2026-09-09-playwright-retry-residual-state.md`](2026-09-09-playwright-retry-residual-state.md) — el estado persistente de WordPress hacía ambiguo un test CRUD con nombre fijo al reintentarse; ahora los registros runtime usan identificadores únicos.
 - [`2026-09-09-runtime-credential-log-masking.md`](2026-09-09-runtime-credential-log-masking.md) — las contraseñas WordPress desechables generadas en runtime deben enmascararse antes de que cualquier comando CI pueda mostrarlas.
 - [`2026-09-09-phase6-wpcs-docblock-formatting.md`](2026-09-09-phase6-wpcs-docblock-formatting.md) — los CI #88/#90 de Fase 6 documentan las reglas WPCS del repositorio para ternarios explícitos, alineación y `@throws` por método antes de considerar que PHPUnit llegó a ejecutarse.
+- [`2026-09-10-phase7-wpcs-exception-and-eof.md`](2026-09-10-phase7-wpcs-exception-and-eof.md) — el CI #97 de Fase 7 registra el requisito de salto de línea POSIX y cómo WPCS trata los mensajes dinámicos de excepción como salida.

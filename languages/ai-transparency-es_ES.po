@@ -357,3 +357,54 @@ msgstr "No se pudo generar la exportación de evidencia. No se creó ningún arc
 
 msgid "Evidence export failed"
 msgstr "Error en la exportación de evidencia"
+
+msgid "AI Transparency Support"
+msgstr "Soporte de Transparencia de IA"
+
+msgid "Optional Kairoseth support for implementation questions, third-party integrations and custom work."
+msgstr "Soporte opcional de Kairoseth para consultas de implementación, integraciones con terceros y desarrollos personalizados."
+
+msgid "Local-first:"
+msgstr "Funcionamiento local:"
+
+msgid "Registry, Discovery, Readiness, Disclosure and Evidence Export continue to work without contacting Kairoseth."
+msgstr "El Registro, Descubrimiento, Preparación, Avisos y Exportación de evidencia siguen funcionando sin contactar con Kairoseth."
+
+msgid "What happens when you use this page"
+msgstr "Qué ocurre cuando usas esta página"
+
+msgid "Nothing is sent to Kairoseth when this WordPress page loads."
+msgstr "No se envía nada a Kairoseth cuando se carga esta página de WordPress."
+
+msgid "Clicking an action opens Kairoseth in a new browser tab with only bounded product and platform context."
+msgstr "Al hacer clic en una acción, Kairoseth se abre en una nueva pestaña del navegador únicamente con contexto limitado del producto y la plataforma."
+
+msgid "No Registry records, evidence, site URL, administrator identity, prompts, conversations, logs or credentials are attached automatically."
+msgstr "No se adjuntan automáticamente registros del Registro, evidencias, URL del sitio, identidad del administrador, prompts, conversaciones, registros de actividad ni credenciales."
+
+msgid "You choose what personal or business information to enter and submit on the Kairoseth form."
+msgstr "Tú decides qué información personal o empresarial introducir y enviar en el formulario de Kairoseth."
+
+msgid "The verified Kairoseth support destination is currently unavailable. No data was sent and all local plugin features remain available."
+msgstr "El destino de soporte verificado de Kairoseth no está disponible actualmente. No se ha enviado ningún dato y todas las funciones locales del plugin siguen disponibles."
+
+msgid "Get support"
+msgstr "Obtener soporte"
+
+msgid "Use this for implementation help, setup questions or guidance applying the plugin in your WordPress environment."
+msgstr "Utiliza esta opción para ayuda con la implementación, preguntas de configuración u orientación para aplicar el plugin en tu entorno WordPress."
+
+msgid "Open Kairoseth support"
+msgstr "Abrir soporte de Kairoseth"
+
+msgid "Request custom integration"
+msgstr "Solicitar integración personalizada"
+
+msgid "Use this when you need a third-party integration or a tailored implementation beyond the local plugin workflow."
+msgstr "Utiliza esta opción cuando necesites una integración con terceros o una implementación a medida más allá del flujo local del plugin."
+
+msgid "Open custom request"
+msgstr "Abrir solicitud personalizada"
+
+msgid "Kairoseth availability is not required for any accepted local Free feature."
+msgstr "La disponibilidad de Kairoseth no es necesaria para ninguna función local gratuita ya aceptada."

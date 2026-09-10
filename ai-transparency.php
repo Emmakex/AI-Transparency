@@ -23,6 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'KAIROSETH_AI_TRANSPARENCY_VERSION', '0.1.0' );
 define( 'KAIROSETH_AI_TRANSPARENCY_FILE', __FILE__ );
 define( 'KAIROSETH_AI_TRANSPARENCY_PATH', plugin_dir_path( __FILE__ ) );
+define( 'KAIROSETH_AI_TRANSPARENCY_SLUG', 'ai-transparency' );
+define( 'KAIROSETH_AI_TRANSPARENCY_NAME', 'Kairoseth AI Transparency' );
+define( 'KAIROSETH_AI_TRANSPARENCY_CUSTOM_REQUESTS_URL', 'https://kairoseth.com/custom-requests' );
 
 require_once KAIROSETH_AI_TRANSPARENCY_PATH . 'src/class-autoloader.php';
 

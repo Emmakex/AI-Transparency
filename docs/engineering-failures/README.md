@@ -38,6 +38,7 @@ Root cause must not repeat the symptom. If evidence is incomplete, mark it `prob
 - [`2026-09-09-runtime-credential-log-masking.md`](2026-09-09-runtime-credential-log-masking.md) — dynamically generated disposable WordPress passwords must be masked before any CI command can echo them.
 - [`2026-09-09-phase6-wpcs-docblock-formatting.md`](2026-09-09-phase6-wpcs-docblock-formatting.md) — Phase 6 CI #88/#90 exposed repository WPCS requirements for explicit ternaries, alignment and method-local `@throws` documentation before PHPUnit can be considered reached.
 - [`2026-09-10-phase7-wpcs-exception-and-eof.md`](2026-09-10-phase7-wpcs-exception-and-eof.md) — Phase 7 CI #97 captured the POSIX final-newline requirement and WPCS treatment of dynamic exception messages as output.
+- [`2026-09-10-wp-env-alpine-tls-bootstrap.md`](2026-09-10-wp-env-alpine-tls-bootstrap.md) — `wp-env` Docker bootstrap can fail before plugin execution when the Alpine package mirror/index request has a transient TLS failure; diagnose the earliest network error before treating the later `no such package` message as a product regression.
 
 ---
 
@@ -73,3 +74,4 @@ La causa raíz no puede limitarse a repetir el síntoma. Si no existe evidencia 
 - [`2026-09-09-runtime-credential-log-masking.md`](2026-09-09-runtime-credential-log-masking.md) — las contraseñas WordPress desechables generadas en runtime deben enmascararse antes de que cualquier comando CI pueda mostrarlas.
 - [`2026-09-09-phase6-wpcs-docblock-formatting.md`](2026-09-09-phase6-wpcs-docblock-formatting.md) — los CI #88/#90 de Fase 6 documentan las reglas WPCS del repositorio para ternarios explícitos, alineación y `@throws` por método antes de considerar que PHPUnit llegó a ejecutarse.
 - [`2026-09-10-phase7-wpcs-exception-and-eof.md`](2026-09-10-phase7-wpcs-exception-and-eof.md) — el CI #97 de Fase 7 registra el requisito de salto de línea POSIX y cómo WPCS trata los mensajes dinámicos de excepción como salida.
+- [`2026-09-10-wp-env-alpine-tls-bootstrap.md`](2026-09-10-wp-env-alpine-tls-bootstrap.md) — el bootstrap Docker de `wp-env` puede fallar antes de ejecutar el plugin si el mirror/índice de paquetes Alpine sufre un error TLS transitorio; hay que diagnosticar primero el fallo de red y no asumir que el posterior `no such package` es una regresión del producto.

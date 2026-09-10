@@ -23,10 +23,12 @@
     "test": "phpunit",
     "lint": "phpcs --standard=phpcs.xml.dist",
     "i18n": "php bin/check-i18n.php",
+    "release:check": "php bin/check-release.php",
     "verify": [
       "@lint",
       "@test",
-      "@i18n"
+      "@i18n",
+      "@release:check"
     ]
   }
 }

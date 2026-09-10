@@ -1,7 +1,8 @@
 # AI Transparency for WordPress
 
 **Plugin:** Kairoseth AI Transparency  
-**Status:** pre-release development
+**Stable release:** `1.0.0`  
+**Status:** stable 1.0.0 released on GitHub · WordPress.org submission/review pending
 
 [English](#english) · [Español](#español)
 
@@ -9,7 +10,7 @@
 
 ## English
 
-Kairoseth AI Transparency is a local-first WordPress plugin for maintaining a reviewable inventory of AI systems, deriving deterministic technical readiness evidence, placing explicit AI interaction disclosures, exporting a bounded technical evidence snapshot and optionally opening a privacy-bounded Kairoseth support/custom request flow.
+Kairoseth AI Transparency is a local-first WordPress plugin for maintaining a reviewable inventory of AI systems, deriving deterministic technical readiness evidence, placing explicit AI interaction disclosures, exporting a bounded technical evidence snapshot and optionally opening a privacy-bounded Kairoseth support/custom-request flow.
 
 ### Plugin identity
 
@@ -19,24 +20,38 @@ Kairoseth AI Transparency is a local-first WordPress plugin for maintaining a re
 | Technical slug | `ai-transparency` |
 | WordPress text domain | `ai-transparency` |
 | WordPress.org target slug | `ai-transparency` |
+| Stable version | `1.0.0` |
 | Requires WordPress | 6.6+ |
-| Tested-up-to target | 7.1 |
+| Tested up to | 7.1 |
 | Requires PHP | 7.4+ |
 | Languages | English + Spanish |
 | License | MIT |
 
-### Current accepted functionality
+### Stable 1.0.0 release
 
-The current development line contains six accepted workflows:
+The accepted repository release is **1.0.0**.
+
+```text
+Git tag: 1.0.0
+Accepted source SHA: 5d0344876eb27db798ded87888b21b11b5581af5
+Release ZIP: ai-transparency-1.0.0.zip
+SHA-256: b7fc6e0b4a80d39e0b9331faf89c3ad7c310f3d5f24795123eb9ab89299bb368
+```
+
+The release package is reproducible and passed the repository's exact-ZIP lifecycle, compatibility, runtime, Multisite, privacy, EN/ES and WordPress Plugin Check gates. The GitHub Release assets were downloaded again after publication and verified against the accepted artifacts.
+
+**WordPress.org is a separate external publication process.** The 1.0.0 package is ready for submission, but WordPress.org submission, review, slug assignment and public directory availability are not claimed complete until independently verified.
+
+### What the plugin provides
+
+The stable release contains six accepted workflows:
 
 - **AI Systems Registry** — **Tools → AI Transparency**;
-- **AI Discovery** — deterministic supported integration evidence under **Tools → AI Discovery**;
+- **AI Discovery** — deterministic supported-integration evidence under **Tools → AI Discovery**;
 - **AI Readiness** — deterministic technical findings under **Tools → AI Readiness**;
-- **AI Disclosure** — administrator-controlled disclosure readiness plus the public shortcode;
+- **AI Disclosure** — administrator-controlled disclosure readiness and public shortcode;
 - **AI Evidence Export** — privileged, user-initiated JSON technical evidence download under **Tools → AI Evidence Export**;
-- **AI Transparency Support** — optional user-initiated support/custom request navigation under **Tools → AI Transparency Support**.
-
-An authorized administrator can add, edit, review and archive AI system records; review supported discovery evidence; inspect deterministic readiness findings; configure disclosure state; copy a public disclosure shortcode for eligible systems; download the complete current site-local evidence snapshot; and deliberately open the Kairoseth Custom Requests form with bounded non-sensitive product/platform context.
+- **AI Transparency Support** — optional user-initiated support/custom-request navigation under **Tools → AI Transparency Support**.
 
 Public disclosure uses:
 
@@ -44,62 +59,21 @@ Public disclosure uses:
 [kairoseth_ai_disclosure system="SYSTEM_ID"]
 ```
 
-### Evidence Export — Phase 6 accepted
+A disclosure can render only from current server-side Registry state that is active, reviewed, marked as requiring interaction disclosure and has non-empty interaction context. The shortcode value is a lookup selector; it does not grant eligibility.
 
-Phase 6 is **closed and verified on `main`**.
+### Local-first and privacy boundary
 
-Accepted runtime flow:
+Registry data is stored site-locally through the WordPress Options API. In Multisite, each blog/site remains authoritative for its own Registry.
 
-```text
-WordPress administrator
-→ Tools → AI Evidence Export
-→ explicit POST
-→ manage_options + nonce
-→ current site-local Registry loaded server-side
-→ RegistrySchema + persisted Discovery references
-→ FindingEngine
-→ DisclosureEngine
-→ canonical allow-list payload
-→ SHA-256 snapshot_signature
-→ readable JSON
-→ direct attachment download
-```
+Registry, Discovery, Readiness, Disclosure and Evidence Export do not automatically upload their state to Kairoseth or another provider. The Evidence Export is generated only after an authorized administrator action and is downloaded directly as JSON.
 
-Key guarantees:
-
-- `export_schema_version = 1`;
-- complete current site-local Registry is exported, including archived records;
-- empty Registry remains a valid signed export;
-- `generated_at` is UTC metadata and is excluded from stable snapshot identity;
-- unchanged technical state produces the same `snapshot_signature` even when generated later;
-- meaningful exported Registry changes produce a different signature;
-- deterministic ordering is used for Registry systems, Discovery references, findings and disclosure-readiness entries;
-- Phase 4 `FindingEngine` and Phase 5 `DisclosureEngine` are reused rather than duplicated;
-- `interaction_context` is included only in the privileged administrative artifact and the UI warns that the file may contain confidential operational context;
-- credentials, tokens, cookies, nonces, user identity, prompts, conversations, logs, database dumps and arbitrary plugin options are outside the export allow-list;
-- the plugin does not persist the generated file, create export history, email it, upload it to Kairoseth, create telemetry or require a cloud account;
-- Multisite export is scoped to the authoritative current blog/site only;
-- `snapshot_signature` is a technical snapshot identity, **not** a legal/digital signature, trusted timestamp, non-repudiation proof or compliance certification.
-
-### Contextual support — Phase 7 accepted
-
-Phase 7 is **closed and verified end-to-end**.
-
-Accepted flow:
+The optional support flow remains local on page load. Network interaction begins only after an explicit administrator CTA to:
 
 ```text
-WordPress administrator
-→ Tools → AI Transparency Support
-→ page load remains local
-→ explicit Get support / Request custom integration click
-→ server-built bounded HTTPS URL
-→ https://kairoseth.com/custom-requests
-→ user reviews/enters personal or business details on Kairoseth
-→ explicit consent + submit
-→ Kairoseth backend validates, rate-limits and sends through SMTP
+https://kairoseth.com/custom-requests
 ```
 
-Only these automatic query keys can be generated by the plugin:
+The plugin automatically adds only bounded non-sensitive product/platform context:
 
 ```text
 source
@@ -112,66 +86,23 @@ locale
 requestType
 ```
 
-Canonical fixed values include:
+It does **not** automatically attach the site/home URL, administrator or customer identity, Registry contents, AI-system names, `interaction_context`, Discovery evidence, Readiness findings, Disclosure state, Evidence Export data/signature, plugin/theme inventory, credentials, prompts, conversations, logs, database contents or arbitrary WordPress options.
 
-```text
-source=extension
-extensionSlug=ai-transparency
-extensionName=Kairoseth AI Transparency
-hostPlatform=wordpress
-```
+### Evidence and legal boundary
 
-The plugin does **not** automatically attach the site/home URL, administrator or customer identity, Registry data, AI-system names, `interaction_context`, Discovery evidence, Readiness findings, Disclosure state, Evidence Export data/signature, plugin/theme inventory, credentials, prompts, conversations, logs, database contents or arbitrary WordPress options.
+Evidence Export produces a deterministic technical snapshot with `export_schema_version = 1` and a stable SHA-256 `snapshot_signature` for equivalent exported technical state.
 
-Loading the support page makes no Kairoseth request. Network interaction begins only after an explicit CTA navigation. Registry, Discovery, Readiness, Disclosure and Evidence Export continue to work without Kairoseth.
+That signature is a technical snapshot identity. It is **not** a legal/digital signature, trusted timestamp, non-repudiation proof or compliance certification.
 
-Production closure evidence is recorded in [`docs/PHASE7_RUNTIME_EVIDENCE.md`](docs/PHASE7_RUNTIME_EVIDENCE.md).
-
-### Registry and disclosure authority
-
-Registry data is stored locally using the WordPress Options API with a versioned schema. In Multisite, storage follows the current blog/site context rather than creating a network-wide inventory.
-
-A public disclosure can render only when current server-side Registry state satisfies:
-
-```text
-status = active
-review_status = reviewed
-interaction_disclosure_required = true
-interaction_context is not empty
-```
-
-The shortcode `system` value is only a lookup selector; it cannot grant eligibility. Public output is limited to localized copy and the reviewed system name. Internal Registry context, source metadata, credentials, prompts, conversations and private logs are not automatically exposed.
-
-### Deterministic Discovery and Readiness
-
-The first validated discovery detector supports **AI Engine 3.7.7** from bounded WordPress plugin identity evidence. It does not infer provider, model, chatbot, prompt or workflow configuration and does not inspect provider credentials.
-
-Readiness preserves:
-
-```text
-FACT
-ADMINISTRATOR DECLARATION
-GUIDANCE
-```
-
-Findings are derived on demand from current Registry state and are technical review signals, not legal decisions.
-
-### Privacy and legal boundary
-
-Registry, Discovery, Readiness, Disclosure and Evidence Export do not automatically send their state to an external service. Phase 7 sends only the bounded non-sensitive context above after an explicit administrator navigation to Kairoseth; the user decides what additional information to submit there.
-
-This plugin provides technical readiness, workflow and evidence tooling. It does **not** certify or guarantee legal compliance with the EU AI Act or any other law, and it does not attempt generic probabilistic detection of whether arbitrary text was written by AI.
+The plugin provides technical readiness, workflow and evidence tooling. It does **not** certify or guarantee legal compliance with the EU AI Act or any other law and does not attempt generic probabilistic detection of whether arbitrary content was written by AI.
 
 ### Installation
 
-1. Upload the plugin directory to `/wp-content/plugins/` or install the generated ZIP.
+1. Install the stable plugin ZIP or plugin directory.
 2. Activate **Kairoseth AI Transparency**.
-3. Open **Tools → AI Transparency** for the Registry.
-4. Open **Tools → AI Discovery** for supported deterministic discovery evidence.
-5. Open **Tools → AI Readiness** for technical findings.
-6. Open **Tools → AI Disclosure** for disclosure readiness and shortcode placement.
-7. Open **Tools → AI Evidence Export** to download the current site-local JSON evidence snapshot.
-8. Optionally open **Tools → AI Transparency Support** to deliberately navigate to Kairoseth support/custom requests.
+3. Open **Tools → AI Transparency** to maintain the AI Systems Registry.
+4. Use **AI Discovery**, **AI Readiness**, **AI Disclosure** and **AI Evidence Export** as needed.
+5. Optionally open **AI Transparency Support** to deliberately navigate to Kairoseth support/custom requests.
 
 ### Development and validation
 
@@ -179,27 +110,20 @@ This plugin provides technical readiness, workflow and evidence tooling. It does
 composer install
 composer verify
 bash bin/build-plugin.sh
+bash bin/build-release.sh
 ```
 
-The production package is generated at `build/ai-transparency/`.
-
-Blocking validation includes WordPress Coding Standards, PHPUnit, PHPCompatibility 7.4+, PHP 7.4/8.1/8.3/8.5 syntax, EN/ES 100%, compiled Spanish gettext, official WordPress Plugin Check, real WordPress activation/migration/CRUD/permissions, responsive/accessibility browser acceptance, deterministic Discovery/Readiness/Disclosure/Evidence behavior, contextual-support privacy/URL acceptance and real Multisite isolation.
-
-### Phase 7 implementation evidence
+Canonical outputs:
 
 ```text
-Contract PR: #17
-Contract merge: cbc04eea07b20af60f3ec4b3621a9aa89c92ae84
-Implementation PR: #18
-Accepted implementation head: e49721eb00b85b0a4cfbf72d53e876d80dc96f44
-PR-head CI: #101 / 34436069862 — 8/8 green
-Implementation merge: f225646808f604b5758bbc960417451af8c31738
-Post-merge main CI: #102 / 34436374187 — 8/8 green
-Kairoseth production delivery proof: #4 / 34437244753 — SUCCESS
-Blockers: 0
+build/ai-transparency/
+dist/ai-transparency-1.0.0.zip
+dist/ai-transparency-1.0.0.zip.sha256
 ```
 
-### Current roadmap state
+Blocking validation includes WordPress Coding Standards, PHPUnit, PHPCompatibility, PHP 7.4/8.1/8.3/8.5 syntax, EN/ES 100% runtime coverage, compiled Spanish gettext, official WordPress Plugin Check, real WordPress runtime acceptance, responsive/accessibility acceptance, deterministic Registry/Discovery/Readiness/Disclosure/Evidence behavior, contextual-support privacy acceptance and real Multisite isolation/lifecycle testing.
+
+### Roadmap status
 
 ```text
 Phase 1 Repository bootstrap                 CLOSED
@@ -209,20 +133,21 @@ Phase 4 Readiness Findings & Evidence        CLOSED
 Phase 5 Disclosure Tooling                   CLOSED
 Phase 6 Evidence Export                      CLOSED
 Phase 7 Contextual support/custom path       CLOSED
-Phase 8 First public release                 NOT STARTED
+Phase 8 Repository/GitHub release            COMPLETE
+Phase 8 WordPress.org external publication   PENDING
 ```
 
-### Project documentation
+### Documentation
 
 - [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
-- [`docs/PHASE6_ACCEPTANCE.md`](docs/PHASE6_ACCEPTANCE.md)
-- [`docs/PHASE6_JSON_SCHEMA_V1.md`](docs/PHASE6_JSON_SCHEMA_V1.md)
 - [`docs/PHASE6_RUNTIME_EVIDENCE.md`](docs/PHASE6_RUNTIME_EVIDENCE.md)
 - [`docs/PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md`](docs/PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md)
-- [`docs/PHASE7_ACCEPTANCE.md`](docs/PHASE7_ACCEPTANCE.md)
 - [`docs/PHASE7_RUNTIME_EVIDENCE.md`](docs/PHASE7_RUNTIME_EVIDENCE.md)
+- [`docs/PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md`](docs/PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md)
+- [`docs/PHASE8_ACCEPTANCE.md`](docs/PHASE8_ACCEPTANCE.md)
+- [`docs/PHASE8_RELEASE_EVIDENCE.md`](docs/PHASE8_RELEASE_EVIDENCE.md)
 - [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)
@@ -231,7 +156,7 @@ Phase 8 First public release                 NOT STARTED
 
 ## Español
 
-Kairoseth AI Transparency es un plugin local-first para WordPress orientado a mantener un inventario revisable de sistemas de IA, derivar evidencia técnica determinista, colocar avisos explícitos de interacción con IA, exportar un snapshot técnico acotado y, opcionalmente, abrir una solicitud de soporte/personalización de Kairoseth con contexto técnico mínimo.
+Kairoseth AI Transparency es un plugin local-first para WordPress orientado a mantener un inventario revisable de sistemas de IA, derivar evidencia técnica determinista, colocar avisos explícitos de interacción con IA, exportar un snapshot técnico acotado y, opcionalmente, abrir un flujo de soporte/solicitud personalizada de Kairoseth con contexto mínimo.
 
 ### Identidad del plugin
 
@@ -241,54 +166,60 @@ Kairoseth AI Transparency es un plugin local-first para WordPress orientado a ma
 | Slug técnico | `ai-transparency` |
 | Text domain | `ai-transparency` |
 | Slug objetivo WordPress.org | `ai-transparency` |
+| Versión estable | `1.0.0` |
 | Requiere WordPress | 6.6+ |
-| Tested-up-to target | 7.1 |
+| Probado hasta | 7.1 |
 | Requiere PHP | 7.4+ |
 | Idiomas | inglés + español |
 | Licencia | MIT |
 
-### Funcionalidad aceptada actual
+### Release estable 1.0.0
 
-La línea actual incluye seis flujos aceptados:
+La versión estable aceptada del repositorio es **1.0.0**.
+
+```text
+Tag Git: 1.0.0
+SHA fuente aceptado: 5d0344876eb27db798ded87888b21b11b5581af5
+ZIP: ai-transparency-1.0.0.zip
+SHA-256: b7fc6e0b4a80d39e0b9331faf89c3ad7c310f3d5f24795123eb9ab89299bb368
+```
+
+El paquete es reproducible y superó los gates del ZIP exacto, lifecycle, compatibilidad, runtime, Multisite, privacidad, EN/ES y Plugin Check oficial. Tras publicar el GitHub Release, los assets se descargaron de nuevo y se verificaron contra los artefactos aceptados.
+
+**WordPress.org es un proceso de publicación externo independiente.** El paquete 1.0.0 está listo para enviarse, pero no se considera completada la submission, revisión, asignación de slug o disponibilidad pública hasta verificarlo externamente.
+
+### Funcionalidad
+
+La versión estable contiene seis flujos aceptados:
 
 - **AI Systems Registry** — **Herramientas → AI Transparency**;
 - **AI Discovery** — evidencia determinista de integraciones soportadas;
 - **AI Readiness** — hallazgos técnicos deterministas;
-- **AI Disclosure** — readiness controlado por administrador y shortcode público;
+- **AI Disclosure** — readiness de disclosure controlado por el administrador y shortcode público;
 - **AI Evidence Export** — descarga JSON privilegiada e iniciada explícitamente por el usuario;
 - **AI Transparency Support** — navegación opcional e iniciada por el usuario hacia soporte/solicitudes personalizadas de Kairoseth.
 
-El shortcode público aceptado es:
+Shortcode público:
 
 ```text
 [kairoseth_ai_disclosure system="SYSTEM_ID"]
 ```
 
-### Evidence Export — Fase 6 aceptada
+El aviso público solo puede renderizarse desde estado server-side del Registry que esté activo, revisado, marcado para disclosure y con contexto de interacción no vacío. El parámetro del shortcode solo selecciona el registro; no concede elegibilidad.
 
-La Fase 6 está **cerrada y verificada en `main`**.
+### Local-first y privacidad
 
-El export es JSON site-local, determinista, generado bajo `manage_options` + nonce y sin persistencia del fichero, historial, email, telemetría ni subida a Kairoseth. Incluye el Registry completo del sitio actual, referencias Discovery válidas, findings y readiness; excluye credenciales, tokens, cookies, identidad de usuario, prompts, conversaciones, logs, dumps de BD y options arbitrarias. `snapshot_signature` identifica técnicamente el estado exportado y no es una firma legal/digital ni una certificación.
+El Registry se almacena localmente mediante WordPress Options. En Multisite, cada blog/sitio mantiene su propio estado autoritativo.
 
-### Soporte contextual — Fase 7 aceptada
+Registry, Discovery, Readiness, Disclosure y Evidence Export no suben automáticamente su estado a Kairoseth ni a otro proveedor. Evidence Export solo se genera tras una acción autorizada del administrador y se descarga directamente como JSON.
 
-La Fase 7 está **cerrada y verificada end-to-end**.
-
-Flujo aceptado:
+La página de soporte no contacta Kairoseth al cargarse. La interacción de red comienza únicamente tras un CTA explícito hacia:
 
 ```text
-administrador WordPress
-→ Herramientas → AI Transparency Support
-→ la página carga sin contactar Kairoseth
-→ clic explícito en soporte / integración personalizada
-→ URL HTTPS acotada construida server-side
-→ https://kairoseth.com/custom-requests
-→ el usuario decide qué datos personales/empresariales introducir
-→ consentimiento + envío explícito
-→ backend Kairoseth valida, aplica rate limit y envía por SMTP
+https://kairoseth.com/custom-requests
 ```
 
-El plugin solo puede generar automáticamente estas claves:
+El plugin solo añade automáticamente estas claves técnicas acotadas:
 
 ```text
 source
@@ -301,54 +232,55 @@ locale
 requestType
 ```
 
-No adjunta automáticamente URL del sitio, identidad del administrador/cliente, Registry, nombres de sistemas IA, `interaction_context`, Discovery, findings, Disclosure, Evidence Export/firma, inventario de plugins/temas, credenciales, prompts, conversaciones, logs, BD ni options arbitrarias.
+No adjunta automáticamente URL del sitio, identidad de administrador/cliente, Registry, nombres de sistemas IA, `interaction_context`, Discovery, findings, Disclosure, Evidence Export/firma, inventario de plugins/temas, credenciales, prompts, conversaciones, logs, contenido de BD ni options arbitrarias.
 
-Registry, Discovery, Readiness, Disclosure y Evidence Export siguen funcionando sin usar Kairoseth. La evidencia completa de cierre está en [`docs/PHASE7_RUNTIME_EVIDENCE.md`](docs/PHASE7_RUNTIME_EVIDENCE.md).
+### Evidencia y límite legal
 
-### Autoridad, privacidad y límites
+Evidence Export genera un snapshot técnico determinista con `export_schema_version = 1` y una `snapshot_signature` SHA-256 estable para el mismo estado técnico exportado.
 
-El Registry usa WordPress Options con schema versionado y alcance site-local. Un aviso público solo puede renderizarse desde estado server-side revisado y elegible; el navegador no concede permisos ni elegibilidad.
+Esa firma identifica técnicamente el snapshot. **No** es una firma legal/digital, sello de tiempo confiable, prueba de no repudio ni certificación de cumplimiento.
 
-Discovery soporta inicialmente **AI Engine 3.7.7** mediante evidencia acotada de identidad WordPress. Readiness mantiene separados Hecho, Declaración del administrador y Orientación.
-
-Registry, Discovery, Readiness, Disclosure y Evidence Export no envían automáticamente su estado a servicios externos. Fase 7 solo navega a Kairoseth después de una acción explícita y transmite el contexto técnico no sensible permitido. El plugin ofrece tooling técnico y evidencia; **no certifica cumplimiento legal** del Reglamento de IA de la UE ni de ninguna otra norma.
+El plugin proporciona herramientas técnicas de readiness, flujo y evidencia. **No certifica ni garantiza cumplimiento legal** del Reglamento de IA de la UE ni de otra norma, ni intenta detectar probabilísticamente si contenido arbitrario fue escrito por IA.
 
 ### Instalación
 
-1. Instala el directorio o ZIP del plugin.
+1. Instala el ZIP estable o el directorio del plugin.
 2. Activa **Kairoseth AI Transparency**.
-3. Usa **Herramientas → AI Transparency** para el Registry.
-4. Usa **Herramientas → AI Discovery** para Discovery.
-5. Usa **Herramientas → AI Readiness** para findings.
-6. Usa **Herramientas → AI Disclosure** para disclosure.
-7. Usa **Herramientas → AI Evidence Export** para descargar el snapshot JSON local.
-8. Opcionalmente usa **Herramientas → AI Transparency Support** para abrir soporte/solicitudes personalizadas de Kairoseth.
+3. Usa **Herramientas → AI Transparency** para mantener el Registry.
+4. Usa **AI Discovery**, **AI Readiness**, **AI Disclosure** y **AI Evidence Export** según sea necesario.
+5. Opcionalmente usa **AI Transparency Support** para abrir deliberadamente soporte/solicitudes personalizadas de Kairoseth.
 
-### Evidencia de Fase 7
+### Desarrollo y validación
+
+```bash
+composer install
+composer verify
+bash bin/build-plugin.sh
+bash bin/build-release.sh
+```
+
+Artefactos canónicos:
 
 ```text
-PR contrato: #17
-Merge contrato: cbc04eea07b20af60f3ec4b3621a9aa89c92ae84
-PR implementación: #18
-Head aceptado: e49721eb00b85b0a4cfbf72d53e876d80dc96f44
-CI del PR: #101 / 34436069862 — 8/8 verde
-Merge implementación: f225646808f604b5758bbc960417451af8c31738
-CI post-merge main: #102 / 34436374187 — 8/8 verde
-Prueba entrega producción Kairoseth: #4 / 34437244753 — SUCCESS
-Bloqueadores: 0
+build/ai-transparency/
+dist/ai-transparency-1.0.0.zip
+dist/ai-transparency-1.0.0.zip.sha256
 ```
+
+La validación bloqueante incluye WordPress Coding Standards, PHPUnit, PHPCompatibility, PHP 7.4/8.1/8.3/8.5, cobertura runtime EN/ES 100%, gettext español compilado, Plugin Check oficial, runtime WordPress real, responsive/accesibilidad, comportamiento determinista de Registry/Discovery/Readiness/Disclosure/Evidence, privacidad del soporte contextual y aislamiento/lifecycle Multisite real.
 
 ### Estado del roadmap
 
 ```text
-Fase 1 Repository bootstrap                 CLOSED
-Fase 2 Persistent AI Systems Registry       CLOSED
-Fase 3 Deterministic Discovery              CLOSED
-Fase 4 Readiness Findings & Evidence        CLOSED
-Fase 5 Disclosure Tooling                   CLOSED
-Fase 6 Evidence Export                      CLOSED
-Fase 7 Contextual support/custom path       CLOSED
-Fase 8 First public release                 NO INICIADA
+Fase 1 Repository bootstrap                 CERRADA
+Fase 2 Persistent AI Systems Registry       CERRADA
+Fase 3 Deterministic Discovery              CERRADA
+Fase 4 Readiness Findings & Evidence        CERRADA
+Fase 5 Disclosure Tooling                   CERRADA
+Fase 6 Evidence Export                      CERRADA
+Fase 7 Contextual support/custom path       CERRADA
+Fase 8 Release repositorio/GitHub           COMPLETA
+Fase 8 Publicación externa WordPress.org    PENDIENTE
 ```
 
 ### Documentación
@@ -356,11 +288,12 @@ Fase 8 First public release                 NO INICIADA
 - [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md`](docs/PHASE6_EVIDENCE_EXPORT_IMPLEMENTATION.md)
-- [`docs/PHASE6_ACCEPTANCE.md`](docs/PHASE6_ACCEPTANCE.md)
-- [`docs/PHASE6_JSON_SCHEMA_V1.md`](docs/PHASE6_JSON_SCHEMA_V1.md)
 - [`docs/PHASE6_RUNTIME_EVIDENCE.md`](docs/PHASE6_RUNTIME_EVIDENCE.md)
 - [`docs/PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md`](docs/PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md)
-- [`docs/PHASE7_ACCEPTANCE.md`](docs/PHASE7_ACCEPTANCE.md)
 - [`docs/PHASE7_RUNTIME_EVIDENCE.md`](docs/PHASE7_RUNTIME_EVIDENCE.md)
+- [`docs/PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md`](docs/PHASE8_PUBLIC_RELEASE_IMPLEMENTATION.md)
+- [`docs/PHASE8_ACCEPTANCE.md`](docs/PHASE8_ACCEPTANCE.md)
+- [`docs/PHASE8_RELEASE_EVIDENCE.md`](docs/PHASE8_RELEASE_EVIDENCE.md)
+- [`docs/BILINGUAL_EN_ES_POLICY.md`](docs/BILINGUAL_EN_ES_POLICY.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)

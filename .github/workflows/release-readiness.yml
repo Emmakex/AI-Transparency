@@ -17,6 +17,7 @@ on:
       - '.wp-env.release*.json'
       - 'tests/runtime/release-*.php'
       - '.github/workflows/release-readiness.yml'
+      - '.github/workflows/release.yml'
   push:
     branches:
       - main
@@ -35,6 +36,7 @@ on:
       - '.wp-env.release*.json'
       - 'tests/runtime/release-*.php'
       - '.github/workflows/release-readiness.yml'
+      - '.github/workflows/release.yml'
 
 permissions:
   contents: read

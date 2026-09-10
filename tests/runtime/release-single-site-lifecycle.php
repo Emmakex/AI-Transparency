@@ -17,15 +17,27 @@ if ( is_multisite() ) {
 	exit( 1 );
 }
 
-$action              = isset( $args[0] ) ? (string) $args[0] : '';
-$registry_option     = 'kairoseth_ai_transparency_registry';
-$expected_hash_option = 'phase8_release_expected_registry_hash';
-$sentinel_option      = 'phase8_unrelated_runtime_sentinel';
+$action                   = isset( $args[0] ) ? (string) $args[0] : '';
+$expected_release_version = isset( $args[1] ) ? trim( (string) $args[1] ) : '';
+$registry_option          = 'kairoseth_ai_transparency_registry';
+$expected_hash_option     = 'phase8_release_expected_registry_hash';
+$sentinel_option          = 'phase8_unrelated_runtime_sentinel';
 
 $failures = array();
 
 $fail = static function ( string $message ) use ( &$failures ): void {
 	$failures[] = $message;
+};
+
+$assert_release_version = static function () use ( $expected_release_version, $fail ): void {
+	if ( '' === $expected_release_version || 1 !== preg_match( '/^\d+\.\d+\.\d+$/', $expected_release_version ) ) {
+		$fail( 'Release assertion requires an expected semantic version argument.' );
+		return;
+	}
+
+	if ( ! defined( 'KAIROSETH_AI_TRANSPARENCY_VERSION' ) || $expected_release_version !== KAIROSETH_AI_TRANSPARENCY_VERSION ) {
+		$fail( 'Release assertion did not run with the expected plugin version active.' );
+	}
 };
 
 $assert_registry_hash = static function () use ( $registry_option, $expected_hash_option, $fail ): void {
@@ -104,8 +116,8 @@ switch ( $action ) {
 		break;
 
 	case 'assert-upgraded':
-		if ( ! defined( 'KAIROSETH_AI_TRANSPARENCY_VERSION' ) || '1.0.0' !== KAIROSETH_AI_TRANSPARENCY_VERSION ) {
-			$fail( 'Upgrade assertion must run with plugin version 1.0.0 active.' );
+		$assert_release_version();
+		if ( $failures ) {
 			break;
 		}
 
@@ -158,18 +170,18 @@ switch ( $action ) {
 		break;
 
 	case 'assert-fresh':
-		if ( ! defined( 'KAIROSETH_AI_TRANSPARENCY_VERSION' ) || '1.0.0' !== KAIROSETH_AI_TRANSPARENCY_VERSION ) {
-			$fail( 'Fresh-install assertion must run with plugin version 1.0.0 active.' );
+		$assert_release_version();
+		if ( $failures ) {
 			break;
 		}
 		$registry = ( new WordPressOptionsRegistryRepository() )->load();
 		if ( 0 !== $registry->count() ) {
-			$fail( 'Fresh 1.0.0 install did not start with an empty Registry.' );
+			$fail( 'Fresh stable install did not start with an empty Registry.' );
 		}
 		break;
 
 	default:
-		$fail( 'Unknown Phase 8 single-site lifecycle action.' );
+		$fail( 'Unknown release single-site lifecycle action.' );
 		break;
 }
 
@@ -180,4 +192,4 @@ if ( $failures ) {
 	exit( 1 );
 }
 
-printf( "Phase 8 single-site lifecycle action passed: %s.\n", $action );
+printf( "Release single-site lifecycle action passed: %s.\n", $action );

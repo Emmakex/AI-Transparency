@@ -4,17 +4,17 @@ Tags: ai transparency, eu ai act, ai disclosure, article 50, artificial intellig
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 1.0.0
 License: MIT
 License URI: https://opensource.org/license/mit/
 
-Local-first AI transparency readiness tooling for WordPress with a reviewable AI systems registry, deterministic evidence workflows, disclosure tooling and administrator-generated JSON evidence export.
+Local-first AI transparency readiness for WordPress with AI inventory, disclosure, evidence export and EU AI Act support.
 
 == Description ==
 
 Kairoseth AI Transparency helps WordPress site owners maintain a reviewable technical inventory of AI systems used on their websites and turn that state into bounded technical evidence.
 
-The current pre-release development build includes:
+Version 1.0.0 includes:
 
 * a local AI Systems Registry under **Tools > AI Transparency**;
 * deterministic AI integration discovery under **Tools > AI Discovery**;
@@ -122,9 +122,13 @@ It is a SHA-256 identity of the bounded stable technical snapshot. Generation ti
 
 No. Evidence Export v1 is built for the explicit administrator request and returned as a direct JSON attachment. The plugin does not persist the generated file or upload it to Kairoseth.
 
+= What happens to my Registry if I deactivate or remove the plugin? =
+
+Deactivation and upgrades preserve the site-local Registry. An explicit WordPress uninstall removes only the Registry data owned by this plugin from the affected site or sites.
+
 = How is Multisite handled? =
 
-Registry and Evidence Export follow the authoritative current blog/site context. The first export does not aggregate the full network.
+Registry and Evidence Export follow the authoritative current blog/site context. The first export does not aggregate the full network. A network uninstall removes only the plugin-owned Registry option from each existing site.
 
 = Does it detect whether any article was written by AI? =
 
@@ -132,19 +136,23 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 
 == Changelog ==
 
-= 0.1.0 =
-* Repository and WordPress plugin bootstrap.
+= 1.0.0 =
+* First stable release candidate.
 * Versioned site-local AI Systems Registry with administrator CRUD/review/archive.
 * Deterministic AI Engine 3.7.7 discovery with explicit administrator acceptance.
 * Deterministic AI Readiness findings with Fact / Administrator declaration / Guidance separation.
 * Explicit AI Disclosure readiness and public shortcode output.
 * Administrator-generated deterministic JSON Evidence Export with SHA-256 snapshot identity.
 * Optional administrator-initiated Kairoseth support/custom-integration handoff with a strict technical-context allow-list.
+* Safe data lifecycle: upgrades and deactivation preserve Registry state; explicit uninstall removes only plugin-owned Registry data.
 * Local-first privacy boundary and site-local Multisite isolation.
 * Mandatory English/Spanish runtime coverage and compiled Spanish catalog.
 * Public CI, real WordPress runtime acceptance and official WordPress Plugin Check baseline.
 
+= 0.1.0 =
+* Development baseline used before the first stable release.
+
 == Upgrade Notice ==
 
-= 0.1.0 =
-Pre-release development baseline. No stable WordPress.org release is claimed yet.
+= 1.0.0 =
+First stable release. Existing Registry state from the development baseline is preserved during upgrade. Review your AI systems and disclosure readiness after updating.

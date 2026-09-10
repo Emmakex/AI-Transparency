@@ -149,7 +149,7 @@ test.describe('Phase 6 Evidence Export runtime acceptance', () => {
     expect(first.generator).toEqual({
       plugin_slug: 'ai-transparency',
       plugin_name: 'Kairoseth AI Transparency',
-      plugin_version: '0.1.0',
+      plugin_version: '1.0.0',
     });
     expect(first.site.blog_id).toBeGreaterThan(0);
     expect(typeof first.site.is_multisite).toBe('boolean');

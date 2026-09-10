@@ -1,0 +1,117 @@
+name: Stable Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  release:
+    name: Publish verified GitHub release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout tagged source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Validate stable tag and accepted main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "${GITHUB_REF_NAME}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Stable release tags must use semantic version form X.Y.Z." >&2
+            exit 1
+          fi
+          git fetch origin main
+          MAIN_SHA="$(git rev-parse origin/main)"
+          if [[ "${GITHUB_SHA}" != "${MAIN_SHA}" ]]; then
+            echo "Release tag must point to the current accepted main commit." >&2
+            echo "tag=${GITHUB_SHA}" >&2
+            echo "main=${MAIN_SHA}" >&2
+            exit 1
+          fi
+          AI_TRANSPARENCY_EXPECTED_VERSION="${GITHUB_REF_NAME}" php bin/check-release.php
+
+      - name: Require successful main CI and Release Readiness for tagged commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          RUNS_JSON="$(gh api -H 'Accept: application/vnd.github+json' "/repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${GITHUB_SHA}&per_page=100")"
+          echo "${RUNS_JSON}" | jq -e '[.workflow_runs[] | select(.event == "push" and .head_branch == "main" and .name == "CI" and .conclusion == "success")] | length > 0' >/dev/null
+          echo "${RUNS_JSON}" | jq -e '[.workflow_runs[] | select(.event == "push" and .head_branch == "main" and .name == "Release Readiness" and .conclusion == "success")] | length > 0' >/dev/null
+
+      - name: Rebuild and verify exact tagged release artifact
+        env:
+          AI_TRANSPARENCY_EXPECTED_VERSION: ${{ github.ref_name }}
+        run: bash bin/run-with-diagnostics.sh "Stable release package" -- bash bin/verify-release-package.sh
+
+      - name: Refuse to overwrite an existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            echo "GitHub Release ${GITHUB_REF_NAME} already exists; refusing to overwrite it." >&2
+            exit 1
+          fi
+
+      - name: Publish GitHub Release with exact ZIP and checksum
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP="dist/ai-transparency-${GITHUB_REF_NAME}.zip"
+          CHECKSUM="${ZIP}.sha256"
+          gh release create "${GITHUB_REF_NAME}" \
+            "${ZIP}" \
+            "${CHECKSUM}" \
+            --verify-tag \
+            --title "Kairoseth AI Transparency ${GITHUB_REF_NAME}" \
+            --generate-notes
+
+      - name: Verify published release assets byte-for-byte
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP_NAME="ai-transparency-${GITHUB_REF_NAME}.zip"
+          CHECKSUM_NAME="${ZIP_NAME}.sha256"
+          RELEASE_JSON="$(gh release view "${GITHUB_REF_NAME}" --json tagName,isDraft,isPrerelease,assets)"
+          echo "${RELEASE_JSON}" | jq -e --arg tag "${GITHUB_REF_NAME}" '.tagName == $tag and .isDraft == false and .isPrerelease == false' >/dev/null
+          echo "${RELEASE_JSON}" | jq -e --arg zip "${ZIP_NAME}" --arg checksum "${CHECKSUM_NAME}" '[.assets[].name] | (index($zip) != null and index($checksum) != null)' >/dev/null
+          TEMP_ROOT="$(mktemp -d)"
+          trap 'rm -rf "${TEMP_ROOT}"' EXIT
+          gh release download "${GITHUB_REF_NAME}" --pattern "${ZIP_NAME}" --dir "${TEMP_ROOT}"
+          LOCAL_HASH="$(php -r 'echo hash_file("sha256", $argv[1]);' "dist/${ZIP_NAME}")"
+          REMOTE_HASH="$(php -r 'echo hash_file("sha256", $argv[1]);' "${TEMP_ROOT}/${ZIP_NAME}")"
+          if [[ "${LOCAL_HASH}" != "${REMOTE_HASH}" ]]; then
+            echo "Published GitHub Release ZIP differs from the accepted tagged artifact." >&2
+            exit 1
+          fi
+
+      - name: Upload release diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stable-release-diagnostics-${{ github.ref_name }}
+          path: .ci-diagnostics/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14

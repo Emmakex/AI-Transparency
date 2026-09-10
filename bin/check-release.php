@@ -60,9 +60,9 @@ $slug = $extract(
 
 $versions = array_filter(
 	array(
-		'plugin header' => $header_version,
-		'runtime constant' => $constant_version,
-		'readme stable tag' => $stable_tag,
+		'plugin header'      => $header_version,
+		'runtime constant'   => $constant_version,
+		'readme stable tag'  => $stable_tag,
 	),
 	static function ( string $version ): bool {
 		return '' !== $version;
@@ -70,13 +70,18 @@ $versions = array_filter(
 );
 
 foreach ( $versions as $label => $version ) {
-	if ( '1.0.0' !== $version ) {
-		$failures[] = sprintf( '%s must be 1.0.0; found %s.', $label, $version );
+	if ( 1 !== preg_match( '/^\d+\.\d+\.\d+$/', $version ) ) {
+		$failures[] = sprintf( '%s must be a stable semantic version; found %s.', $label, $version );
 	}
 }
 
 if ( count( array_unique( $versions ) ) > 1 ) {
 	$failures[] = 'Release versions are inconsistent across plugin header, runtime constant and readme Stable tag.';
+}
+
+$expected_version = getenv( 'AI_TRANSPARENCY_EXPECTED_VERSION' );
+if ( false !== $expected_version && '' !== $expected_version && $header_version !== $expected_version ) {
+	$failures[] = sprintf( 'Release version must be %s for this build; found %s.', $expected_version, $header_version );
 }
 
 if ( 'ai-transparency' !== $text_domain ) {
@@ -87,8 +92,8 @@ if ( 'ai-transparency' !== $slug ) {
 	$failures[] = sprintf( 'Plugin slug constant must remain ai-transparency; found %s.', $slug );
 }
 
-if ( false === strpos( $changelog, '## [1.0.0]' ) ) {
-	$failures[] = 'CHANGELOG.md is missing the 1.0.0 release heading.';
+if ( '' !== $header_version && false === strpos( $changelog, '## [' . $header_version . ']' ) ) {
+	$failures[] = sprintf( 'CHANGELOG.md is missing the %s release heading.', $header_version );
 }
 
 if ( ! is_file( $uninstall_path ) || 0 === filesize( $uninstall_path ) ) {

@@ -86,8 +86,17 @@ jobs:
               echo "GitHub Release ${VERSION} exists without its expected Git tag." >&2
               exit 1
             fi
-            echo "Stable release ${VERSION} already exists; leaving the immutable release unchanged."
+
             echo "already_released=true" >> "${GITHUB_OUTPUT}"
+            echo "tag_sha=${TAG_SHA}" >> "${GITHUB_OUTPUT}"
+
+            if [[ "${TAG_SHA}" == "${TARGET_SHA}" ]]; then
+              echo "Existing release ${VERSION} belongs to this exact accepted main SHA; assets will be rebuilt and verified again."
+              echo "verify_existing=true" >> "${GITHUB_OUTPUT}"
+            else
+              echo "Stable release ${VERSION} is already immutable on ${TAG_SHA}; current main is ${TARGET_SHA}, so no tag or release mutation will occur."
+              echo "verify_existing=false" >> "${GITHUB_OUTPUT}"
+            fi
             exit 0
           fi
 
@@ -99,9 +108,11 @@ jobs:
           fi
 
           echo "already_released=false" >> "${GITHUB_OUTPUT}"
+          echo "verify_existing=false" >> "${GITHUB_OUTPUT}"
+          echo "tag_sha=${TAG_SHA}" >> "${GITHUB_OUTPUT}"
 
       - name: Require successful main CI and Release Readiness
-        if: steps.existing.outputs.already_released != 'true'
+        if: steps.existing.outputs.already_released != 'true' || steps.existing.outputs.verify_existing == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           TARGET_SHA: ${{ steps.resolve.outputs.target_sha }}
@@ -166,7 +177,7 @@ jobs:
           fi
 
       - name: Rebuild and verify exact accepted release artifact
-        if: steps.existing.outputs.already_released != 'true'
+        if: steps.existing.outputs.already_released != 'true' || steps.existing.outputs.verify_existing == 'true'
         env:
           AI_TRANSPARENCY_EXPECTED_VERSION: ${{ steps.resolve.outputs.version }}
         run: bash bin/run-with-diagnostics.sh "Stable release package" -- bash bin/verify-release-package.sh
@@ -194,8 +205,8 @@ jobs:
             --title "Kairoseth AI Transparency ${VERSION}" \
             --generate-notes
 
-      - name: Verify published release assets byte-for-byte
-        if: steps.existing.outputs.already_released != 'true'
+      - name: Verify release assets byte-for-byte
+        if: steps.existing.outputs.already_released != 'true' || steps.existing.outputs.verify_existing == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.resolve.outputs.version }}
@@ -231,6 +242,12 @@ jobs:
           fi
 
           echo "Verified immutable GitHub Release ${VERSION} with SHA-256 ${REMOTE_HASH}."
+
+      - name: Confirm prior immutable release needs no mutation
+        if: steps.existing.outputs.already_released == 'true' && steps.existing.outputs.verify_existing != 'true'
+        env:
+          VERSION: ${{ steps.resolve.outputs.version }}
+        run: echo "Stable GitHub Release ${VERSION} already exists on its immutable historical tag; no release mutation was required."
 
       - name: Upload release diagnostics
         if: failure()

@@ -96,7 +96,8 @@ final class SupportUrlBuilder {
 	 */
 	private function validate_destination( string $destination ): string {
 		$destination = trim( $destination );
-		$parts       = parse_url( $destination );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url -- Pure domain validation must run without a WordPress bootstrap.
+		$parts = parse_url( $destination );
 
 		if ( false === $parts || ! is_array( $parts ) ) {
 			throw new InvalidArgumentException( 'Kairoseth support destination is invalid.' );

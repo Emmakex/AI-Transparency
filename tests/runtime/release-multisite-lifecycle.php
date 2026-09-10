@@ -14,10 +14,11 @@ if ( ! is_multisite() ) {
 	exit( 1 );
 }
 
-$action           = isset( $args[0] ) ? (string) $args[0] : '';
-$registry_option  = 'kairoseth_ai_transparency_registry';
-$sentinel_option  = 'phase8_unrelated_site_sentinel';
-$network_sentinel = 'phase8_unrelated_network_sentinel';
+$action                   = isset( $args[0] ) ? (string) $args[0] : '';
+$expected_release_version = isset( $args[1] ) ? trim( (string) $args[1] ) : '';
+$registry_option          = 'kairoseth_ai_transparency_registry';
+$sentinel_option          = 'phase8_unrelated_site_sentinel';
+$network_sentinel         = 'phase8_unrelated_network_sentinel';
 
 $failures = array();
 
@@ -25,10 +26,21 @@ $fail = static function ( string $message ) use ( &$failures ): void {
 	$failures[] = $message;
 };
 
+$assert_release_version = static function () use ( $expected_release_version, $fail ): void {
+	if ( '' === $expected_release_version || 1 !== preg_match( '/^\d+\.\d+\.\d+$/', $expected_release_version ) ) {
+		$fail( 'Multisite lifecycle seed requires an expected semantic version argument.' );
+		return;
+	}
+
+	if ( ! defined( 'KAIROSETH_AI_TRANSPARENCY_VERSION' ) || $expected_release_version !== KAIROSETH_AI_TRANSPARENCY_VERSION ) {
+		$fail( 'Multisite lifecycle seed did not run with the expected plugin version active.' );
+	}
+};
+
 switch ( $action ) {
 	case 'seed':
-		if ( ! defined( 'KAIROSETH_AI_TRANSPARENCY_VERSION' ) || '1.0.0' !== KAIROSETH_AI_TRANSPARENCY_VERSION ) {
-			$fail( 'Multisite lifecycle seed must run with plugin version 1.0.0 active.' );
+		$assert_release_version();
+		if ( $failures ) {
 			break;
 		}
 
@@ -119,7 +131,7 @@ switch ( $action ) {
 		break;
 
 	default:
-		$fail( 'Unknown Phase 8 Multisite lifecycle action.' );
+		$fail( 'Unknown release Multisite lifecycle action.' );
 		break;
 }
 
@@ -130,4 +142,4 @@ if ( $failures ) {
 	exit( 1 );
 }
 
-printf( "Phase 8 Multisite lifecycle action passed: %s.\n", $action );
+printf( "Release Multisite lifecycle action passed: %s.\n", $action );

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kairoseth AI Transparency 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Emmakex/AI-Transparency/issues\n"
-"POT-Creation-Date: 2026-09-09 20:20+0000\n"
+"POT-Creation-Date: 2026-09-10 04:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -356,4 +356,55 @@ msgid "The evidence export could not be generated. No file was created."
 msgstr ""
 
 msgid "Evidence export failed"
+msgstr ""
+
+msgid "AI Transparency Support"
+msgstr ""
+
+msgid "Optional Kairoseth support for implementation questions, third-party integrations and custom work."
+msgstr ""
+
+msgid "Local-first:"
+msgstr ""
+
+msgid "Registry, Discovery, Readiness, Disclosure and Evidence Export continue to work without contacting Kairoseth."
+msgstr ""
+
+msgid "What happens when you use this page"
+msgstr ""
+
+msgid "Nothing is sent to Kairoseth when this WordPress page loads."
+msgstr ""
+
+msgid "Clicking an action opens Kairoseth in a new browser tab with only bounded product and platform context."
+msgstr ""
+
+msgid "No Registry records, evidence, site URL, administrator identity, prompts, conversations, logs or credentials are attached automatically."
+msgstr ""
+
+msgid "You choose what personal or business information to enter and submit on the Kairoseth form."
+msgstr ""
+
+msgid "The verified Kairoseth support destination is currently unavailable. No data was sent and all local plugin features remain available."
+msgstr ""
+
+msgid "Get support"
+msgstr ""
+
+msgid "Use this for implementation help, setup questions or guidance applying the plugin in your WordPress environment."
+msgstr ""
+
+msgid "Open Kairoseth support"
+msgstr ""
+
+msgid "Request custom integration"
+msgstr ""
+
+msgid "Use this when you need a third-party integration or a tailored implementation beyond the local plugin workflow."
+msgstr ""
+
+msgid "Open custom request"
+msgstr ""
+
+msgid "Kairoseth availability is not required for any accepted local Free feature."
 msgstr ""

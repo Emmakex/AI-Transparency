@@ -1,11 +1,11 @@
 # Kairoseth AI Transparency — Implementation Architecture
 
-Status: active development — **Phases 1–6 closed; Phase 7 contextual support/custom contract active**  
-Last reviewed: 9 September 2026
+Status: active development — **Phases 1–7 closed; Phase 8 not started**  
+Last reviewed: 10 September 2026
 
 ## Product boundary
 
-Kairoseth AI Transparency is a local-first WordPress plugin for technical AI-transparency readiness. The accepted local architecture provides:
+Kairoseth AI Transparency is a local-first WordPress plugin for technical AI-transparency readiness. The accepted architecture provides:
 
 ```text
 local AI Systems Registry
@@ -13,9 +13,10 @@ local AI Systems Registry
 + deterministic Readiness findings
 + explicit administrator-controlled public Disclosure tooling
 + privileged deterministic JSON Evidence Export
++ optional user-initiated contextual Support / Custom Requests navigation
 ```
 
-Phase 7 adds only an **optional user-initiated navigation path** to Kairoseth support/custom work. It does not make any accepted local workflow dependent on Kairoseth.
+The support/custom path does not make any accepted local workflow dependent on Kairoseth.
 
 The plugin is **not** a legal certification engine and does not infer legal obligations from plugin presence, probabilistic guesses, arbitrary content or weak contextual evidence.
 
@@ -28,10 +29,10 @@ The plugin is **not** a legal certification engine and does not infer legal obli
 5. **Allow-list evidence export.** Phase 6 serializes only contracted evidence fields; arbitrary option/request/session data never become export input.
 6. **Stable evidence identity.** `generated_at` is metadata and is excluded from the Phase 6 stable `snapshot_signature`.
 7. **Server-authoritative permissions/state.** Browser/client values never grant WordPress privileges, disclosure eligibility, export evidence authority or Kairoseth destination authority.
-8. **Browser input is an action/selector, not evidence.** Server-side state remains authoritative across Discovery, Readiness, Disclosure, Export and Phase 7 context construction.
+8. **Browser input is an action/selector, not evidence.** Server-side state remains authoritative across Discovery, Readiness, Disclosure, Export and support-context construction.
 9. **User-initiated external navigation.** Phase 7 performs no background Kairoseth request on page load; only an explicit CTA click may leave WordPress.
-10. **Strict contextual allow-list.** Phase 7 may expose bounded product/version/platform/locale/request-type context only; Registry/evidence/personal/site data remain excluded.
-11. **Fail-closed destination validation.** Non-HTTPS, non-Kairoseth or structurally unsafe support destinations must not be followed.
+10. **Strict contextual allow-list.** Phase 7 exposes only bounded product/version/platform/locale/request-type context; Registry/evidence/personal/site data remain excluded.
+11. **Fail-closed destination validation.** Only the canonical HTTPS `kairoseth.com/custom-requests` destination is accepted.
 12. **WordPress-native security.** Capability checks, nonces where mutations exist, validation/sanitization and context-correct output encoding remain mandatory.
 13. **Domain separated from adapters.** Deterministic Registry/Discovery/Finding/Disclosure/Export/Support logic stays independently testable where practical.
 14. **EN/ES ships together.** Customer-facing changes require complete English and Spanish runtime catalogs in the same change.
@@ -62,17 +63,21 @@ AI-Transparency/
 │   │   ├── class-discoverypage.php
 │   │   ├── class-readinesspage.php
 │   │   ├── class-disclosurepage.php
-│   │   └── class-evidenceexportpage.php
+│   │   ├── class-evidenceexportpage.php
+│   │   └── class-supportpage.php
 │   ├── Domain/
 │   ├── Registry/
 │   ├── Persistence/
 │   ├── Discovery/
 │   ├── Evidence/
 │   ├── Disclosure/
-│   └── Export/
-│       ├── class-evidencesnapshot.php
-│       ├── class-evidencesnapshotbuilder.php
-│       └── class-evidencejsonencoder.php
+│   ├── Export/
+│   │   ├── class-evidencesnapshot.php
+│   │   ├── class-evidencesnapshotbuilder.php
+│   │   └── class-evidencejsonencoder.php
+│   └── Support/
+│       ├── class-supportcontext.php
+│       └── class-supporturlbuilder.php
 ├── assets/
 ├── languages/
 ├── bin/
@@ -80,16 +85,6 @@ AI-Transparency/
 ├── docs/
 └── .github/workflows/
 ```
-
-Phase 7 planned additions, after its contract is accepted:
-
-```text
-src/Support/class-supportcontext.php
-src/Support/class-supporturlbuilder.php
-src/Admin/class-supportpage.php
-```
-
-Exact class names may simplify during implementation; the authority/privacy boundaries are the blocking contract.
 
 ## Release flow
 
@@ -198,40 +193,28 @@ References:
 - [`PHASE6_JSON_SCHEMA_V1.md`](PHASE6_JSON_SCHEMA_V1.md)
 - [`PHASE6_RUNTIME_EVIDENCE.md`](PHASE6_RUNTIME_EVIDENCE.md)
 
-## Contextual Support / Custom Integration — Phase 7 contract
+## Contextual Support / Custom Integration — Phase 7 accepted
 
-### Product boundary
-
-Phase 7 preserves this relationship:
-
-```text
-useful local Free product
-→ optional support/custom CTA
-→ explicit user navigation to Kairoseth
-→ user chooses what to submit there
-```
-
-No local feature unlock, trial, entitlement check, telemetry or mandatory account is introduced.
-
-### First planned WordPress surface
+### WordPress surface
 
 ```text
 Tools → AI Transparency Support
 capability: manage_options
 ```
 
-The page is read-only with respect to Registry state.
-
-Planned actions:
+The page is read-only with respect to Registry state and exposes two explicit navigation actions:
 
 ```text
 Get support
+→ implementation_support
+
 Request custom integration
+→ third_party_integration
 ```
 
 ### Context construction
 
-The plugin may build only this initial bounded context server-side:
+Server-side automatic context is limited to:
 
 ```text
 source=extension
@@ -240,7 +223,7 @@ extensionName=Kairoseth AI Transparency
 extensionVersion=<runtime plugin version>
 hostPlatform=wordpress
 hostPlatformVersion=<runtime WordPress version>
-locale=<WordPress locale>
+locale=<WordPress locale normalized to en|es>
 requestType=<accepted enum>
 ```
 
@@ -257,7 +240,7 @@ other
 
 ### Forbidden automatic context
 
-Phase 7 must not automatically transmit:
+The plugin does not automatically transmit:
 
 ```text
 site/home URL
@@ -284,31 +267,26 @@ GET WordPress support page
 
 explicit CTA click
 → browser navigation only
-→ canonical verified Kairoseth HTTPS destination
+→ https://kairoseth.com/custom-requests
 ```
 
-The WordPress plugin does not submit the final lead/request. Kairoseth owns the destination form, privacy notice, consent and persistence.
+The WordPress plugin does not submit the final lead/request. Kairoseth owns the destination form, privacy notice, consent, backend validation, rate limiting and final SMTP delivery.
 
 ### Destination authority
 
-Implementation requires one verified production route under Kairoseth control:
+`SupportUrlBuilder` accepts only:
 
 ```text
-https://kairoseth.com/<verified-custom-request-route>
+scheme = https
+host = kairoseth.com
+path = /custom-requests
+no userinfo/password
+no custom port
+no preloaded query
+no fragment
 ```
 
-The plugin must reject/fail closed for:
-
-```text
-non-HTTPS
-non-Kairoseth host
-URL userinfo/credentials
-unknown requestType
-unbounded/unapproved query keys
-unsafe destination structure
-```
-
-The exact route is deliberately not invented in the contract.
+Unknown request types and unsafe destinations fail closed.
 
 ### Local independence
 
@@ -322,20 +300,42 @@ Disclosure
 Evidence Export
 ```
 
-### External dependency
+### Production backend authority
 
-Current blocker for implementation closure:
+The Kairoseth backend re-normalizes extension context and resolves the destination mailbox only server-side:
 
 ```text
-verified production Kairoseth Custom Requests route
+CUSTOM_REQUESTS_TO
+→ otherwise SMTP_USER
+→ otherwise fail closed
 ```
 
-The contract can be accepted before that dependency exists. Phase 7 cannot be declared implemented/closed without a real WordPress → Kairoseth Custom Requests E2E.
+The browser, WordPress context and user-entered form fields cannot select the mailbox.
+
+### Accepted evidence
+
+```text
+Contract PR: #17
+Contract CI: #95 / 34405157557 — SUCCESS
+Contract merge: cbc04eea07b20af60f3ec4b3621a9aa89c92ae84
+Contract post-merge CI: #96 / 34405183831 — SUCCESS
+Implementation PR: #18
+Accepted head: e49721eb00b85b0a4cfbf72d53e876d80dc96f44
+PR-head CI: #101 / 34436069862 — 8/8 green
+Implementation merge: f225646808f604b5758bbc960417451af8c31738
+Post-merge main CI: #102 / 34436374187 — 8/8 green
+Kairoseth fallback merge: 5c01adfd40151da6392c8d780203230c315c19fb
+Kairoseth post-merge CI #897 / 34437075381 — SUCCESS
+Kairoseth Production Smoke #119 / 34437075355 — SUCCESS
+Final synthetic SMTP E2E #4 / 34437244753 — SUCCESS
+Blockers: 0
+```
 
 References:
 
 - [`PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md`](PHASE7_CONTEXTUAL_SUPPORT_IMPLEMENTATION.md)
 - [`PHASE7_ACCEPTANCE.md`](PHASE7_ACCEPTANCE.md)
+- [`PHASE7_RUNTIME_EVIDENCE.md`](PHASE7_RUNTIME_EVIDENCE.md)
 
 ## WordPress compatibility baseline
 
@@ -347,8 +347,6 @@ References:
 CI validates PHP 7.4 / 8.1 / 8.3 / 8.5 syntax.
 
 ## CI / release gates
-
-Current implementation gates remain:
 
 ```text
 PHP Quality
@@ -374,7 +372,7 @@ WordPress runtime acceptance
 ├ Readiness
 ├ Disclosure
 ├ Evidence Export
-├ Phase 7 support/custom behavior when implemented
+├ contextual Support privacy/URL behavior
 ├ responsive/accessibility
 └ Multisite isolation
 ```
@@ -388,6 +386,6 @@ Repository-controlled failures use `bin/run-with-diagnostics.sh` and `.ci-diagno
 - Phase 3 Deterministic Discovery: closed and verified on `main`.
 - Phase 4 Readiness Findings & Evidence: closed and verified on `main`.
 - Phase 5 Disclosure Tooling: closed and verified on `main`.
-- Phase 6 Evidence Export: **closed and finally verified via CI #94 on `main`**.
-- Phase 7 Contextual Support / Custom Integration: **contract active / implementation not started; verified Kairoseth Custom Requests route is the current external dependency**.
-- Phase 8 First public release: not started.
+- Phase 6 Evidence Export: closed and verified on `main`.
+- Phase 7 Contextual Support / Custom Integration: **closed and verified end-to-end**.
+- Phase 8 First public release: **not started**.

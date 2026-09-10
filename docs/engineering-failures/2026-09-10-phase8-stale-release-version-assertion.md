@@ -1,6 +1,6 @@
 # Phase 8 — stale release-version assertion in Evidence Export acceptance
 
-Status: resolved pending final green regression verification  
+Status: resolved and regression-verified  
 First observed: 10 September 2026  
 Affected area: CI / Playwright Evidence Export acceptance / release version transition  
 Severity: low-medium  
@@ -46,25 +46,26 @@ The Evidence Export runtime expectation was updated to `1.0.0`, matching the acc
 
 ## Verification
 
-Final verification is the next full CI run on the corrected PR head. The WordPress runtime acceptance job must pass the complete Evidence Export test together with inherited Registry, Discovery, Readiness, Disclosure, Support, responsive/accessibility and permission acceptance.
+Regression verification passed in **CI #122 / run `34443049878`**. The `WordPress runtime acceptance` job `102761913086` completed successfully, including the corrected Evidence Export assertion plus the inherited Registry, Discovery, Readiness, Disclosure, Support, responsive/accessibility, permission and Multisite acceptance.
 
 ## Related evidence
 
 ```text
 PR: #21
-CI: #117
-Run: 34442517924
-Job: 102760391973 — WordPress runtime acceptance
+Failed CI: #117 / 34442517924
+Failed job: 102760391973 — WordPress runtime acceptance
 Failed test: Phase 6 Evidence Export runtime acceptance
 File: tests/e2e/evidence-export.spec.js
 Failure signature: 3d132b6e4c784f327d3417e92284441cfe19219a96a2673072f3b2b3c54a09d7
+Regression CI: #122 / 34443049878 — SUCCESS — 8/8
+Regression runtime job: 102761913086 — SUCCESS
 ```
 
 ---
 
 ## Español
 
-Estado: resuelto, pendiente de la verificación de regresión verde final  
+Estado: resuelto y verificado mediante regresión  
 Primera observación: 10 de septiembre de 2026  
 Área afectada: CI / aceptación Playwright de Evidence Export / transición de versión  
 Severidad: baja-media
@@ -87,4 +88,4 @@ Cada transición de versión estable debe buscar referencias a la versión anter
 
 ### Verificación
 
-El siguiente CI completo del head corregido debe pasar WordPress runtime acceptance sin alterar el comportamiento funcional de Evidence Export.
+**CI #122 / `34443049878`** quedó 8/8 verde y el job `WordPress runtime acceptance` pasó Evidence Export y todas las regresiones heredadas.

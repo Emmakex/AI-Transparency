@@ -3,7 +3,7 @@
   "phpVersion": "8.3",
   "multisite": true,
   "plugins": [
-    "./build/ai-transparency"
+    "./build/kairoseth-ai-transparency"
   ],
   "mappings": {
     "wp-content/ai-transparency-runtime-tests": "./tests/runtime"

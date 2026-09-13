@@ -49,6 +49,10 @@ final class Plugin {
 	/**
 	 * Register WordPress hooks once.
 	 *
+	 * WordPress.org language packs use just-in-time translation loading for
+	 * supported WordPress versions, so the plugin does not call
+	 * load_plugin_textdomain().
+	 *
 	 * @return void
 	 */
 	public function boot(): void {
@@ -58,7 +62,6 @@ final class Plugin {
 
 		$this->booted = true;
 
-		add_action( 'init', array( $this, 'load_textdomain' ) );
 		( new DisclosureShortcode() )->register();
 
 		if ( is_admin() ) {
@@ -69,19 +72,6 @@ final class Plugin {
 			( new EvidenceExportPage() )->register();
 			( new SupportPage() )->register();
 		}
-	}
-
-	/**
-	 * Load bundled translations after WordPress initialization begins.
-	 *
-	 * @return void
-	 */
-	public function load_textdomain(): void {
-		load_plugin_textdomain(
-			'ai-transparency',
-			false,
-			dirname( plugin_basename( KAIROSETH_AI_TRANSPARENCY_FILE ) ) . '/languages'
-		);
 	}
 
 	/**

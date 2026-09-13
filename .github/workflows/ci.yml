@@ -20,23 +20,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           coverage: none
           tools: composer:v2
-
       - name: Validate Composer metadata
         run: composer validate --strict --no-check-publish
-
       - name: Install development dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
-
       - name: Run coding standards, tests and bilingual coverage
         run: bash bin/run-with-diagnostics.sh "PHP quality" -- composer verify
-
       - name: Upload PHP quality diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -48,27 +43,28 @@ jobs:
           retention-days: 14
 
   bilingual-coverage:
-    name: EN/ES 100% coverage
+    name: EN/ES 100% source coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           coverage: none
-
-      - name: Verify EN/ES catalog coverage
-        run: bash bin/run-with-diagnostics.sh "EN ES coverage" -- php bin/check-i18n.php
-
-      - name: Build bilingual production package
-        run: bash bin/run-with-diagnostics.sh "Bilingual production package" -- bash bin/build-plugin.sh
-
-      - name: Verify compiled Spanish catalog
-        run: test -s build/ai-transparency/languages/ai-transparency-es_ES.mo
-
+      - name: Verify EN/ES source catalog coverage
+        run: bash bin/run-with-diagnostics.sh "EN ES source coverage" -- php bin/check-i18n.php
+      - name: Build WordPress.org production package
+        run: bash bin/run-with-diagnostics.sh "WordPress.org production package" -- bash bin/build-plugin.sh
+      - name: Verify directory package uses language packs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -d build/kairoseth-ai-transparency/languages
+          grep -Fq "Text Domain:       kairoseth-ai-transparency" build/kairoseth-ai-transparency/ai-transparency.php
+          ! grep -R -F "load_plugin_textdomain(" build/kairoseth-ai-transparency
+          test -s languages/ai-transparency-es_ES.mo
       - name: Upload bilingual diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -89,19 +85,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-
       - name: Lint production PHP
         shell: bash
         run: >-
           bash bin/run-with-diagnostics.sh "PHP ${{ matrix.php }} syntax" --
           bash -c 'set -euo pipefail; while IFS= read -r -d "" file; do php -l "$file"; done < <(find . -path "./vendor" -prune -o -path "./build" -prune -o -path "./node_modules" -prune -o -name "*.php" -print0)'
-
       - name: Upload PHP syntax diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -118,21 +111,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Build production plugin package
         run: bash bin/run-with-diagnostics.sh "WordPress production package" -- bash bin/build-plugin.sh
-
       - name: Run official WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: ./build/ai-transparency
+          build-dir: ./build/kairoseth-ai-transparency
           wp-version: latest
           categories: |
             plugin_repo
             security
             accessibility
             performance
-
       - name: Upload package diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -150,42 +140,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           coverage: none
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-
       - name: Build production plugin package
         run: bash bin/run-with-diagnostics.sh "Runtime production package" -- bash bin/build-plugin.sh
-
       - name: Install pinned runtime tooling
         run: npm install --no-audit --no-fund
-
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
-
       - name: Start single-site WordPress
         run: bash bin/run-with-diagnostics.sh "WordPress single-site start" -- npm exec -- wp-env start
-
       - name: Verify production plugin activation
-        run: bash bin/run-with-diagnostics.sh "WordPress plugin activation" -- npm exec -- wp-env run cli -- wp plugin is-active ai-transparency
-
+        run: bash bin/run-with-diagnostics.sh "WordPress plugin activation" -- npm exec -- wp-env run cli -- wp plugin is-active kairoseth-ai-transparency
       - name: Install AI Engine 3.7.7 discovery fixture
         run: >-
           bash bin/run-with-diagnostics.sh "AI Engine 3.7.7 fixture" --
           npm exec -- wp-env run cli --
           wp plugin install ai-engine --version=3.7.7 --activate --force
-
       - name: Run real migration smoke
         run: bash bin/run-with-diagnostics.sh "WordPress migration smoke" -- npm exec -- wp-env run cli -- wp eval-file wp-content/ai-transparency-runtime-tests/single-site-smoke.php
-
       - name: Configure ephemeral runtime users
         shell: bash
         run: |
@@ -202,29 +182,23 @@ jobs:
             echo "WP_TEST_EDITOR_USER=phase2_editor"
             echo "WP_TEST_EDITOR_PASS=${EDITOR_PASS}"
           } >> "$GITHUB_ENV"
-
       - name: Run CRUD, discovery, permission, responsive and accessibility acceptance
         env:
           WP_BASE_URL: http://localhost:8888
         run: bash bin/run-with-diagnostics.sh "WordPress browser acceptance" -- npm run test:e2e
-
       - name: Stop single-site WordPress
         if: always()
         run: npm exec -- wp-env stop || true
-
       - name: Start Multisite WordPress
         run: bash bin/run-with-diagnostics.sh "WordPress Multisite start" -- npm exec -- wp-env start --config=.wp-env.multisite.json
-
       - name: Run real Multisite isolation smoke
         run: >-
           bash bin/run-with-diagnostics.sh "WordPress Multisite isolation" --
           npm exec -- wp-env run cli --config=.wp-env.multisite.json --
           wp eval-file wp-content/ai-transparency-runtime-tests/multisite-smoke.php
-
       - name: Stop Multisite WordPress
         if: always()
         run: npm exec -- wp-env stop --config=.wp-env.multisite.json || true
-
       - name: Upload runtime acceptance diagnostics
         if: failure()
         uses: actions/upload-artifact@v4

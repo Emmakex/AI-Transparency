@@ -67,6 +67,11 @@ $author_uri = $extract(
 	$plugin,
 	'Author URI'
 );
+$contributors_line = $extract(
+	'/^Contributors:\s*([^\r\n]+)$/mi',
+	$readme,
+	'readme Contributors'
+);
 
 $versions = array_filter(
 	array(
@@ -94,12 +99,22 @@ if ( false !== $expected_version && '' !== $expected_version && $header_version 
 	$failures[] = sprintf( 'Release version must be %s for this build; found %s.', $expected_version, $header_version );
 }
 
-if ( 'ai-transparency' !== $text_domain ) {
-	$failures[] = sprintf( 'Text Domain must remain ai-transparency; found %s.', $text_domain );
+$expected_slug = 'kairoseth-ai-transparency';
+if ( $expected_slug !== $text_domain ) {
+	$failures[] = sprintf( 'Text Domain must match the requested WordPress.org slug %s; found %s.', $expected_slug, $text_domain );
 }
 
-if ( 'ai-transparency' !== $slug ) {
-	$failures[] = sprintf( 'Plugin slug constant must remain ai-transparency; found %s.', $slug );
+if ( $expected_slug !== $slug ) {
+	$failures[] = sprintf( 'Plugin slug constant must match the requested WordPress.org slug %s; found %s.', $expected_slug, $slug );
+}
+
+$contributors = array_values(
+	array_filter(
+		array_map( 'trim', explode( ',', $contributors_line ) )
+	)
+);
+if ( ! in_array( 'eduardoyauri', $contributors, true ) ) {
+	$failures[] = 'WordPress.org Contributors must include the submitting account eduardoyauri.';
 }
 
 $expected_plugin_uri = 'https://kairoseth.com/products/ai-transparency';
@@ -115,6 +130,10 @@ if ( $expected_author_uri !== $author_uri ) {
 
 if ( '' !== $plugin_uri && '' !== $author_uri && $plugin_uri === $author_uri ) {
 	$failures[] = 'Plugin URI and Author URI must be different for WordPress.org submission.';
+}
+
+if ( false !== strpos( $plugin, 'load_plugin_textdomain(' ) ) {
+	$failures[] = 'WordPress.org package must not call load_plugin_textdomain() for this WordPress 6.6+ plugin.';
 }
 
 if ( '' !== $header_version && false === strpos( $changelog, '## [' . $header_version . ']' ) ) {
@@ -177,9 +196,10 @@ if ( in_array( '--print-version', $argv, true ) ) {
 }
 
 printf(
-	"Release metadata gate passed for %s: slug=%s, short_description=%d chars, plugin_uri=%s.\n",
+	"Release metadata gate passed for %s: slug=%s, text_domain=%s, contributor=eduardoyauri, short_description=%d chars, plugin_uri=%s.\n",
 	$header_version,
 	$slug,
+	$text_domain,
 	$short_length,
 	$plugin_uri
 );

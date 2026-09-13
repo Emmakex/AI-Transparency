@@ -5,7 +5,8 @@
     "./build/kairoseth-ai-transparency"
   ],
   "mappings": {
-    "wp-content/ai-transparency-runtime-tests": "./tests/runtime"
+    "wp-content/ai-transparency-runtime-tests": "./tests/runtime",
+    "wp-content/languages/plugins/kairoseth-ai-transparency-es_ES.mo": "./languages/ai-transparency-es_ES.mo"
   },
   "port": 8888,
   "testsEnvironment": false,

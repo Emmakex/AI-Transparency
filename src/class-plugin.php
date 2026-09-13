@@ -50,8 +50,8 @@ final class Plugin {
 	 * Register WordPress hooks once.
 	 *
 	 * WordPress.org language packs use just-in-time translation loading for
-	 * supported WordPress versions, so the plugin does not call
-	 * load_plugin_textdomain().
+	 * supported WordPress versions, so no manual plugin text-domain loader is
+	 * registered here.
 	 *
 	 * @return void
 	 */

@@ -54,8 +54,8 @@ final class ReadinessPage {
 	 */
 	public function register_menu(): void {
 		add_management_page(
-			__( 'AI Readiness', 'ai-transparency' ),
-			__( 'AI Readiness', 'ai-transparency' ),
+			__( 'AI Readiness', 'kairoseth-ai-transparency' ),
+			__( 'AI Readiness', 'kairoseth-ai-transparency' ),
 			'manage_options',
 			'ai-transparency-readiness',
 			array( $this, 'render' )
@@ -93,12 +93,12 @@ final class ReadinessPage {
 		$findings = $this->engine->generate( $registry, gmdate( 'c' ) );
 		?>
 		<div class="wrap ai-transparency-admin">
-			<h1><?php echo esc_html__( 'AI Readiness', 'ai-transparency' ); ?></h1>
-			<p><?php echo esc_html__( 'Technical readiness findings are generated from the current local AI Systems Registry.', 'ai-transparency' ); ?></p>
-			<p><em><?php echo esc_html__( 'Findings keep observed facts, administrator declarations and guidance separate. They do not determine or certify legal compliance.', 'ai-transparency' ); ?></em></p>
+			<h1><?php echo esc_html__( 'AI Readiness', 'kairoseth-ai-transparency' ); ?></h1>
+			<p><?php echo esc_html__( 'Technical readiness findings are generated from the current local AI Systems Registry.', 'kairoseth-ai-transparency' ); ?></p>
+			<p><em><?php echo esc_html__( 'Findings keep observed facts, administrator declarations and guidance separate. They do not determine or certify legal compliance.', 'kairoseth-ai-transparency' ); ?></em></p>
 
 			<?php if ( empty( $findings ) ) : ?>
-				<p><?php echo esc_html__( 'No readiness findings were generated from the current active registry records.', 'ai-transparency' ); ?></p>
+				<p><?php echo esc_html__( 'No readiness findings were generated from the current active registry records.', 'kairoseth-ai-transparency' ); ?></p>
 			<?php else : ?>
 				<div class="ai-transparency-findings">
 					<?php foreach ( $findings as $finding ) : ?>
@@ -109,7 +109,7 @@ final class ReadinessPage {
 
 			<p>
 				<a href="<?php echo esc_url( admin_url( 'tools.php?page=ai-transparency' ) ); ?>">
-					<?php echo esc_html__( 'Open AI Systems Registry', 'ai-transparency' ); ?>
+					<?php echo esc_html__( 'Open AI Systems Registry', 'kairoseth-ai-transparency' ); ?>
 				</a>
 			</p>
 		</div>
@@ -128,19 +128,19 @@ final class ReadinessPage {
 			<h2 id="<?php echo esc_attr( $finding->id() . '-title' ); ?>">
 				<?php echo esc_html( $finding->subject_system_name() ); ?>
 			</h2>
-			<p><strong><?php echo esc_html__( 'Priority:', 'ai-transparency' ); ?></strong> <?php echo esc_html( $this->priority_label( $finding ) ); ?></p>
+			<p><strong><?php echo esc_html__( 'Priority:', 'kairoseth-ai-transparency' ); ?></strong> <?php echo esc_html( $this->priority_label( $finding ) ); ?></p>
 
-			<h3><?php echo esc_html__( 'Fact', 'ai-transparency' ); ?></h3>
+			<h3><?php echo esc_html__( 'Fact', 'kairoseth-ai-transparency' ); ?></h3>
 			<p><?php echo esc_html( $this->fact_text( $finding ) ); ?></p>
 
-			<h3><?php echo esc_html__( 'Administrator declaration', 'ai-transparency' ); ?></h3>
+			<h3><?php echo esc_html__( 'Administrator declaration', 'kairoseth-ai-transparency' ); ?></h3>
 			<p><?php echo esc_html( $this->declaration_text( $finding ) ); ?></p>
 
-			<h3><?php echo esc_html__( 'Guidance', 'ai-transparency' ); ?></h3>
+			<h3><?php echo esc_html__( 'Guidance', 'kairoseth-ai-transparency' ); ?></h3>
 			<p><?php echo esc_html( $this->guidance_text( $finding ) ); ?></p>
 
 			<p class="description">
-				<strong><?php echo esc_html__( 'Evidence signature:', 'ai-transparency' ); ?></strong>
+				<strong><?php echo esc_html__( 'Evidence signature:', 'kairoseth-ai-transparency' ); ?></strong>
 				<code class="ai-transparency-signature"><?php echo esc_html( $finding->evidence_signature() ); ?></code>
 			</p>
 		</section>
@@ -155,8 +155,8 @@ final class ReadinessPage {
 	 */
 	private function priority_label( Finding $finding ): string {
 		return Finding::PRIORITY_REVIEW === $finding->priority()
-			? __( 'Review', 'ai-transparency' )
-			: __( 'Information', 'ai-transparency' );
+			? __( 'Review', 'kairoseth-ai-transparency' )
+			: __( 'Information', 'kairoseth-ai-transparency' );
 	}
 
 	/**
@@ -168,13 +168,13 @@ final class ReadinessPage {
 	private function fact_text( Finding $finding ): string {
 		switch ( $finding->fact_code() ) {
 			case Finding::FACT_REVIEW_PENDING:
-				return __( 'The active registry record is still pending administrator review.', 'ai-transparency' );
+				return __( 'The active registry record is still pending administrator review.', 'kairoseth-ai-transparency' );
 			case Finding::FACT_CONTEXT_MISSING:
-				return __( 'No interaction context is recorded for this active AI system.', 'ai-transparency' );
+				return __( 'No interaction context is recorded for this active AI system.', 'kairoseth-ai-transparency' );
 			case Finding::FACT_SYSTEM_ACTIVE:
-				return __( 'This AI system is active in the local AI Systems Registry.', 'ai-transparency' );
+				return __( 'This AI system is active in the local AI Systems Registry.', 'kairoseth-ai-transparency' );
 			default:
-				return __( 'A technical registry condition requires review.', 'ai-transparency' );
+				return __( 'A technical registry condition requires review.', 'kairoseth-ai-transparency' );
 		}
 	}
 
@@ -186,10 +186,10 @@ final class ReadinessPage {
 	 */
 	private function declaration_text( Finding $finding ): string {
 		if ( Finding::DECLARATION_DISCLOSURE_REQUIRED === $finding->declaration_code() ) {
-			return __( 'The administrator has configured this workflow as requiring an AI interaction disclosure.', 'ai-transparency' );
+			return __( 'The administrator has configured this workflow as requiring an AI interaction disclosure.', 'kairoseth-ai-transparency' );
 		}
 
-		return __( 'No additional administrator declaration is attached to this finding.', 'ai-transparency' );
+		return __( 'No additional administrator declaration is attached to this finding.', 'kairoseth-ai-transparency' );
 	}
 
 	/**
@@ -201,13 +201,13 @@ final class ReadinessPage {
 	private function guidance_text( Finding $finding ): string {
 		switch ( $finding->guidance_code() ) {
 			case Finding::GUIDANCE_COMPLETE_REVIEW:
-				return __( 'Review the system actual use, type, interaction context and transparency configuration.', 'ai-transparency' );
+				return __( 'Review the system actual use, type, interaction context and transparency configuration.', 'kairoseth-ai-transparency' );
 			case Finding::GUIDANCE_DOCUMENT_CONTEXT:
-				return __( 'Document where or how visitors, staff or customers interact with this AI system.', 'ai-transparency' );
+				return __( 'Document where or how visitors, staff or customers interact with this AI system.', 'kairoseth-ai-transparency' );
 			case Finding::GUIDANCE_VERIFY_DISCLOSURE:
-				return __( 'Verify that the configured disclosure has an appropriate implementation and placement for the actual workflow.', 'ai-transparency' );
+				return __( 'Verify that the configured disclosure has an appropriate implementation and placement for the actual workflow.', 'kairoseth-ai-transparency' );
 			default:
-				return __( 'Review the technical evidence and update the registry when appropriate.', 'ai-transparency' );
+				return __( 'Review the technical evidence and update the registry when appropriate.', 'kairoseth-ai-transparency' );
 		}
 	}
 
@@ -218,7 +218,7 @@ final class ReadinessPage {
 	 */
 	private function require_permission(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'ai-transparency' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'kairoseth-ai-transparency' ) );
 		}
 	}
 }

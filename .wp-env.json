@@ -2,7 +2,7 @@
   "core": "WordPress/WordPress#7.1",
   "phpVersion": "8.3",
   "plugins": [
-    "./build/ai-transparency"
+    "./build/kairoseth-ai-transparency"
   ],
   "mappings": {
     "wp-content/ai-transparency-runtime-tests": "./tests/runtime"

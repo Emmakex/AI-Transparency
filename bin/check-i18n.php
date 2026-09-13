@@ -2,12 +2,17 @@
 /**
  * Verify that runtime gettext strings use the canonical domain and have Spanish translations.
  *
+ * The source Spanish catalog is retained in the repository for coverage and
+ * WordPress.org translation import/reference. It is not bundled in the
+ * directory release package because WordPress.org distributes translations
+ * through translate.wordpress.org language packs.
+ *
  * @package KairosethAITransparency
  */
 
 declare(strict_types=1);
 
-const AI_TRANSPARENCY_I18N_DOMAIN = 'ai-transparency';
+const AI_TRANSPARENCY_I18N_DOMAIN = 'kairoseth-ai-transparency';
 
 $root = dirname(__DIR__);
 $source_files = array($root . '/ai-transparency.php');
@@ -76,7 +81,7 @@ if ($errors) {
     exit(1);
 }
 
-printf("EN/ES bilingual coverage gate passed: %d runtime strings have complete Spanish translations.\n", count($messages));
+printf("EN/ES bilingual source coverage gate passed: %d runtime strings use %s and have complete Spanish source translations.\n", count($messages), AI_TRANSPARENCY_I18N_DOMAIN);
 
 /**
  * Parse a simple gettext PO catalog into msgid => msgstr.

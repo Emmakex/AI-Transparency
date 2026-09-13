@@ -32,8 +32,8 @@ final class SupportPage {
 	 */
 	public function register_menu(): void {
 		add_management_page(
-			__( 'AI Transparency Support', 'ai-transparency' ),
-			__( 'AI Transparency Support', 'ai-transparency' ),
+			__( 'AI Transparency Support', 'kairoseth-ai-transparency' ),
+			__( 'AI Transparency Support', 'kairoseth-ai-transparency' ),
 			'manage_options',
 			'ai-transparency-support',
 			array( $this, 'render' )
@@ -89,52 +89,52 @@ final class SupportPage {
 		}
 		?>
 		<div class="wrap ai-transparency-admin ai-transparency-support-page">
-			<h1><?php echo esc_html__( 'AI Transparency Support', 'ai-transparency' ); ?></h1>
-			<p class="description"><?php echo esc_html__( 'Optional Kairoseth support for implementation questions, third-party integrations and custom work.', 'ai-transparency' ); ?></p>
+			<h1><?php echo esc_html__( 'AI Transparency Support', 'kairoseth-ai-transparency' ); ?></h1>
+			<p class="description"><?php echo esc_html__( 'Optional Kairoseth support for implementation questions, third-party integrations and custom work.', 'kairoseth-ai-transparency' ); ?></p>
 
 			<div class="notice notice-info inline">
-				<p><strong><?php echo esc_html__( 'Local-first:', 'ai-transparency' ); ?></strong> <?php echo esc_html__( 'Registry, Discovery, Readiness, Disclosure and Evidence Export continue to work without contacting Kairoseth.', 'ai-transparency' ); ?></p>
+				<p><strong><?php echo esc_html__( 'Local-first:', 'kairoseth-ai-transparency' ); ?></strong> <?php echo esc_html__( 'Registry, Discovery, Readiness, Disclosure and Evidence Export continue to work without contacting Kairoseth.', 'kairoseth-ai-transparency' ); ?></p>
 			</div>
 
 			<section class="ai-transparency-support-section" aria-labelledby="ai-transparency-support-privacy">
-				<h2 id="ai-transparency-support-privacy"><?php echo esc_html__( 'What happens when you use this page', 'ai-transparency' ); ?></h2>
+				<h2 id="ai-transparency-support-privacy"><?php echo esc_html__( 'What happens when you use this page', 'kairoseth-ai-transparency' ); ?></h2>
 				<ul class="ai-transparency-support-list">
-					<li><?php echo esc_html__( 'Nothing is sent to Kairoseth when this WordPress page loads.', 'ai-transparency' ); ?></li>
-					<li><?php echo esc_html__( 'Clicking an action opens Kairoseth in a new browser tab with only bounded product and platform context.', 'ai-transparency' ); ?></li>
-					<li><?php echo esc_html__( 'No Registry records, evidence, site URL, administrator identity, prompts, conversations, logs or credentials are attached automatically.', 'ai-transparency' ); ?></li>
-					<li><?php echo esc_html__( 'You choose what personal or business information to enter and submit on the Kairoseth form.', 'ai-transparency' ); ?></li>
+					<li><?php echo esc_html__( 'Nothing is sent to Kairoseth when this WordPress page loads.', 'kairoseth-ai-transparency' ); ?></li>
+					<li><?php echo esc_html__( 'Clicking an action opens Kairoseth in a new browser tab with only bounded product and platform context.', 'kairoseth-ai-transparency' ); ?></li>
+					<li><?php echo esc_html__( 'No Registry records, evidence, site URL, administrator identity, prompts, conversations, logs or credentials are attached automatically.', 'kairoseth-ai-transparency' ); ?></li>
+					<li><?php echo esc_html__( 'You choose what personal or business information to enter and submit on the Kairoseth form.', 'kairoseth-ai-transparency' ); ?></li>
 				</ul>
 			</section>
 
 			<?php if ( $error ) : ?>
 				<div class="notice notice-error inline">
-					<p><?php echo esc_html__( 'The verified Kairoseth support destination is currently unavailable. No data was sent and all local plugin features remain available.', 'ai-transparency' ); ?></p>
+					<p><?php echo esc_html__( 'The verified Kairoseth support destination is currently unavailable. No data was sent and all local plugin features remain available.', 'kairoseth-ai-transparency' ); ?></p>
 				</div>
 			<?php else : ?>
 				<div class="ai-transparency-support-grid">
 					<section class="ai-transparency-support-card" aria-labelledby="ai-transparency-support-help-title">
-						<h2 id="ai-transparency-support-help-title"><?php echo esc_html__( 'Get support', 'ai-transparency' ); ?></h2>
-						<p><?php echo esc_html__( 'Use this for implementation help, setup questions or guidance applying the plugin in your WordPress environment.', 'ai-transparency' ); ?></p>
+						<h2 id="ai-transparency-support-help-title"><?php echo esc_html__( 'Get support', 'kairoseth-ai-transparency' ); ?></h2>
+						<p><?php echo esc_html__( 'Use this for implementation help, setup questions or guidance applying the plugin in your WordPress environment.', 'kairoseth-ai-transparency' ); ?></p>
 						<p>
 							<a class="button button-primary" href="<?php echo esc_url( $urls['support'] ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html__( 'Open Kairoseth support', 'ai-transparency' ); ?>
+								<?php echo esc_html__( 'Open Kairoseth support', 'kairoseth-ai-transparency' ); ?>
 							</a>
 						</p>
 					</section>
 
 					<section class="ai-transparency-support-card" aria-labelledby="ai-transparency-support-custom-title">
-						<h2 id="ai-transparency-support-custom-title"><?php echo esc_html__( 'Request custom integration', 'ai-transparency' ); ?></h2>
-						<p><?php echo esc_html__( 'Use this when you need a third-party integration or a tailored implementation beyond the local plugin workflow.', 'ai-transparency' ); ?></p>
+						<h2 id="ai-transparency-support-custom-title"><?php echo esc_html__( 'Request custom integration', 'kairoseth-ai-transparency' ); ?></h2>
+						<p><?php echo esc_html__( 'Use this when you need a third-party integration or a tailored implementation beyond the local plugin workflow.', 'kairoseth-ai-transparency' ); ?></p>
 						<p>
 							<a class="button button-secondary" href="<?php echo esc_url( $urls['custom'] ); ?>" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html__( 'Open custom request', 'ai-transparency' ); ?>
+								<?php echo esc_html__( 'Open custom request', 'kairoseth-ai-transparency' ); ?>
 							</a>
 						</p>
 					</section>
 				</div>
 			<?php endif; ?>
 
-			<p class="ai-transparency-support-footnote"><?php echo esc_html__( 'Kairoseth availability is not required for any accepted local Free feature.', 'ai-transparency' ); ?></p>
+			<p class="ai-transparency-support-footnote"><?php echo esc_html__( 'Kairoseth availability is not required for any accepted local Free feature.', 'kairoseth-ai-transparency' ); ?></p>
 		</div>
 		<?php
 	}
@@ -146,7 +146,7 @@ final class SupportPage {
 	 */
 	private function require_permission(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'ai-transparency' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'kairoseth-ai-transparency' ) );
 		}
 	}
 }

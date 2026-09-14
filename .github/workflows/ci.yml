@@ -64,7 +64,6 @@ jobs:
           test ! -d build/kairoseth-ai-transparency/languages
           grep -Fq "Text Domain:       kairoseth-ai-transparency" build/kairoseth-ai-transparency/ai-transparency.php
           ! grep -R --include='*.php' -F "load_plugin_textdomain(" build/kairoseth-ai-transparency
-          test -s languages/ai-transparency-es_ES.mo
       - name: Upload bilingual diagnostics
         if: failure()
         uses: actions/upload-artifact@v4

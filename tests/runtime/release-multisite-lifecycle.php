@@ -124,8 +124,8 @@ switch ( $action ) {
 		if ( 'preserve-network' !== get_site_option( $network_sentinel, '' ) ) {
 			$fail( 'Explicit uninstall removed unrelated network data.' );
 		}
-		if ( is_dir( WP_PLUGIN_DIR . '/ai-transparency' ) ) {
-			$fail( 'Plugin directory still exists after Multisite uninstall.' );
+		if ( is_dir( WP_PLUGIN_DIR . '/kairoseth-ai-transparency' ) ) {
+			$fail( 'Current plugin directory still exists after Multisite uninstall.' );
 		}
 		delete_site_option( $network_sentinel );
 		break;

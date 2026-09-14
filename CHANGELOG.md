@@ -8,6 +8,17 @@ The project follows semantic versioning for public releases.
 
 No changes yet.
 
+## [1.0.2] - 2026-09-13
+
+### Changed
+
+- WordPress.org permalink and canonical text domain are aligned to the distinctive `kairoseth-ai-transparency` identity requested in response to directory review feedback.
+- The submitting WordPress.org account `eduardoyauri` is now declared in `Contributors`.
+- Removed the explicit `load_plugin_textdomain()` call; WordPress 6.6+ uses the WordPress.org just-in-time language-pack flow.
+- Production packages no longer bundle `.po`/`.mo` catalogs; maintained Spanish source coverage remains validated in the repository for WordPress.org translation workflows.
+- Release gates now fail if slug, text domain, contributor metadata or translation-loading behavior regress from the WordPress.org review contract.
+- No Registry schema, privacy boundary or stored-data lifecycle changes.
+
 ## [1.0.1] - 2026-09-10
 
 ### Changed

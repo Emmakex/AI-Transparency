@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_ROOT="${ROOT_DIR}/build"
 DIST_ROOT="${ROOT_DIR}/dist"
-PLUGIN_SLUG="ai-transparency"
+PLUGIN_SLUG="kairoseth-ai-transparency"
 PLUGIN_DIR="${BUILD_ROOT}/${PLUGIN_SLUG}"
 
 php "${ROOT_DIR}/bin/check-release.php"
@@ -35,9 +35,6 @@ required_paths=(
   "LICENSE"
   "assets/admin.css"
   "assets/frontend.css"
-  "languages/ai-transparency.pot"
-  "languages/ai-transparency-es_ES.po"
-  "languages/ai-transparency-es_ES.mo"
 )
 
 for required_path in "${required_paths[@]}"; do
@@ -47,9 +44,9 @@ for required_path in "${required_paths[@]}"; do
   fi
 done
 
-for forbidden_path in tests .github docs vendor node_modules build dist composer.json package.json phpcs.xml.dist phpunit.xml.dist playwright.config.js; do
+for forbidden_path in tests .github docs vendor node_modules build dist composer.json package.json phpcs.xml.dist phpunit.xml.dist playwright.config.js languages; do
   if [[ -e "${PLUGIN_DIR}/${forbidden_path}" ]]; then
-    echo "Development-only path leaked into release package: ${forbidden_path}" >&2
+    echo "Development-only or WordPress.org-managed path leaked into release package: ${forbidden_path}" >&2
     exit 1
   fi
 done

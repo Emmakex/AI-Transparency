@@ -64,8 +64,8 @@ final class EvidenceExportPage {
 	 */
 	public function register_menu(): void {
 		add_management_page(
-			__( 'AI Evidence Export', 'ai-transparency' ),
-			__( 'AI Evidence Export', 'ai-transparency' ),
+			__( 'AI Evidence Export', 'kairoseth-ai-transparency' ),
+			__( 'AI Evidence Export', 'kairoseth-ai-transparency' ),
 			'manage_options',
 			'ai-transparency-evidence-export',
 			array( $this, 'render' )
@@ -102,29 +102,29 @@ final class EvidenceExportPage {
 		$this->require_permission();
 		?>
 		<div class="wrap ai-transparency-admin">
-			<h1><?php echo esc_html__( 'AI Evidence Export', 'ai-transparency' ); ?></h1>
-			<p><?php echo esc_html__( 'Create a local JSON snapshot of the current site AI Systems Registry, technical findings and disclosure readiness.', 'ai-transparency' ); ?></p>
-			<p><em><?php echo esc_html__( 'This export is technical evidence for review. It is not legal certification, regulatory approval, a trusted timestamp or a digital signature.', 'ai-transparency' ); ?></em></p>
+			<h1><?php echo esc_html__( 'AI Evidence Export', 'kairoseth-ai-transparency' ); ?></h1>
+			<p><?php echo esc_html__( 'Create a local JSON snapshot of the current site AI Systems Registry, technical findings and disclosure readiness.', 'kairoseth-ai-transparency' ); ?></p>
+			<p><em><?php echo esc_html__( 'This export is technical evidence for review. It is not legal certification, regulatory approval, a trusted timestamp or a digital signature.', 'kairoseth-ai-transparency' ); ?></em></p>
 
 			<div class="notice notice-warning inline">
 				<p>
-					<strong><?php echo esc_html__( 'Confidentiality:', 'ai-transparency' ); ?></strong>
-					<?php echo esc_html__( 'The JSON file may contain administrator-authored operational context from the Registry. Review and store the downloaded file appropriately.', 'ai-transparency' ); ?>
+					<strong><?php echo esc_html__( 'Confidentiality:', 'kairoseth-ai-transparency' ); ?></strong>
+					<?php echo esc_html__( 'The JSON file may contain administrator-authored operational context from the Registry. Review and store the downloaded file appropriately.', 'kairoseth-ai-transparency' ); ?>
 				</p>
 			</div>
 
-			<p><?php echo esc_html__( 'Generation is user-initiated and local to this WordPress request. The plugin does not upload, email or persist the generated evidence file.', 'ai-transparency' ); ?></p>
-			<p><?php echo esc_html__( 'The export always uses the complete current site-local Registry. Browser-selected system ids or evidence values are not accepted.', 'ai-transparency' ); ?></p>
+			<p><?php echo esc_html__( 'Generation is user-initiated and local to this WordPress request. The plugin does not upload, email or persist the generated evidence file.', 'kairoseth-ai-transparency' ); ?></p>
+			<p><?php echo esc_html__( 'The export always uses the complete current site-local Registry. Browser-selected system ids or evidence values are not accepted.', 'kairoseth-ai-transparency' ); ?></p>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ai_transparency_export_evidence">
 				<?php wp_nonce_field( 'ai_transparency_export_evidence', '_kat_evidence_export_nonce' ); ?>
-				<?php submit_button( __( 'Download JSON evidence', 'ai-transparency' ), 'primary', 'submit', false ); ?>
+				<?php submit_button( __( 'Download JSON evidence', 'kairoseth-ai-transparency' ), 'primary', 'submit', false ); ?>
 			</form>
 
 			<p>
 				<a href="<?php echo esc_url( admin_url( 'tools.php?page=ai-transparency' ) ); ?>">
-					<?php echo esc_html__( 'Open AI Systems Registry', 'ai-transparency' ); ?>
+					<?php echo esc_html__( 'Open AI Systems Registry', 'kairoseth-ai-transparency' ); ?>
 				</a>
 			</p>
 		</div>
@@ -158,8 +158,8 @@ final class EvidenceExportPage {
 			$json     = $this->encoder->encode( $snapshot );
 		} catch ( Throwable $error ) {
 			wp_die(
-				esc_html__( 'The evidence export could not be generated. No file was created.', 'ai-transparency' ),
-				esc_html__( 'Evidence export failed', 'ai-transparency' ),
+				esc_html__( 'The evidence export could not be generated. No file was created.', 'kairoseth-ai-transparency' ),
+				esc_html__( 'Evidence export failed', 'kairoseth-ai-transparency' ),
 				array( 'response' => 500 )
 			);
 		}
@@ -184,7 +184,7 @@ final class EvidenceExportPage {
 	 */
 	private function require_permission(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'ai-transparency' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'kairoseth-ai-transparency' ) );
 		}
 	}
 }

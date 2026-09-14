@@ -1,10 +1,10 @@
 === Kairoseth AI Transparency ===
-Contributors: emmakex
+Contributors: eduardoyauri
 Tags: ai transparency, eu ai act, ai disclosure, article 50, artificial intelligence
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: MIT
 License URI: https://opensource.org/license/mit/
 
@@ -69,7 +69,7 @@ The plugin is local-first. Registry, Discovery, Readiness, Disclosure and Eviden
 The explicit browser navigation goes to `https://kairoseth.com/custom-requests` and includes only this bounded technical/product context in the URL:
 
 * source: `extension`;
-* extension slug: `ai-transparency`;
+* extension slug: `kairoseth-ai-transparency`;
 * extension name: `Kairoseth AI Transparency`;
 * installed plugin version;
 * host platform: `wordpress`;
@@ -136,6 +136,12 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 
 == Changelog ==
 
+= 1.0.2 =
+* Aligns the WordPress.org permalink, plugin text domain and product slug with the distinctive Kairoseth AI Transparency identity.
+* Uses WordPress.org just-in-time language packs instead of manually calling `load_plugin_textdomain()`.
+* Lists the submitting WordPress.org account `eduardoyauri` as the plugin contributor.
+* No stored-data schema changes.
+
 = 1.0.1 =
 * Uses the dedicated Kairoseth AI Transparency product page as Plugin URI so plugin and author metadata remain distinct for WordPress.org validation.
 * No runtime behavior or stored-data schema changes.
@@ -150,13 +156,16 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 * Optional administrator-initiated Kairoseth support/custom-integration handoff with a strict technical-context allow-list.
 * Safe data lifecycle: upgrades and deactivation preserve Registry state; explicit uninstall removes only plugin-owned Registry data.
 * Local-first privacy boundary and site-local Multisite isolation.
-* Mandatory English/Spanish runtime coverage and compiled Spanish catalog.
+* Internationalized customer-facing strings with maintained English/Spanish source coverage.
 * Public CI, real WordPress runtime acceptance and official WordPress Plugin Check baseline.
 
 = 0.1.0 =
 * Development baseline used before the first stable release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+WordPress.org review update aligning the plugin slug, text domain, contributor metadata and translation loading with directory requirements.
 
 = 1.0.1 =
 Metadata-only patch for WordPress.org submission readiness. Runtime behavior and Registry data remain unchanged.

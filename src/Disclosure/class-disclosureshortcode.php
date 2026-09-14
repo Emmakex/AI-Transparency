@@ -105,10 +105,10 @@ final class DisclosureShortcode {
 			return '';
 		}
 
-		$title = __( 'AI transparency notice', 'ai-transparency' );
+		$title = __( 'AI transparency notice', 'kairoseth-ai-transparency' );
 		$body  = sprintf(
 			/* translators: %s is the administrator-reviewed AI system name. */
-			__( 'This interaction uses the AI system “%s”. Review important information or outcomes before relying on them.', 'ai-transparency' ),
+			__( 'This interaction uses the AI system “%s”. Review important information or outcomes before relying on them.', 'kairoseth-ai-transparency' ),
 			$disclosure->subject_system_name()
 		);
 

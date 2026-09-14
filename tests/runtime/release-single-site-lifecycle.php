@@ -143,6 +143,9 @@ switch ( $action ) {
 		if ( 'preserve-me' !== get_option( $sentinel_option, '' ) ) {
 			$fail( 'Unrelated sentinel data changed during upgrade.' );
 		}
+		if ( in_array( 'ai-transparency/ai-transparency.php', (array) get_option( 'active_plugins', array() ), true ) ) {
+			$fail( 'Historical ai-transparency slug remained active after migration.' );
+		}
 		break;
 
 	case 'assert-deactivated':
@@ -162,8 +165,8 @@ switch ( $action ) {
 		if ( 'preserve-me' !== get_option( $sentinel_option, '' ) ) {
 			$fail( 'Explicit uninstall removed unrelated WordPress data.' );
 		}
-		if ( is_dir( WP_PLUGIN_DIR . '/ai-transparency' ) ) {
-			$fail( 'Plugin directory still exists after WordPress uninstall.' );
+		if ( is_dir( WP_PLUGIN_DIR . '/kairoseth-ai-transparency' ) ) {
+			$fail( 'Current plugin directory still exists after WordPress uninstall.' );
 		}
 		delete_option( $expected_hash_option );
 		delete_option( $sentinel_option );

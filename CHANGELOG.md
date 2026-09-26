@@ -8,6 +8,14 @@ The project follows semantic versioning for public releases.
 
 No changes yet.
 
+## [1.0.3] - 2026-09-26
+
+### Changed
+
+- Clarified the public ownership relationship: Kairoseth is developed and operated by Emmake, and Kairoseth AI Transparency is an official Kairoseth product developed and maintained by Emmake.
+- Plugin Author metadata now identifies `Emmake / Kairoseth` and uses `https://emmake.com/`, aligning the package with the submitting WordPress.org account's `@emmake.com` domain.
+- No runtime behavior, Registry schema, privacy boundary or stored-data lifecycle changes.
+
 ## [1.0.2] - 2026-09-13
 
 ### Changed

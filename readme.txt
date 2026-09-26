@@ -4,7 +4,7 @@ Tags: ai transparency, eu ai act, ai disclosure, article 50, artificial intellig
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: MIT
 License URI: https://opensource.org/license/mit/
 
@@ -12,7 +12,7 @@ Local-first AI transparency readiness for WordPress with AI inventory, disclosur
 
 == Description ==
 
-Kairoseth AI Transparency helps WordPress site owners maintain a reviewable technical inventory of AI systems used on their websites and turn that state into bounded technical evidence.
+Kairoseth AI Transparency is an official Kairoseth product developed and maintained by Emmake. Kairoseth is developed and operated by Emmake. The plugin helps WordPress site owners maintain a reviewable technical inventory of AI systems used on their websites and turn that state into bounded technical evidence.
 
 The stable release includes:
 
@@ -136,6 +136,11 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 
 == Changelog ==
 
+= 1.0.3 =
+* Clarifies that Kairoseth is developed and operated by Emmake and that Kairoseth AI Transparency is an official Kairoseth product developed and maintained by Emmake.
+* Aligns the plugin Author metadata with the submitting `@emmake.com` ownership identity used for WordPress.org review.
+* No runtime behavior or stored-data schema changes.
+
 = 1.0.2 =
 * Aligns the WordPress.org permalink, plugin text domain and product slug with the distinctive Kairoseth AI Transparency identity.
 * Uses WordPress.org just-in-time language packs instead of manually calling `load_plugin_textdomain()`.
@@ -163,6 +168,9 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 * Development baseline used before the first stable release.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Ownership-metadata clarification for the ongoing WordPress.org review. No runtime behavior or stored-data schema changes.
 
 = 1.0.2 =
 WordPress.org review update aligning the plugin slug, text domain, contributor metadata and translation loading with directory requirements.

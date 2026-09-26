@@ -62,6 +62,11 @@ $plugin_uri = $extract(
 	$plugin,
 	'Plugin URI'
 );
+$author = $extract(
+	'/^\s*\*\s*Author:\s*([^\r\n]+)$/m',
+	$plugin,
+	'Author'
+);
 $author_uri = $extract(
 	'/^\s*\*\s*Author URI:\s*([^\r\n]+)$/m',
 	$plugin,
@@ -118,7 +123,16 @@ if ( ! in_array( 'eduardoyauri', $contributors, true ) ) {
 }
 
 $expected_plugin_uri = 'https://kairoseth.com/products/ai-transparency';
-$expected_author_uri = 'https://kairoseth.com/';
+$expected_author_uri = 'https://emmake.com/';
+
+$expected_author = 'Emmake / Kairoseth';
+if ( $expected_author !== $author ) {
+	$failures[] = sprintf( 'Author must make the Emmake/Kairoseth ownership relationship explicit; found %s.', $author );
+}
+
+if ( false === strpos( $readme, 'Kairoseth is developed and operated by Emmake.' ) ) {
+	$failures[] = 'WordPress.org readme must explicitly state that Kairoseth is developed and operated by Emmake.';
+}
 
 if ( $expected_plugin_uri !== $plugin_uri ) {
 	$failures[] = sprintf( 'Plugin URI must remain %s; found %s.', $expected_plugin_uri, $plugin_uri );

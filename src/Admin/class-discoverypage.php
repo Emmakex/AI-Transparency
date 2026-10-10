@@ -8,6 +8,7 @@
 namespace Kairoseth\AITransparency\Admin;
 
 use Kairoseth\AITransparency\Discovery\AiEngineDetector;
+use Kairoseth\AITransparency\Discovery\AiPufferDetector;
 use Kairoseth\AITransparency\Discovery\DiscoveryEngine;
 use Kairoseth\AITransparency\Discovery\DiscoveryResult;
 use Kairoseth\AITransparency\Discovery\WordPressPluginInventory;
@@ -44,7 +45,12 @@ final class DiscoveryPage {
 	public function __construct() {
 		$this->repository       = new WordPressOptionsRegistryRepository();
 		$this->inventory        = new WordPressPluginInventory();
-		$this->discovery_engine = new DiscoveryEngine( array( new AiEngineDetector() ) );
+		$this->discovery_engine = new DiscoveryEngine(
+			array(
+				new AiEngineDetector(),
+				new AiPufferDetector(),
+			)
+		);
 	}
 
 	/**
@@ -113,7 +119,7 @@ final class DiscoveryPage {
 			<h2><?php echo esc_html__( 'Deterministic discovery', 'kairoseth-ai-transparency' ); ?></h2>
 
 			<?php if ( empty( $results ) ) : ?>
-				<p><?php echo esc_html__( 'AI Engine was not detected as active in the WordPress plugin inventory.', 'kairoseth-ai-transparency' ); ?></p>
+				<p><?php echo esc_html__( 'No recognized AI integrations were detected as active in the current WordPress plugin inventory.', 'kairoseth-ai-transparency' ); ?></p>
 			<?php else : ?>
 				<div class="ai-transparency-discovery-results">
 					<?php foreach ( $results as $result ) : ?>
@@ -229,7 +235,7 @@ final class DiscoveryPage {
 			</table>
 
 			<?php if ( ! $result->supported() ) : ?>
-				<p><?php echo esc_html__( 'This AI Engine version is detected but is outside the currently validated detector boundary.', 'kairoseth-ai-transparency' ); ?></p>
+				<p><?php echo esc_html__( 'This integration version is detected but is outside its currently validated detector boundary.', 'kairoseth-ai-transparency' ); ?></p>
 				<p><?php echo esc_html__( 'Review the installed version manually or wait for a validated detector update before adding it through discovery.', 'kairoseth-ai-transparency' ); ?></p>
 			<?php elseif ( $already_registered ) : ?>
 				<p><strong><?php echo esc_html__( 'Already in registry', 'kairoseth-ai-transparency' ); ?></strong></p>
@@ -268,8 +274,8 @@ final class DiscoveryPage {
 		$messages = array(
 			'added'       => __( 'Detected AI integration added to the registry for administrator review.', 'kairoseth-ai-transparency' ),
 			'exists'      => __( 'The detected integration is already present in the registry.', 'kairoseth-ai-transparency' ),
-			'unsupported' => __( 'The AI Engine observation is outside the currently validated detector boundary.', 'kairoseth-ai-transparency' ),
-			'not_found'   => __( 'AI Engine could not be detected as an active plugin.', 'kairoseth-ai-transparency' ),
+			'unsupported' => __( 'The selected integration observation is outside its currently validated detector boundary.', 'kairoseth-ai-transparency' ),
+			'not_found'   => __( 'The selected AI integration could not be matched to the current active plugin inventory.', 'kairoseth-ai-transparency' ),
 			'save_failed' => __( 'The AI systems registry could not be saved.', 'kairoseth-ai-transparency' ),
 		);
 
@@ -277,9 +283,9 @@ final class DiscoveryPage {
 			return;
 		}
 
-		$class = 'save_failed' === $notice ? 'notice notice-error' : 'notice notice-success';
+		$class = in_array( $notice, array( 'save_failed', 'unsupported', 'not_found' ), true ) ? 'notice notice-error' : 'notice notice-success';
 		?>
-		<div class="<?php echo esc_attr( $class ); ?>" role="<?php echo esc_attr( 'save_failed' === $notice ? 'alert' : 'status' ); ?>">
+		<div class="<?php echo esc_attr( $class ); ?>" role="<?php echo esc_attr( 'notice notice-error' === $class ? 'alert' : 'status' ); ?>">
 			<p><?php echo esc_html( $messages[ $notice ] ); ?></p>
 		</div>
 		<?php

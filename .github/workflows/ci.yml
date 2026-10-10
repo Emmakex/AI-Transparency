@@ -163,6 +163,11 @@ jobs:
           bash bin/run-with-diagnostics.sh "AI Engine 3.7.7 fixture" --
           npm exec -- wp-env run cli --
           wp plugin install ai-engine --version=3.7.7 --activate --force
+      - name: Install AI Puffer 2.4.97 discovery fixture
+        run: >-
+          bash bin/run-with-diagnostics.sh "AI Puffer 2.4.97 fixture" --
+          npm exec -- wp-env run cli --
+          wp plugin install gpt3-ai-content-generator --version=2.4.97 --activate --force
       - name: Run real migration smoke
         run: bash bin/run-with-diagnostics.sh "WordPress migration smoke" -- npm exec -- wp-env run cli -- wp eval-file wp-content/ai-transparency-runtime-tests/single-site-smoke.php
       - name: Configure ephemeral runtime users

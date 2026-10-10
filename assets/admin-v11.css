@@ -176,6 +176,22 @@
 	min-height: 38px;
 }
 
+.ai-transparency-discovery-results {
+	display: grid;
+	gap: 20px;
+	max-width: 920px;
+}
+
+.ai-transparency-discovery-result > h3 {
+	margin: 0 0 10px;
+	color: var(--kat-text);
+	font-size: 17px;
+}
+
+.ai-transparency-discovery-result > form {
+	margin: 12px 0 0;
+}
+
 .ai-transparency-admin .ai-transparency-findings {
 	display: grid;
 	gap: 14px;

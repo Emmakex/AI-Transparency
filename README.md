@@ -1,8 +1,8 @@
 # Kairoseth AI Transparency for WordPress
 
 **Plugin:** Kairoseth AI Transparency  
-**Current release candidate:** `1.1.0`  
-**Public WordPress.org stable before this candidate:** `1.0.3`  
+**Current release candidate:** `1.2.0`  
+**Current public stable:** `1.1.0`  
 **Canonical slug:** `kairoseth-ai-transparency`  
 **WordPress text domain:** `kairoseth-ai-transparency`  
 **Author:** Emmake / Kairoseth  
@@ -16,23 +16,25 @@
 
 Kairoseth AI Transparency is a local-first WordPress plugin for maintaining a reviewable inventory of AI systems, deriving deterministic technical readiness evidence, placing explicit AI interaction disclosures, exporting a bounded technical evidence snapshot, and optionally opening a privacy-bounded Kairoseth support/custom-request flow.
 
-### v1.1 admin experience
+### v1.2 product scope
 
-Version 1.1 groups the complete workflow under a dedicated **Kairoseth AI Transparency** WordPress admin menu instead of scattering visible entries under Tools.
+Version 1.2 builds on the unified v1.1 admin experience and expands the product in three areas:
 
-The dashboard provides live summary metrics from the current site-local Registry, Readiness and Disclosure state, workflow cards for the six product areas, and recent Registry activity with direct edit actions.
+- **extensible deterministic Discovery** with multiple independently validated detectors;
+- **Registry schema v2** with explicit administrator-authored context;
+- **richer deterministic Readiness** for incomplete reviewed Registry context.
 
-The visible workflow is:
+The visible workflow remains:
 
 - **Kairoseth AI Transparency** — overview dashboard and live summary.
-- **AI Systems Registry** — add, edit, review and archive systems, with instant local search and filters by type, review state and lifecycle status.
+- **AI Systems Registry** — add, edit, review and archive systems, with instant local search and filters.
 - **AI Discovery** — deterministic supported-integration evidence.
 - **AI Readiness** — deterministic technical findings and readiness evidence.
 - **AI Disclosure** — administrator-controlled disclosure readiness and public shortcode.
 - **AI Evidence Export** — privileged, user-initiated JSON technical evidence download.
 - **AI Transparency Support** — optional user-initiated navigation to Kairoseth support/custom requests.
 
-Legacy 1.0.x Tools URLs remain registered for backwards compatibility, but duplicate visible Tools menu entries are removed in 1.1.
+Legacy 1.0.x Tools URLs remain registered for backwards compatibility while the visible workflow stays grouped under the dedicated Kairoseth AI Transparency menu.
 
 ### Requirements and identity
 
@@ -41,24 +43,40 @@ Legacy 1.0.x Tools URLs remain registered for backwards compatibility, but dupli
 | Plugin name | **Kairoseth AI Transparency** |
 | Canonical slug | `kairoseth-ai-transparency` |
 | WordPress text domain | `kairoseth-ai-transparency` |
-| Release candidate | `1.1.0` |
+| Release candidate | `1.2.0` |
 | Requires WordPress | 6.6+ |
 | Tested up to | 7.1 |
 | Requires PHP | 7.4+ |
 | Languages | English + Spanish source coverage |
 | License | MIT |
 
-### AI Systems Registry
+### AI Systems Registry v2
 
 The Registry stores the authoritative site-local technical inventory in WordPress Options using a versioned persistence schema. An authorized administrator can add, edit, review and archive AI system records.
 
-The 1.1 search and filter controls are local presentation helpers. They do not change Registry persistence, perform remote searches or introduce a new data schema.
+Version 1.2 introduces Registry schema v2 with six optional administrator-authored context fields:
+
+- purpose;
+- provider;
+- model or model family;
+- audience;
+- human oversight;
+- data-use context.
+
+Existing Registry state migrates on first access. Existing lifecycle, review, interaction-context and disclosure state is preserved. The six new fields default to empty values and are never inferred automatically from Discovery evidence.
 
 ### AI Discovery
 
-The first validated deterministic detector recognizes **AI Engine 3.7.7** from bounded WordPress plugin identity evidence.
+Discovery now uses an extensible detector contract and a server-authoritative multi-result engine.
 
-Discovery does not inspect AI provider credentials, provider/model settings, prompts, conversations or AI Engine internal configuration. Supported discovery results require explicit administrator acceptance and enter the Registry as pending review.
+The validated v1.2 detector boundaries are:
+
+- **AI Engine 3.7.7**;
+- **AI Puffer 2.4.97** (`gpt3-ai-content-generator/gpt3-ai-content-generator.php`).
+
+Discovery reads bounded WordPress plugin identity, version and activation state. It does not inspect provider credentials, prompts, conversations or private provider configuration. Browser selectors are revalidated against freshly generated server-side detector output before a result can be accepted into the Registry.
+
+A supported result requires explicit administrator acceptance and enters the Registry as pending review.
 
 ### AI Readiness
 
@@ -67,6 +85,8 @@ Readiness findings are derived from the current Registry and keep three concepts
 - **Fact** — a technical condition observed in current local state.
 - **Administrator declaration** — an explicit administrator state when relevant.
 - **Guidance** — a technical review or completion action.
+
+Version 1.2 adds the deterministic rule `administrator_context_incomplete_v1`. It is emitted only for active records that have already been reviewed and still have one or more of the six administrator-context fields undocumented. Pending discovered records are not given this extra completeness finding, which avoids duplicate review noise.
 
 The plugin does not turn these findings into legal-compliance claims.
 
@@ -86,20 +106,11 @@ Public output is intentionally bounded to localized disclosure copy and the revi
 
 Evidence Export creates an explicit administrator-generated JSON attachment for the current site only. The export includes the complete site-local Registry, normalized persisted Discovery references where structurally valid, current deterministic Readiness findings and Disclosure readiness.
 
-Evidence Export v1 guarantees:
+Evidence Export keeps `export_schema_version = 1`, while the nested Registry payload is versioned independently and is now schema v2.
 
-- `export_schema_version = 1`;
-- UTC `generated_at`;
-- a deterministic SHA-256 `snapshot_signature` excluding generation time;
-- unchanged technical state produces the same signature across export times;
-- meaningful exported Registry changes change the signature;
-- archived Registry records are retained;
-- an empty Registry is valid;
-- site-local Multisite isolation;
-- no Media Library persistence, export history, email, telemetry, Kairoseth upload or cloud-account requirement;
-- no arbitrary WordPress/plugin option dump or automatic export of credentials, tokens, cookies, nonces, user identities, prompts, conversations, logs or database dumps.
+The deterministic SHA-256 `snapshot_signature` excludes generation time. Equivalent technical state produces the same signature, while meaningful Registry changes — including administrator-context changes — change the snapshot identity.
 
-The privileged export may contain administrator-authored `interaction_context`, so downloaded evidence can include confidential operational context and should be handled accordingly.
+The generated file is not persisted, emailed or uploaded automatically. Because it can contain administrator-authored operational context, it should be handled as potentially confidential business information.
 
 ### Local-first and privacy boundary
 
@@ -111,7 +122,7 @@ The optional support page performs no Kairoseth request when the WordPress page 
 https://kairoseth.com/custom-requests
 ```
 
-The handoff contains only bounded product/platform context such as plugin version, WordPress version, locale and administrator-selected request type. It does **not** automatically attach the site URL, administrator identity, Registry contents, AI-system names, interaction context, evidence, credentials, prompts, conversations, logs or database contents.
+The handoff contains only bounded product/platform context. It does **not** automatically attach the site URL, administrator identity, Registry contents, AI-system names, administrator declarations, evidence, credentials, prompts, conversations, logs or database contents.
 
 ### Legal boundary
 
@@ -120,15 +131,6 @@ Kairoseth AI Transparency provides technical readiness, workflow, disclosure and
 The Evidence Export `snapshot_signature` is a technical snapshot identity, not a legal/digital signature, trusted timestamp, non-repudiation proof or regulatory certification.
 
 The plugin does not perform generic probabilistic detection of whether arbitrary content was written by AI.
-
-### Installation
-
-1. Install the packaged plugin ZIP or plugin directory.
-2. Activate **Kairoseth AI Transparency**.
-3. Open **Kairoseth AI Transparency** for the dashboard.
-4. Use **AI Systems Registry** to maintain, search and filter the local inventory.
-5. Use **AI Discovery**, **AI Readiness**, **AI Disclosure** and **AI Evidence Export** as needed.
-6. Optionally use **AI Transparency Support** for an explicit privacy-bounded handoff to Kairoseth.
 
 ### Development and validation
 
@@ -139,15 +141,9 @@ bash bin/build-plugin.sh
 bash bin/build-release.sh
 ```
 
-The release matrix blocks on WordPress Coding Standards, PHPUnit, PHPCompatibility, PHP 7.4/8.1/8.3/8.5 syntax, EN/ES source coverage, official WordPress Plugin Check, real WordPress runtime acceptance, browser CRUD/discovery/permissions/responsive/accessibility checks, Multisite isolation, upgrade/lifecycle acceptance and reproducible release packaging.
+The release matrix blocks on WordPress Coding Standards, PHPUnit, PHPCompatibility, PHP 7.4/8.1/8.3/8.5 syntax, EN/ES source coverage, official WordPress Plugin Check, real WordPress runtime acceptance, browser CRUD/discovery/permissions/responsive/accessibility checks, Multisite isolation, Registry migration, upgrade/lifecycle acceptance and reproducible release packaging.
 
-The v1.1 branch additionally covers the dedicated dashboard, unified menu, duplicate Tools-menu removal, Registry search/filter UX, shared responsive styling and accessibility behavior in browser acceptance.
-
-### Roadmap
-
-The 1.1 release is intentionally a low-risk UX/i18n release built on the stable 1.0.x data model.
-
-Planned 1.2 work remains separate and includes broader detector architecture, richer structured Registry evidence, expanded deterministic readiness, disclosure templates/preview, Evidence Export v2 and validated Registry migration/import-export.
+Version 1.2 additionally covers multi-detector selection/tamper resistance, real AI Engine + AI Puffer fixtures, Registry schema v2 migration, administrator-context persistence, readiness completeness guidance and exact-ZIP preservation across upgrade/deactivation/reactivation/uninstall/fresh-install flows.
 
 ### Documentation
 
@@ -164,23 +160,15 @@ Planned 1.2 work remains separate and includes broader detector architecture, ri
 
 Kairoseth AI Transparency es un plugin local-first para WordPress orientado a mantener un inventario revisable de sistemas de IA, derivar evidencia técnica determinista, colocar avisos explícitos de interacción con IA, exportar un snapshot técnico acotado y, opcionalmente, abrir un flujo de soporte/solicitud personalizada de Kairoseth con contexto mínimo.
 
-### Experiencia de administración v1.1
+### Alcance de v1.2
 
-La versión 1.1 agrupa todo el flujo bajo un menú propio **Kairoseth AI Transparency** en WordPress, en lugar de dispersar las entradas visibles dentro de Herramientas.
+La versión 1.2 mantiene la experiencia de administración unificada de v1.1 y amplía el producto en tres áreas:
 
-El dashboard muestra métricas reales del Registry local, Readiness y Disclosure, accesos a las seis áreas del producto y actividad reciente del Registry con acceso directo a edición.
+- **Discovery determinista extensible**, preparado para varios detectores validados de forma independiente;
+- **Registry schema v2**, con contexto declarado explícitamente por el administrador;
+- **Readiness ampliado**, capaz de detectar contexto administrativo incompleto en registros ya revisados.
 
-El flujo visible queda así:
-
-- **Kairoseth AI Transparency** — dashboard y resumen técnico actual.
-- **AI Systems Registry** — alta, edición, revisión y archivo, con búsqueda local instantánea y filtros por tipo, revisión y estado.
-- **AI Discovery** — evidencia determinista de integraciones soportadas.
-- **AI Readiness** — hallazgos técnicos y evidencia de preparación.
-- **AI Disclosure** — preparación de avisos controlada por el administrador y shortcode público.
-- **AI Evidence Export** — descarga JSON privilegiada e iniciada explícitamente por el usuario.
-- **AI Transparency Support** — navegación opcional hacia soporte/solicitudes personalizadas de Kairoseth.
-
-Las URLs heredadas de Herramientas de la línea 1.0.x siguen registradas por compatibilidad, pero la versión 1.1 elimina sus entradas visibles duplicadas.
+El flujo visible sigue agrupado bajo **Kairoseth AI Transparency**: Dashboard, AI Systems Registry, AI Discovery, AI Readiness, AI Disclosure, AI Evidence Export y AI Transparency Support.
 
 ### Requisitos e identidad
 
@@ -189,34 +177,48 @@ Las URLs heredadas de Herramientas de la línea 1.0.x siguen registradas por com
 | Nombre | **Kairoseth AI Transparency** |
 | Slug canónico | `kairoseth-ai-transparency` |
 | Text domain | `kairoseth-ai-transparency` |
-| Candidato de release | `1.1.0` |
+| Candidato de release | `1.2.0` |
 | Requiere WordPress | 6.6+ |
 | Probado hasta | 7.1 |
 | Requiere PHP | 7.4+ |
 | Idiomas | cobertura fuente inglés + español |
 | Licencia | MIT |
 
-### AI Systems Registry
+### AI Systems Registry v2
 
-El Registry conserva el inventario técnico autoritativo del sitio mediante WordPress Options y un esquema de persistencia versionado. Un administrador autorizado puede añadir, editar, revisar y archivar sistemas de IA.
+El Registry conserva el inventario técnico autoritativo del sitio mediante WordPress Options y un esquema de persistencia versionado.
 
-La búsqueda y los filtros de 1.1 son ayudas locales de presentación: no cambian la persistencia, no realizan búsquedas remotas y no introducen un nuevo esquema de datos.
+La versión 1.2 añade seis campos opcionales escritos por el administrador:
+
+- finalidad;
+- proveedor;
+- modelo o familia de modelos;
+- audiencia;
+- supervisión humana;
+- contexto de uso de datos.
+
+Los registros anteriores migran automáticamente al esquema v2 cuando el repositorio los carga. Se mantienen estado, revisión, contexto de interacción y configuración de disclosure. Los nuevos campos empiezan vacíos y **Discovery no los rellena ni los infiere**.
 
 ### AI Discovery
 
-El primer detector determinista validado reconoce **AI Engine 3.7.7** mediante evidencia acotada del inventario de plugins de WordPress.
+Discovery utiliza ahora una arquitectura extensible de detectores y un motor multiresultado validado en servidor.
 
-Discovery no inspecciona credenciales de proveedores IA, configuración de proveedor/modelo, prompts, conversaciones ni configuración interna de AI Engine. Los resultados soportados requieren aceptación explícita del administrador y entran al Registry como pendientes de revisión.
+Los detectores validados en v1.2 son:
+
+- **AI Engine 3.7.7**;
+- **AI Puffer 2.4.97** (`gpt3-ai-content-generator/gpt3-ai-content-generator.php`).
+
+Discovery solo utiliza evidencia acotada de identidad, versión y estado de activación del plugin. No inspecciona credenciales, prompts, conversaciones ni configuración privada del proveedor. Cualquier selección enviada por el navegador se revalida contra el inventario actual y la salida recién regenerada de los detectores.
 
 ### AI Readiness
 
-Readiness deriva hallazgos del Registry actual y mantiene separados:
+Readiness mantiene separados:
 
-- **Hecho** — condición técnica observada en el estado local.
-- **Declaración del administrador** — estado explícito del administrador cuando corresponda.
+- **Hecho** — condición técnica observada.
+- **Declaración del administrador** — estado explícito cuando corresponde.
 - **Orientación** — acción técnica de revisión o completado.
 
-El plugin no convierte esos hallazgos en afirmaciones de cumplimiento legal.
+La versión 1.2 añade la regla determinista `administrator_context_incomplete_v1`. Solo se aplica a registros activos ya revisados que mantienen uno o más campos de contexto administrativo sin documentar. No se usa para convertir la ausencia de datos en una conclusión legal ni para inferir declaraciones.
 
 ### AI Disclosure
 
@@ -226,63 +228,33 @@ El aviso público solo se genera desde estado autoritativo server-side del Regis
 [kairoseth_ai_disclosure system="SYSTEM_ID"]
 ```
 
-El sistema debe estar activo, revisado, configurado como requiriendo aviso de interacción y disponer de contexto de interacción. El parámetro del shortcode solo selecciona el registro; no concede elegibilidad.
+El sistema debe estar activo, revisado, configurado como requiriendo aviso de interacción y disponer de contexto de interacción.
 
 ### AI Evidence Export
 
-Evidence Export genera, tras una acción explícita del administrador, un JSON del sitio actual con Registry, referencias Discovery persistidas válidas, findings Readiness y preparación Disclosure.
+Evidence Export mantiene `export_schema_version = 1`, pero el Registry anidado usa ahora schema v2.
 
-`export_schema_version = 1` se mantiene en 1.1, al igual que la firma técnica determinista `snapshot_signature`. La actualización 1.1 no modifica el esquema de Evidence Export ni el esquema de persistencia del Registry.
+La `snapshot_signature` SHA-256 sigue siendo determinista y excluye la hora de generación. Si cambia de forma significativa el Registry —incluido el contexto administrativo— cambia también la identidad del snapshot.
 
-El archivo puede contener `interaction_context` escrito por el administrador y debe tratarse como posible contexto operativo confidencial.
+El archivo se genera solo tras una acción explícita del administrador y no se persiste, envía por correo ni sube automáticamente. Puede contener contexto operativo confidencial y debe tratarse en consecuencia.
 
 ### Local-first y privacidad
 
 Registry, Discovery, Readiness, Disclosure y Evidence Export funcionan localmente y no suben automáticamente su estado a Kairoseth ni a otro proveedor.
 
-La página de soporte tampoco contacta Kairoseth al cargarse. La interacción de red comienza únicamente cuando un administrador activa deliberadamente una acción hacia:
-
-```text
-https://kairoseth.com/custom-requests
-```
-
-El handoff contiene únicamente contexto acotado de producto/plataforma. No adjunta automáticamente URL del sitio, identidad del administrador, Registry, nombres de sistemas IA, contexto, evidencia, credenciales, prompts, conversaciones, logs ni contenido de base de datos.
+La página de soporte tampoco contacta Kairoseth al cargarse. La interacción de red empieza únicamente cuando un administrador decide abrir deliberadamente una acción hacia `https://kairoseth.com/custom-requests`.
 
 ### Límite legal
 
 Kairoseth AI Transparency proporciona herramientas técnicas de preparación, flujo, disclosure y evidencia. **No certifica ni garantiza cumplimiento legal** del Reglamento de IA de la UE ni de otra norma.
 
-La `snapshot_signature` de Evidence Export identifica técnicamente un snapshot; no es una firma legal/digital, sello de tiempo confiable, prueba de no repudio ni certificación regulatoria.
-
-El plugin tampoco intenta detectar probabilísticamente si contenido arbitrario fue escrito por IA.
-
-### Instalación
-
-1. Instala el ZIP del plugin o su directorio.
-2. Activa **Kairoseth AI Transparency**.
-3. Abre **Kairoseth AI Transparency** para ver el dashboard.
-4. Usa **AI Systems Registry** para mantener, buscar y filtrar el inventario local.
-5. Usa **AI Discovery**, **AI Readiness**, **AI Disclosure** y **AI Evidence Export** según sea necesario.
-6. Opcionalmente usa **AI Transparency Support** para abrir deliberadamente el soporte de Kairoseth.
+La `snapshot_signature` identifica técnicamente un snapshot; no es una firma legal/digital, sello de tiempo confiable, prueba de no repudio ni certificación regulatoria.
 
 ### Desarrollo y validación
 
-```bash
-composer install
-composer verify
-bash bin/build-plugin.sh
-bash bin/build-release.sh
-```
+La matriz bloqueante cubre estándares WordPress, PHPUnit, PHPCompatibility, PHP 7.4/8.1/8.3/8.5, cobertura EN/ES, WordPress Plugin Check oficial, WordPress real, CRUD/Discovery/permisos/responsive/accesibilidad, aislamiento Multisite, migración de Registry, lifecycle del ZIP y empaquetado reproducible.
 
-La matriz bloqueante cubre WordPress Coding Standards, PHPUnit, PHPCompatibility, sintaxis PHP 7.4/8.1/8.3/8.5, cobertura fuente EN/ES, WordPress Plugin Check oficial, runtime WordPress real, CRUD/discovery/permisos/responsive/accesibilidad en navegador, aislamiento Multisite, upgrades/lifecycle y empaquetado reproducible.
-
-La rama 1.1 añade aceptación específica para dashboard, menú unificado, eliminación de duplicados en Herramientas, búsqueda/filtros del Registry, responsive y accesibilidad.
-
-### Roadmap
-
-1.1 se mantiene deliberadamente como una actualización UX/i18n de bajo riesgo sobre el modelo de datos estable de 1.0.x.
-
-Para 1.2 quedan separados: más detectores, evidencia estructurada más rica en Registry, Readiness ampliado, plantillas/preview de Disclosure, Evidence Export v2 e importación/exportación validada del Registry.
+Para v1.2 se añaden específicamente pruebas de multi-detector, resistencia a manipulación de selectores, fixtures reales de AI Engine + AI Puffer, persistencia del contexto del administrador, migración schema v2 y Readiness por contexto incompleto.
 
 ### Documentación
 

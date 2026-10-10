@@ -171,19 +171,19 @@ final class AdminPage {
 		$this->require_permission();
 		check_admin_referer( 'kairoseth_ai_transparency_save_system', '_kat_nonce' );
 
-		$registry     = $this->repository->load();
-		$id           = isset( $_POST['system_id'] ) ? sanitize_text_field( wp_unslash( $_POST['system_id'] ) ) : '';
-		$name         = isset( $_POST['system_name'] ) ? sanitize_text_field( wp_unslash( $_POST['system_name'] ) ) : '';
-		$type         = isset( $_POST['system_type'] ) ? sanitize_key( wp_unslash( $_POST['system_type'] ) ) : '';
-		$context      = isset( $_POST['interaction_context'] ) ? sanitize_textarea_field( wp_unslash( $_POST['interaction_context'] ) ) : '';
-		$purpose      = isset( $_POST['purpose'] ) ? sanitize_textarea_field( wp_unslash( $_POST['purpose'] ) ) : '';
-		$provider     = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
-		$model        = isset( $_POST['model'] ) ? sanitize_text_field( wp_unslash( $_POST['model'] ) ) : '';
-		$audience     = isset( $_POST['audience'] ) ? sanitize_textarea_field( wp_unslash( $_POST['audience'] ) ) : '';
-		$oversight    = isset( $_POST['human_oversight'] ) ? sanitize_textarea_field( wp_unslash( $_POST['human_oversight'] ) ) : '';
-		$data_use     = isset( $_POST['data_use_context'] ) ? sanitize_textarea_field( wp_unslash( $_POST['data_use_context'] ) ) : '';
-		$review       = isset( $_POST['review_status'] ) ? sanitize_key( wp_unslash( $_POST['review_status'] ) ) : AiSystem::REVIEW_PENDING;
-		$required     = isset( $_POST['interaction_disclosure_required'] ) && '1' === sanitize_text_field( wp_unslash( $_POST['interaction_disclosure_required'] ) );
+		$registry  = $this->repository->load();
+		$id        = isset( $_POST['system_id'] ) ? sanitize_text_field( wp_unslash( $_POST['system_id'] ) ) : '';
+		$name      = isset( $_POST['system_name'] ) ? sanitize_text_field( wp_unslash( $_POST['system_name'] ) ) : '';
+		$type      = isset( $_POST['system_type'] ) ? sanitize_key( wp_unslash( $_POST['system_type'] ) ) : '';
+		$context   = isset( $_POST['interaction_context'] ) ? sanitize_textarea_field( wp_unslash( $_POST['interaction_context'] ) ) : '';
+		$purpose   = isset( $_POST['purpose'] ) ? sanitize_textarea_field( wp_unslash( $_POST['purpose'] ) ) : '';
+		$provider  = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
+		$model     = isset( $_POST['model'] ) ? sanitize_text_field( wp_unslash( $_POST['model'] ) ) : '';
+		$audience  = isset( $_POST['audience'] ) ? sanitize_textarea_field( wp_unslash( $_POST['audience'] ) ) : '';
+		$oversight = isset( $_POST['human_oversight'] ) ? sanitize_textarea_field( wp_unslash( $_POST['human_oversight'] ) ) : '';
+		$data_use  = isset( $_POST['data_use_context'] ) ? sanitize_textarea_field( wp_unslash( $_POST['data_use_context'] ) ) : '';
+		$review    = isset( $_POST['review_status'] ) ? sanitize_key( wp_unslash( $_POST['review_status'] ) ) : AiSystem::REVIEW_PENDING;
+		$required  = isset( $_POST['interaction_disclosure_required'] ) && '1' === sanitize_text_field( wp_unslash( $_POST['interaction_disclosure_required'] ) );
 
 		if ( '' === $name || ! in_array( $type, AiSystem::supported_types(), true ) || ! in_array( $review, AiSystem::supported_review_statuses(), true ) ) {
 			$this->redirect_with_notice( 'invalid' );

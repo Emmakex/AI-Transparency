@@ -69,7 +69,7 @@ final class FindingEngine {
 			}
 
 			$missing_admin_context = $this->missing_admin_context( $system );
-			if ( ! empty( $missing_admin_context ) ) {
+			if ( AiSystem::REVIEW_REVIEWED === $system->review_status() && ! empty( $missing_admin_context ) ) {
 				$findings[] = $this->build_finding(
 					self::RULE_ADMIN_CONTEXT_INCOMPLETE,
 					'registry_completeness',

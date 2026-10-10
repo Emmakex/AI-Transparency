@@ -146,7 +146,11 @@ final class DiscoveryPage {
 
 		$detector_id = isset( $_POST['kat_detector_id'] ) ? sanitize_key( wp_unslash( $_POST['kat_detector_id'] ) ) : '';
 		$signature   = isset( $_POST['kat_source_signature'] ) ? sanitize_key( wp_unslash( $_POST['kat_source_signature'] ) ) : '';
-		$result      = $this->find_result( $this->discover_results(), $detector_id, $signature );
+		$result      = $this->discovery_engine->find(
+			$this->inventory->observations(),
+			$detector_id,
+			$signature
+		);
 
 		if ( null === $result ) {
 			$this->redirect_with_notice( 'not_found' );
@@ -251,31 +255,6 @@ final class DiscoveryPage {
 	 */
 	private function discover_results(): array {
 		return $this->discovery_engine->discover( $this->inventory->observations() );
-	}
-
-	/**
-	 * Match a browser-selected result only against freshly generated server state.
-	 *
-	 * The submitted detector id and signature are selectors only. No browser
-	 * evidence or candidate data is accepted or persisted directly.
-	 *
-	 * @param DiscoveryResult[] $results Fresh server-generated discovery results.
-	 * @param string            $detector_id Selected detector identifier.
-	 * @param string            $signature Selected evidence signature.
-	 * @return DiscoveryResult|null
-	 */
-	private function find_result( array $results, string $detector_id, string $signature ) {
-		if ( '' === $detector_id || '' === $signature ) {
-			return null;
-		}
-
-		foreach ( $results as $result ) {
-			if ( $detector_id === $result->detector_id() && $signature === $result->source_signature() ) {
-				return $result;
-			}
-		}
-
-		return null;
 	}
 
 	/**

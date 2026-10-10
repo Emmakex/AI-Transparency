@@ -112,6 +112,22 @@
 	font-weight: 650;
 }
 
+.ai-transparency-admin > form .kat-form-section td {
+	padding-top: 24px;
+	border-top: 1px solid var(--kat-border);
+}
+
+.ai-transparency-admin > form .kat-form-section h3 {
+	margin: 0 0 6px;
+	color: var(--kat-text);
+	font-size: 17px;
+}
+
+.ai-transparency-admin > form .kat-form-section .description {
+	max-width: 720px;
+	margin: 0;
+}
+
 .ai-transparency-admin input[type="text"],
 .ai-transparency-admin input[type="search"],
 .ai-transparency-admin input[type="url"],

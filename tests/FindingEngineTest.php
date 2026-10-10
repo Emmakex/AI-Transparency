@@ -32,6 +32,20 @@ final class FindingEngineTest extends TestCase {
 		$this->assertSame( array(), ( new FindingEngine() )->generate( $registry, '2026-09-09T17:00:00+00:00' ) );
 	}
 
+	public function test_missing_administrator_context_creates_one_bounded_completeness_finding(): void {
+		$registry = new AiSystemsRegistry();
+		$registry->put( $this->system( 'assistant-context', AiSystem::REVIEW_REVIEWED, 'Public support flow.', false, false ) );
+
+		$findings = ( new FindingEngine() )->generate( $registry, '2026-09-09T17:00:00+00:00' );
+
+		$this->assertCount( 1, $findings );
+		$this->assertSame( FindingEngine::RULE_ADMIN_CONTEXT_INCOMPLETE, $findings[0]->rule_id() );
+		$this->assertSame( Finding::FACT_ADMIN_CONTEXT_INCOMPLETE, $findings[0]->fact_code() );
+		$this->assertSame( Finding::DECLARATION_NONE, $findings[0]->declaration_code() );
+		$this->assertSame( Finding::GUIDANCE_DOCUMENT_ADMIN_CONTEXT, $findings[0]->guidance_code() );
+		$this->assertSame( Finding::PRIORITY_REVIEW, $findings[0]->priority() );
+	}
+
 	public function test_disclosure_declaration_creates_separate_declaration_finding(): void {
 		$registry = new AiSystemsRegistry();
 		$registry->put( $this->system( 'assistant-3', AiSystem::REVIEW_REVIEWED, 'Public assistant.', true ) );
@@ -68,22 +82,44 @@ final class FindingEngineTest extends TestCase {
 		$this->assertNotSame( $first[0]->generated_at(), $second[0]->generated_at() );
 	}
 
-	private function system( string $id, string $review_status, string $context, bool $disclosure_required ): AiSystem {
+	private function system(
+		string $id,
+		string $review_status,
+		string $context,
+		bool $disclosure_required,
+		bool $complete_admin_context = true
+	): AiSystem {
+		$metadata = array(
+			'source_origin'       => AiSystem::SOURCE_MANUAL,
+			'status'              => AiSystem::STATUS_ACTIVE,
+			'review_status'       => $review_status,
+			'interaction_context' => $context,
+			'created_at'          => '2026-09-09T15:00:00+00:00',
+			'updated_at'          => '2026-09-09T15:00:00+00:00',
+			'reviewed_at'         => AiSystem::REVIEW_REVIEWED === $review_status ? '2026-09-09T15:30:00+00:00' : '',
+		);
+
+		if ( $complete_admin_context ) {
+			$metadata = array_merge(
+				$metadata,
+				array(
+					'purpose'          => 'Support users in the documented workflow.',
+					'provider'         => 'Example Provider',
+					'model'            => 'Example Model Family',
+					'audience'         => 'Documented users',
+					'human_oversight'  => 'A responsible person reviews escalations.',
+					'data_use_context' => 'Documented operational input categories.',
+				)
+			);
+		}
+
 		return new AiSystem(
 			$id,
 			'Test AI System',
 			AiSystem::TYPE_ASSISTANT,
 			'manual:test',
 			$disclosure_required,
-			array(
-				'source_origin'       => AiSystem::SOURCE_MANUAL,
-				'status'              => AiSystem::STATUS_ACTIVE,
-				'review_status'       => $review_status,
-				'interaction_context' => $context,
-				'created_at'          => '2026-09-09T15:00:00+00:00',
-				'updated_at'          => '2026-09-09T15:00:00+00:00',
-				'reviewed_at'         => AiSystem::REVIEW_REVIEWED === $review_status ? '2026-09-09T15:30:00+00:00' : '',
-			)
+			$metadata
 		);
 	}
 }

@@ -71,6 +71,42 @@ msgstr "Nombre del sistema"
 msgid "System type"
 msgstr "Tipo de sistema"
 
+msgid "Administrator context"
+msgstr "Contexto del administrador"
+
+msgid "These fields are administrator declarations. Discovery does not infer them from plugin identity or version."
+msgstr "Estos campos son declaraciones del administrador. El descubrimiento no los infiere a partir de la identidad o la versión del plugin."
+
+msgid "Purpose"
+msgstr "Finalidad"
+
+msgid "Describe what this AI system is used for in this site or workflow."
+msgstr "Describe para qué se utiliza este sistema de IA en este sitio o flujo de trabajo."
+
+msgid "Provider"
+msgstr "Proveedor"
+
+msgid "Model or model family"
+msgstr "Modelo o familia de modelos"
+
+msgid "Audience"
+msgstr "Audiencia"
+
+msgid "Describe the people who use, receive, or are affected by this system."
+msgstr "Describe las personas que utilizan, reciben o se ven afectadas por este sistema."
+
+msgid "Human oversight"
+msgstr "Supervisión humana"
+
+msgid "Describe who reviews, approves, or can intervene in the system outputs or decisions."
+msgstr "Describe quién revisa, aprueba o puede intervenir en los resultados o decisiones del sistema."
+
+msgid "Data use context"
+msgstr "Contexto de uso de datos"
+
+msgid "Describe the categories of data the workflow uses or receives. Do not enter secrets or credentials."
+msgstr "Describe las categorías de datos que utiliza o recibe el flujo de trabajo. No introduzcas secretos ni credenciales."
+
 msgid "Interaction context"
 msgstr "Contexto de interacción"
 
@@ -260,6 +296,9 @@ msgstr "El registro activo todavía está pendiente de revisión por un administ
 msgid "No interaction context is recorded for this active AI system."
 msgstr "No se ha registrado un contexto de interacción para este sistema de IA activo."
 
+msgid "One or more administrator context fields are not documented for this active AI system."
+msgstr "Uno o más campos de contexto del administrador no están documentados para este sistema de IA activo."
+
 msgid "This AI system is active in the local AI Systems Registry."
 msgstr "Este sistema de IA está activo en el Registro local de sistemas de IA."
 
@@ -277,6 +316,9 @@ msgstr "Revisa el uso real del sistema, su tipo, el contexto de interacción y l
 
 msgid "Document where or how visitors, staff or customers interact with this AI system."
 msgstr "Documenta dónde o cómo interactúan los visitantes, el personal o los clientes con este sistema de IA."
+
+msgid "Review the missing administrator context fields and document those that are applicable to this system."
+msgstr "Revisa los campos de contexto del administrador que faltan y documenta los que sean aplicables a este sistema."
 
 msgid "Verify that the configured disclosure has an appropriate implementation and placement for the actual workflow."
 msgstr "Verifica que el aviso configurado tenga una implementación y ubicación adecuadas para el flujo real."

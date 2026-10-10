@@ -94,6 +94,48 @@ final class AiSystem {
 	private $interaction_context;
 
 	/**
+	 * Administrator-declared business or operational purpose.
+	 *
+	 * @var string
+	 */
+	private $purpose;
+
+	/**
+	 * Administrator-declared provider or vendor.
+	 *
+	 * @var string
+	 */
+	private $provider;
+
+	/**
+	 * Administrator-declared model or model family.
+	 *
+	 * @var string
+	 */
+	private $model;
+
+	/**
+	 * Administrator-declared audience or affected user group.
+	 *
+	 * @var string
+	 */
+	private $audience;
+
+	/**
+	 * Administrator-declared human oversight process.
+	 *
+	 * @var string
+	 */
+	private $human_oversight;
+
+	/**
+	 * Administrator-declared data-use context.
+	 *
+	 * @var string
+	 */
+	private $data_use_context;
+
+	/**
 	 * Creation timestamp.
 	 *
 	 * @var string
@@ -122,7 +164,7 @@ final class AiSystem {
 	 * @param string               $type System type.
 	 * @param string               $source Evidence/source identifier.
 	 * @param bool                 $interaction_disclosure_required Whether interaction disclosure is required by the configured workflow.
-	 * @param array<string, mixed> $metadata Optional lifecycle and origin metadata.
+	 * @param array<string, mixed> $metadata Optional lifecycle, origin and administrator-authored context metadata.
 	 * @throws InvalidArgumentException When the record is invalid.
 	 */
 	public function __construct(
@@ -171,6 +213,12 @@ final class AiSystem {
 		$this->status                          = $status;
 		$this->review_status                   = $review_status;
 		$this->interaction_context             = isset( $metadata['interaction_context'] ) ? trim( (string) $metadata['interaction_context'] ) : '';
+		$this->purpose                         = isset( $metadata['purpose'] ) ? trim( (string) $metadata['purpose'] ) : '';
+		$this->provider                        = isset( $metadata['provider'] ) ? trim( (string) $metadata['provider'] ) : '';
+		$this->model                           = isset( $metadata['model'] ) ? trim( (string) $metadata['model'] ) : '';
+		$this->audience                        = isset( $metadata['audience'] ) ? trim( (string) $metadata['audience'] ) : '';
+		$this->human_oversight                 = isset( $metadata['human_oversight'] ) ? trim( (string) $metadata['human_oversight'] ) : '';
+		$this->data_use_context                = isset( $metadata['data_use_context'] ) ? trim( (string) $metadata['data_use_context'] ) : '';
 		$this->created_at                      = isset( $metadata['created_at'] ) ? trim( (string) $metadata['created_at'] ) : '';
 		$this->updated_at                      = isset( $metadata['updated_at'] ) ? trim( (string) $metadata['updated_at'] ) : '';
 		$this->reviewed_at                     = isset( $metadata['reviewed_at'] ) ? trim( (string) $metadata['reviewed_at'] ) : '';
@@ -194,6 +242,12 @@ final class AiSystem {
 				'status'              => $data['status'] ?? self::STATUS_ACTIVE,
 				'review_status'       => $data['review_status'] ?? self::REVIEW_PENDING,
 				'interaction_context' => $data['interaction_context'] ?? '',
+				'purpose'             => $data['purpose'] ?? '',
+				'provider'            => $data['provider'] ?? '',
+				'model'               => $data['model'] ?? '',
+				'audience'            => $data['audience'] ?? '',
+				'human_oversight'     => $data['human_oversight'] ?? '',
+				'data_use_context'    => $data['data_use_context'] ?? '',
 				'created_at'          => $data['created_at'] ?? '',
 				'updated_at'          => $data['updated_at'] ?? '',
 				'reviewed_at'         => $data['reviewed_at'] ?? '',
@@ -293,6 +347,60 @@ final class AiSystem {
 	}
 
 	/**
+	 * Get the administrator-declared purpose.
+	 *
+	 * @return string
+	 */
+	public function purpose(): string {
+		return $this->purpose;
+	}
+
+	/**
+	 * Get the administrator-declared provider.
+	 *
+	 * @return string
+	 */
+	public function provider(): string {
+		return $this->provider;
+	}
+
+	/**
+	 * Get the administrator-declared model or model family.
+	 *
+	 * @return string
+	 */
+	public function model(): string {
+		return $this->model;
+	}
+
+	/**
+	 * Get the administrator-declared audience.
+	 *
+	 * @return string
+	 */
+	public function audience(): string {
+		return $this->audience;
+	}
+
+	/**
+	 * Get the administrator-declared human oversight process.
+	 *
+	 * @return string
+	 */
+	public function human_oversight(): string {
+		return $this->human_oversight;
+	}
+
+	/**
+	 * Get the administrator-declared data-use context.
+	 *
+	 * @return string
+	 */
+	public function data_use_context(): string {
+		return $this->data_use_context;
+	}
+
+	/**
 	 * Get creation timestamp.
 	 *
 	 * @return string
@@ -334,6 +442,12 @@ final class AiSystem {
 			'status'                          => $this->status,
 			'review_status'                   => $this->review_status,
 			'interaction_context'             => $this->interaction_context,
+			'purpose'                         => $this->purpose,
+			'provider'                        => $this->provider,
+			'model'                           => $this->model,
+			'audience'                        => $this->audience,
+			'human_oversight'                 => $this->human_oversight,
+			'data_use_context'                => $this->data_use_context,
 			'interaction_disclosure_required' => $this->interaction_disclosure_required,
 			'created_at'                      => $this->created_at,
 			'updated_at'                      => $this->updated_at,

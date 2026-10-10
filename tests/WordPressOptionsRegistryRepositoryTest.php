@@ -7,6 +7,7 @@
 
 use Kairoseth\AITransparency\Domain\AiSystem;
 use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
+use Kairoseth\AITransparency\Registry\RegistrySchema;
 use PHPUnit\Framework\TestCase;
 
 $GLOBALS['kat_test_blog_id'] = 1;
@@ -74,9 +75,16 @@ final class WordPressOptionsRegistryRepositoryTest extends TestCase {
 		$repository = new WordPressOptionsRegistryRepository();
 		$registry   = $repository->load();
 		$stored     = $GLOBALS['kat_test_options'][1][ WordPressOptionsRegistryRepository::OPTION_NAME ];
+		$system     = $registry->find( 'legacy' );
 
-		$this->assertNotNull( $registry->find( 'legacy' ) );
-		$this->assertSame( 1, $stored['schema_version'] );
+		$this->assertNotNull( $system );
+		$this->assertSame( RegistrySchema::VERSION, $stored['schema_version'] );
 		$this->assertSame( 'active', $stored['systems'][0]['status'] );
+		$this->assertSame( '', $stored['systems'][0]['purpose'] );
+		$this->assertSame( '', $stored['systems'][0]['provider'] );
+		$this->assertSame( '', $stored['systems'][0]['model'] );
+		$this->assertSame( '', $stored['systems'][0]['audience'] );
+		$this->assertSame( '', $stored['systems'][0]['human_oversight'] );
+		$this->assertSame( '', $stored['systems'][0]['data_use_context'] );
 	}
 }

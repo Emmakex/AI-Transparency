@@ -14,10 +14,18 @@ use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
  * Renders deterministic disclosure readiness from current registry state.
  */
 final class DisclosurePage {
-	/** @var WordPressOptionsRegistryRepository */
+	/**
+	 * Site-local registry repository.
+	 *
+	 * @var WordPressOptionsRegistryRepository
+	 */
 	private $repository;
 
-	/** @var DisclosureEngine */
+	/**
+	 * Deterministic disclosure engine.
+	 *
+	 * @var DisclosureEngine
+	 */
 	private $engine;
 
 	/**
@@ -103,9 +111,9 @@ final class DisclosurePage {
 						<tbody>
 							<?php foreach ( $registry->all() as $system ) : ?>
 								<?php
-								$reasons  = $this->engine->reason_codes( $system );
-								$is_ready = empty( $reasons );
-								$edit_url = add_query_arg(
+								$reasons   = $this->engine->reason_codes( $system );
+								$is_ready  = empty( $reasons );
+								$edit_url  = add_query_arg(
 									array(
 										'page'   => 'ai-transparency',
 										'system' => $system->id(),

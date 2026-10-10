@@ -65,4 +65,33 @@ final class DiscoveryEngine {
 
 		return $results;
 	}
+
+	/**
+	 * Match a result selector only against freshly regenerated detector output.
+	 *
+	 * Detector id and source signature are selectors, never trusted evidence. The
+	 * returned object always comes from the current immutable observation set.
+	 *
+	 * @param PluginObservation[] $observations Current immutable observations.
+	 * @param string              $detector_id Detector identifier selector.
+	 * @param string              $source_signature Evidence signature selector.
+	 * @return DiscoveryResult|null
+	 * @throws InvalidArgumentException When an observation is not a PluginObservation instance.
+	 */
+	public function find( array $observations, string $detector_id, string $source_signature ) {
+		$detector_id      = trim( $detector_id );
+		$source_signature = trim( $source_signature );
+
+		if ( '' === $detector_id || '' === $source_signature ) {
+			return null;
+		}
+
+		foreach ( $this->discover( $observations ) as $result ) {
+			if ( $detector_id === $result->detector_id() && $source_signature === $result->source_signature() ) {
+				return $result;
+			}
+		}
+
+		return null;
+	}
 }

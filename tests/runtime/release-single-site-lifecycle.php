@@ -11,6 +11,7 @@
 use Kairoseth\AITransparency\Domain\AiSystem;
 use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
 use Kairoseth\AITransparency\Registry\AiSystemsRegistry;
+use Kairoseth\AITransparency\Registry\RegistrySchema;
 
 if ( is_multisite() ) {
 	fwrite( STDERR, "Expected a single-site WordPress runtime.\n" );
@@ -121,12 +122,15 @@ switch ( $action ) {
 			break;
 		}
 
+		// Prove the raw historical payload survives the package swap unchanged until
+		// the current repository intentionally migrates it on first access.
 		$assert_registry_hash();
 
 		$repository = new WordPressOptionsRegistryRepository();
 		$registry   = $repository->load();
 		$reviewed   = $registry->find( 'phase8-reviewed-system' );
 		$archived   = $registry->find( 'phase8-archived-system' );
+		$stored     = get_option( $registry_option, array() );
 
 		if ( 2 !== $registry->count() ) {
 			$fail( 'Upgrade did not preserve exactly two Registry records.' );
@@ -140,11 +144,36 @@ switch ( $action ) {
 		if ( null === $archived || AiSystem::STATUS_ARCHIVED !== $archived->status() || AiSystem::REVIEW_REVIEWED !== $archived->review_status() ) {
 			$fail( 'Archived reviewed Registry state was not preserved by upgrade.' );
 		}
+
+		if ( ! is_array( $stored ) || RegistrySchema::VERSION !== (int) ( $stored['schema_version'] ?? 0 ) ) {
+			$fail( 'Upgrade did not persist the Registry using the current schema version.' );
+		}
+
+		$context_fields = array( 'purpose', 'provider', 'model', 'audience', 'human_oversight', 'data_use_context' );
+		foreach ( array( $reviewed, $archived ) as $system ) {
+			if ( null === $system ) {
+				continue;
+			}
+			$system_data = $system->to_array();
+			foreach ( $context_fields as $field ) {
+				if ( ! array_key_exists( $field, $system_data ) || '' !== $system_data[ $field ] ) {
+					$fail( 'Legacy Registry context was not migrated to safe empty administrator declarations.' );
+					break 2;
+				}
+			}
+		}
+
 		if ( 'preserve-me' !== get_option( $sentinel_option, '' ) ) {
 			$fail( 'Unrelated sentinel data changed during upgrade.' );
 		}
 		if ( in_array( 'ai-transparency/ai-transparency.php', (array) get_option( 'active_plugins', array() ), true ) ) {
 			$fail( 'Historical ai-transparency slug remained active after migration.' );
+		}
+
+		// From this point onward lifecycle preservation is measured against the
+		// intentionally migrated current-schema payload.
+		if ( is_array( $stored ) ) {
+			update_option( $expected_hash_option, hash( 'sha256', serialize( $stored ) ), false );
 		}
 		break;
 

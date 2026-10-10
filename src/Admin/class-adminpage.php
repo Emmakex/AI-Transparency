@@ -124,7 +124,7 @@ final class AdminPage {
 										'page'   => 'ai-transparency',
 										'system' => $system->id(),
 									),
-									admin_url( 'tools.php' )
+									admin_url( 'admin.php' )
 								);
 								?>
 								<tr>
@@ -379,7 +379,7 @@ final class AdminPage {
 					'page'       => 'ai-transparency',
 					'kat_notice' => $notice,
 				),
-				admin_url( 'tools.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		exit;

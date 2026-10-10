@@ -120,7 +120,7 @@ final class DiscoveryPage {
 			<?php endif; ?>
 
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'tools.php?page=ai-transparency' ) ); ?>">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=ai-transparency' ) ); ?>">
 					<?php echo esc_html__( 'Open AI Systems Registry', 'kairoseth-ai-transparency' ); ?>
 				</a>
 			</p>
@@ -294,7 +294,7 @@ final class DiscoveryPage {
 				'page'                 => 'ai-transparency-discovery',
 				'kat_discovery_notice' => sanitize_key( $notice ),
 			),
-			admin_url( 'tools.php' )
+			admin_url( 'admin.php' )
 		);
 
 		wp_safe_redirect( $url );

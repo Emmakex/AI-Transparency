@@ -7,7 +7,9 @@
 
 namespace Kairoseth\AITransparency;
 
+use Kairoseth\AITransparency\Admin\AdminNavigation;
 use Kairoseth\AITransparency\Admin\AdminPage;
+use Kairoseth\AITransparency\Admin\DashboardPage;
 use Kairoseth\AITransparency\Admin\DisclosurePage;
 use Kairoseth\AITransparency\Admin\DiscoveryPage;
 use Kairoseth\AITransparency\Admin\EvidenceExportPage;
@@ -65,12 +67,30 @@ final class Plugin {
 		( new DisclosureShortcode() )->register();
 
 		if ( is_admin() ) {
-			( new AdminPage() )->register();
-			( new DiscoveryPage() )->register();
-			( new ReadinessPage() )->register();
-			( new DisclosurePage() )->register();
-			( new EvidenceExportPage() )->register();
-			( new SupportPage() )->register();
+			$dashboard_page       = new DashboardPage();
+			$registry_page        = new AdminPage();
+			$discovery_page       = new DiscoveryPage();
+			$readiness_page       = new ReadinessPage();
+			$disclosure_page      = new DisclosurePage();
+			$evidence_export_page = new EvidenceExportPage();
+			$support_page         = new SupportPage();
+
+			$dashboard_page->register();
+			$registry_page->register();
+			$discovery_page->register();
+			$readiness_page->register();
+			$disclosure_page->register();
+			$evidence_export_page->register();
+			$support_page->register();
+
+			( new AdminNavigation(
+				$registry_page,
+				$discovery_page,
+				$readiness_page,
+				$disclosure_page,
+				$evidence_export_page,
+				$support_page
+			) )->register();
 		}
 	}
 

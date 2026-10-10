@@ -118,7 +118,7 @@ final class DisclosurePage {
 										'page'   => 'ai-transparency',
 										'system' => $system->id(),
 									),
-									admin_url( 'tools.php' )
+									admin_url( 'admin.php' )
 								);
 								$shortcode = sprintf( '[kairoseth_ai_disclosure system="%s"]', $system->id() );
 								?>

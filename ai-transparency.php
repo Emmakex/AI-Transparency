@@ -3,7 +3,7 @@
  * Plugin Name:       Kairoseth AI Transparency
  * Plugin URI:        https://kairoseth.com/products/ai-transparency
  * Description:       EU AI Act transparency readiness tooling for WordPress, with local AI system inventory, evidence and disclosure workflows.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            Emmake / Kairoseth
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'KAIROSETH_AI_TRANSPARENCY_VERSION', '1.1.0' );
+define( 'KAIROSETH_AI_TRANSPARENCY_VERSION', '1.2.0' );
 define( 'KAIROSETH_AI_TRANSPARENCY_FILE', __FILE__ );
 define( 'KAIROSETH_AI_TRANSPARENCY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'KAIROSETH_AI_TRANSPARENCY_SLUG', 'kairoseth-ai-transparency' );

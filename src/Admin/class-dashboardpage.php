@@ -17,13 +17,25 @@ use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
  * Renders the plugin-owned WordPress admin overview.
  */
 final class DashboardPage {
-	/** @var WordPressOptionsRegistryRepository */
+	/**
+	 * Site-local registry repository.
+	 *
+	 * @var WordPressOptionsRegistryRepository
+	 */
 	private $repository;
 
-	/** @var FindingEngine */
+	/**
+	 * Deterministic readiness engine.
+	 *
+	 * @var FindingEngine
+	 */
 	private $finding_engine;
 
-	/** @var DisclosureEngine */
+	/**
+	 * Disclosure eligibility engine.
+	 *
+	 * @var DisclosureEngine
+	 */
 	private $disclosure_engine;
 
 	/**
@@ -244,7 +256,13 @@ final class DashboardPage {
 										<td><?php echo esc_html( $this->status_label( $system ) ); ?></td>
 										<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
 										<td>
-											<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'ai-transparency', 'system' => $system->id() ), admin_url( 'admin.php' ) ) ); ?>">
+											<a href="<?php echo esc_url( add_query_arg(
+												array(
+													'page'   => 'ai-transparency',
+													'system' => $system->id(),
+												),
+												admin_url( 'admin.php' )
+											) ); ?>">
 												<?php echo esc_html__( 'Edit', 'kairoseth-ai-transparency' ); ?>
 											</a>
 										</td>

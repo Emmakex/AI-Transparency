@@ -13,13 +13,18 @@ use InvalidArgumentException;
  * Runs registered deterministic detectors against immutable observations.
  */
 final class DiscoveryEngine {
-	/** @var DetectorInterface[] */
+	/**
+	 * Registered deterministic detectors.
+	 *
+	 * @var DetectorInterface[]
+	 */
 	private $detectors;
 
 	/**
 	 * Create the discovery engine.
 	 *
 	 * @param DetectorInterface[] $detectors Registered deterministic detectors.
+	 * @throws InvalidArgumentException When a registered detector does not implement DetectorInterface.
 	 */
 	public function __construct( array $detectors ) {
 		foreach ( $detectors as $detector ) {
@@ -40,6 +45,7 @@ final class DiscoveryEngine {
 	 *
 	 * @param PluginObservation[] $observations Immutable plugin observations.
 	 * @return DiscoveryResult[]
+	 * @throws InvalidArgumentException When an observation is not a PluginObservation instance.
 	 */
 	public function discover( array $observations ): array {
 		$results = array();

@@ -8,6 +8,34 @@ The project follows semantic versioning for public releases.
 
 No changes yet.
 
+## [1.2.0] - 2026-10-10
+
+### Added
+
+- Extensible deterministic Discovery architecture with detector contracts and a multi-result server-authoritative selection flow.
+- Validated deterministic Discovery support for **AI Puffer 2.4.97** alongside the existing **AI Engine 3.7.7** detector.
+- Registry schema v2 administrator declarations for purpose, provider, model/model family, audience, human oversight and data-use context.
+- Dedicated Registry form section for those declarations, with explicit wording that Discovery does not infer them from plugin identity or version.
+- Deterministic Readiness rule `administrator_context_incomplete_v1` for reviewed active records with incomplete administrator context.
+- Unit and browser acceptance proving Registry context create/edit/persist/re-open behavior and the new signed readiness finding.
+- Evidence continuity tests proving administrator-context changes participate in the deterministic Evidence Export snapshot identity.
+
+### Changed
+
+- Discovery is no longer hard-wired to a single integration; result selection uses bounded `detector_id` and `source_signature` selectors and is revalidated against the current server-side WordPress plugin inventory before acceptance.
+- Earlier Registry payloads migrate to schema v2 on first access while preserving existing lifecycle, review, interaction-context and disclosure state.
+- New v2 declaration fields migrate as empty values instead of being inferred from detector evidence.
+- Readiness defers administrator-context completeness findings until the record has been explicitly reviewed, reducing duplicate noise for newly discovered pending systems.
+- Exact ZIP lifecycle acceptance now distinguishes untouched historical payload state from the intentional first-access schema migration and fingerprints the migrated payload for subsequent preservation checks.
+- Spanish source coverage now includes the new Registry declaration and Readiness guidance strings.
+
+### Privacy and authority
+
+- Provider, model, purpose, audience, human oversight and data-use context remain explicit administrator-authored declarations.
+- Discovery still reads only bounded local WordPress plugin identity/version/activation evidence and does not read credentials, prompts, conversations or private provider configuration.
+- Completing Registry context does not certify or guarantee legal compliance.
+- Registry, Discovery, Readiness, Disclosure and Evidence Export remain local-first with no new telemetry or remote-service dependency.
+
 ## [1.1.0] - 2026-10-10
 
 ### Added

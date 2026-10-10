@@ -24,6 +24,12 @@ function rowForSystem(page, systemName) {
   return page.getByRole('cell', { name: systemName, exact: true }).locator('..');
 }
 
+function discoveryResult(page, integrationName) {
+  return page.locator('.ai-transparency-discovery-result').filter({
+    has: page.getByRole('heading', { level: 3, name: integrationName, exact: true }),
+  });
+}
+
 async function createPublishedPage(page, title, content) {
   const nonceResponse = await page.request.get('/wp-admin/admin-ajax.php?action=rest-nonce');
   expect(nonceResponse.ok()).toBeTruthy();
@@ -48,19 +54,30 @@ async function createPublishedPage(page, title, content) {
 test.describe.configure({ mode: 'serial' });
 
 test.describe('WordPress runtime acceptance', () => {
-  test('AI Engine 3.7.7 is discovered with explainable evidence and requires explicit registry acceptance', async ({ page }) => {
+  test('AI Engine 3.7.7 and AI Puffer 2.4.97 are independently discovered, selector tampering fails closed, and both require explicit acceptance', async ({ page }) => {
     await login(page, adminUser, adminPass);
-    await page.goto('/wp-admin/tools.php?page=ai-transparency-discovery');
+    await page.goto('/wp-admin/admin.php?page=ai-transparency-discovery');
 
     await expect(page.getByRole('heading', { level: 1, name: 'AI Discovery' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'AI Engine', exact: true })).toBeVisible();
-    await expect(page.getByRole('cell', { name: '3.7.7', exact: true }).first()).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Supported', exact: true })).toBeVisible();
-    await expect(page.getByText('ai-engine/ai-engine.php', { exact: true })).toBeVisible();
-    await expect(page.getByText('ai-engine', { exact: true }).last()).toBeVisible();
 
-    const signature = page.getByRole('row').filter({ hasText: 'Evidence signature' }).locator('code');
-    await expect(signature).toHaveText(/^[a-f0-9]{64}$/);
+    let aiEngine = discoveryResult(page, 'AI Engine');
+    let aiPuffer = discoveryResult(page, 'AI Puffer');
+    await expect(aiEngine).toHaveCount(1);
+    await expect(aiPuffer).toHaveCount(1);
+
+    await expect(aiEngine.getByRole('cell', { name: 'AI Engine', exact: true })).toBeVisible();
+    await expect(aiEngine.getByRole('cell', { name: '3.7.7', exact: true }).first()).toBeVisible();
+    await expect(aiEngine.getByRole('cell', { name: 'Supported', exact: true })).toBeVisible();
+    await expect(aiEngine.getByText('ai-engine/ai-engine.php', { exact: true })).toBeVisible();
+    await expect(aiEngine.getByText('ai-engine', { exact: true }).last()).toBeVisible();
+    await expect(aiEngine.getByRole('row').filter({ hasText: 'Evidence signature' }).locator('code')).toHaveText(/^[a-f0-9]{64}$/);
+
+    await expect(aiPuffer.getByRole('cell', { name: 'AI Puffer', exact: true })).toBeVisible();
+    await expect(aiPuffer.getByRole('cell', { name: '2.4.97', exact: true }).first()).toBeVisible();
+    await expect(aiPuffer.getByRole('cell', { name: 'Supported', exact: true })).toBeVisible();
+    await expect(aiPuffer.getByText('gpt3-ai-content-generator/gpt3-ai-content-generator.php', { exact: true })).toBeVisible();
+    await expect(aiPuffer.getByText('gpt3-ai-content-generator', { exact: true }).last()).toBeVisible();
+    await expect(aiPuffer.getByRole('row').filter({ hasText: 'Evidence signature' }).locator('code')).toHaveText(/^[a-f0-9]{64}$/);
 
     await page.setViewportSize({ width: 390, height: 844 });
     const horizontalOverflow = await page.evaluate(() =>
@@ -76,22 +93,46 @@ test.describe('WordPress runtime acceptance', () => {
     );
     expect(blockingViolations, JSON.stringify(blockingViolations, null, 2)).toEqual([]);
 
-    const addButton = page.getByRole('button', { name: 'Add to registry' });
-    if (await addButton.count()) {
-      await addButton.click();
-      await expect(page.locator('.notice-success')).toContainText(
-        'Detected AI integration added to the registry for administrator review.'
-      );
-    } else {
-      await expect(page.getByText('Already in registry', { exact: true })).toBeVisible();
-    }
-    await expect(page.getByText('Already in registry', { exact: true })).toBeVisible();
+    const aiEngineForm = aiEngine.locator('form');
+    await expect(aiEngineForm).toHaveCount(1);
+    await aiEngineForm.locator('input[name="kat_source_signature"]').evaluate((input) => {
+      input.value = '0'.repeat(64);
+    });
+    await aiEngineForm.getByRole('button', { name: 'Add to registry' }).click();
+    await expect(page.locator('.notice-error')).toContainText(
+      'The selected AI integration could not be matched to the current active plugin inventory.'
+    );
 
-    await page.goto('/wp-admin/tools.php?page=ai-transparency');
-    const row = rowForSystem(page, 'AI Engine');
-    await expect(row).toContainText('Other');
-    await expect(row).toContainText('Pending review');
-    await expect(row).toContainText('Active');
+    aiEngine = discoveryResult(page, 'AI Engine');
+    aiPuffer = discoveryResult(page, 'AI Puffer');
+    await expect(aiEngine.getByRole('button', { name: 'Add to registry' })).toBeVisible();
+    await expect(aiPuffer.getByRole('button', { name: 'Add to registry' })).toBeVisible();
+
+    await aiEngine.getByRole('button', { name: 'Add to registry' }).click();
+    await expect(page.locator('.notice-success')).toContainText(
+      'Detected AI integration added to the registry for administrator review.'
+    );
+    aiEngine = discoveryResult(page, 'AI Engine');
+    aiPuffer = discoveryResult(page, 'AI Puffer');
+    await expect(aiEngine.getByText('Already in registry', { exact: true })).toBeVisible();
+    await expect(aiPuffer.getByRole('button', { name: 'Add to registry' })).toBeVisible();
+
+    await aiPuffer.getByRole('button', { name: 'Add to registry' }).click();
+    await expect(page.locator('.notice-success')).toContainText(
+      'Detected AI integration added to the registry for administrator review.'
+    );
+    await expect(page.getByText('Already in registry', { exact: true })).toHaveCount(2);
+
+    await page.goto('/wp-admin/admin.php?page=ai-transparency');
+    const aiEngineRow = rowForSystem(page, 'AI Engine');
+    await expect(aiEngineRow).toContainText('Other');
+    await expect(aiEngineRow).toContainText('Pending review');
+    await expect(aiEngineRow).toContainText('Active');
+
+    const aiPufferRow = rowForSystem(page, 'AI Puffer');
+    await expect(aiPufferRow).toContainText('Other');
+    await expect(aiPufferRow).toContainText('Pending review');
+    await expect(aiPufferRow).toContainText('Active');
   });
 
   test('readiness findings separate facts, declarations and guidance for the discovered system', async ({ page }) => {

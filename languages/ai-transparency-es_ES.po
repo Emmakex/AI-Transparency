@@ -71,6 +71,42 @@ msgstr "Nombre del sistema"
 msgid "System type"
 msgstr "Tipo de sistema"
 
+msgid "Administrator context"
+msgstr "Contexto del administrador"
+
+msgid "These fields are administrator declarations. Discovery does not infer them from plugin identity or version."
+msgstr "Estos campos son declaraciones del administrador. El descubrimiento no los infiere a partir de la identidad o la versión del plugin."
+
+msgid "Purpose"
+msgstr "Finalidad"
+
+msgid "Describe what this AI system is used for in this site or workflow."
+msgstr "Describe para qué se utiliza este sistema de IA en este sitio o flujo de trabajo."
+
+msgid "Provider"
+msgstr "Proveedor"
+
+msgid "Model or model family"
+msgstr "Modelo o familia de modelos"
+
+msgid "Audience"
+msgstr "Audiencia"
+
+msgid "Describe the people who use, receive, or are affected by this system."
+msgstr "Describe las personas que utilizan, reciben o se ven afectadas por este sistema."
+
+msgid "Human oversight"
+msgstr "Supervisión humana"
+
+msgid "Describe who reviews, approves, or can intervene in the system outputs or decisions."
+msgstr "Describe quién revisa, aprueba o puede intervenir en los resultados o decisiones del sistema."
+
+msgid "Data use context"
+msgstr "Contexto de uso de datos"
+
+msgid "Describe the categories of data the workflow uses or receives. Do not enter secrets or credentials."
+msgstr "Describe las categorías de datos que utiliza o recibe el flujo de trabajo. No introduzcas secretos ni credenciales."
+
 msgid "Interaction context"
 msgstr "Contexto de interacción"
 

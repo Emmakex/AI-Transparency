@@ -22,7 +22,7 @@ function rowForSystem(page, systemName) {
 }
 
 test.describe('Registry administrator context', () => {
-  test('administrator context is explicit, editable and persisted independently of discovery evidence', async ({ page }) => {
+  test('administrator context is explicit, editable, persisted and reflected in readiness without discovery inference', async ({ page }) => {
     const runId = `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
     const systemName = `Registry Context ${runId}`;
 
@@ -73,5 +73,23 @@ test.describe('Registry administrator context', () => {
     await expect(page.getByLabel('Audience')).toHaveValue('Customers using the public support flow.');
     await expect(page.getByLabel('Human oversight')).toHaveValue('Support staff review escalations before action.');
     await expect(page.getByLabel('Data use context')).toHaveValue('Customer questions and approved knowledge-base content.');
+
+    await page.getByLabel('Human oversight').fill('');
+    await page.getByRole('button', { name: 'Update AI system' }).click();
+    await expect(page.locator('.notice-success')).toContainText('AI system saved.');
+
+    await page.goto('/wp-admin/tools.php?page=ai-transparency-readiness');
+    const contextFinding = page.locator('.ai-transparency-finding').filter({
+      has: page.getByRole('heading', { level: 2, name: systemName, exact: true }),
+    });
+
+    await expect(contextFinding).toHaveCount(1);
+    await expect(contextFinding).toContainText(
+      'One or more administrator context fields are not documented for this active AI system.'
+    );
+    await expect(contextFinding).toContainText(
+      'Review the missing administrator context fields and document those that are applicable to this system.'
+    );
+    await expect(contextFinding.locator('.ai-transparency-signature')).toHaveText(/^[a-f0-9]{64}$/);
   });
 });

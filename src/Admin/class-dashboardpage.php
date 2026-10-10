@@ -136,42 +136,42 @@ final class DashboardPage {
 				'title'       => __( 'AI Systems Registry', 'kairoseth-ai-transparency' ),
 				'description' => __( 'Maintain a local inventory of AI systems used by this WordPress site.', 'kairoseth-ai-transparency' ),
 				'label'       => __( 'Open AI Systems Registry', 'kairoseth-ai-transparency' ),
-				'url'         => admin_url( 'tools.php?page=ai-transparency' ),
+				'url'         => admin_url( 'admin.php?page=ai-transparency' ),
 				'icon'        => 'dashicons-list-view',
 			),
 			array(
 				'title'       => __( 'AI Discovery', 'kairoseth-ai-transparency' ),
 				'description' => __( 'Discovery reports only explainable technical evidence from supported WordPress integrations.', 'kairoseth-ai-transparency' ),
 				'label'       => __( 'AI Discovery', 'kairoseth-ai-transparency' ),
-				'url'         => admin_url( 'tools.php?page=ai-transparency-discovery' ),
+				'url'         => admin_url( 'admin.php?page=ai-transparency-discovery' ),
 				'icon'        => 'dashicons-search',
 			),
 			array(
 				'title'       => __( 'AI Readiness', 'kairoseth-ai-transparency' ),
 				'description' => __( 'Technical readiness findings are generated from the current local AI Systems Registry.', 'kairoseth-ai-transparency' ),
 				'label'       => __( 'AI Readiness', 'kairoseth-ai-transparency' ),
-				'url'         => admin_url( 'tools.php?page=ai-transparency-readiness' ),
+				'url'         => admin_url( 'admin.php?page=ai-transparency-readiness' ),
 				'icon'        => 'dashicons-shield-alt',
 			),
 			array(
 				'title'       => __( 'AI Disclosure', 'kairoseth-ai-transparency' ),
 				'description' => __( 'Review which registered AI systems are ready for explicit frontend disclosure placement.', 'kairoseth-ai-transparency' ),
 				'label'       => __( 'AI Disclosure', 'kairoseth-ai-transparency' ),
-				'url'         => admin_url( 'tools.php?page=ai-transparency-disclosure' ),
+				'url'         => admin_url( 'admin.php?page=ai-transparency-disclosure' ),
 				'icon'        => 'dashicons-media-document',
 			),
 			array(
 				'title'       => __( 'AI Evidence Export', 'kairoseth-ai-transparency' ),
 				'description' => __( 'Create a local JSON snapshot of the current site AI Systems Registry, technical findings and disclosure readiness.', 'kairoseth-ai-transparency' ),
 				'label'       => __( 'AI Evidence Export', 'kairoseth-ai-transparency' ),
-				'url'         => admin_url( 'tools.php?page=ai-transparency-evidence-export' ),
+				'url'         => admin_url( 'admin.php?page=ai-transparency-evidence-export' ),
 				'icon'        => 'dashicons-download',
 			),
 			array(
 				'title'       => __( 'AI Transparency Support', 'kairoseth-ai-transparency' ),
 				'description' => __( 'Optional Kairoseth support for implementation questions, third-party integrations and custom work.', 'kairoseth-ai-transparency' ),
 				'label'       => __( 'Get support', 'kairoseth-ai-transparency' ),
-				'url'         => admin_url( 'tools.php?page=ai-transparency-support' ),
+				'url'         => admin_url( 'admin.php?page=ai-transparency-support' ),
 				'icon'        => 'dashicons-sos',
 			),
 		);
@@ -197,7 +197,7 @@ final class DashboardPage {
 					<h2 id="kat-dashboard-status-title"><?php echo esc_html__( 'Guidance', 'kairoseth-ai-transparency' ); ?></h2>
 					<p><?php echo esc_html__( 'Findings keep observed facts, administrator declarations and guidance separate. They do not determine or certify legal compliance.', 'kairoseth-ai-transparency' ); ?></p>
 				</div>
-				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'tools.php?page=ai-transparency-readiness' ) ); ?>">
+				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=ai-transparency-readiness' ) ); ?>">
 					<?php echo esc_html__( 'AI Readiness', 'kairoseth-ai-transparency' ); ?>
 				</a>
 			</section>

@@ -124,6 +124,225 @@
 	font-style: italic;
 }
 
+.kat-dashboard {
+	max-width: 1280px;
+}
+
+.kat-dashboard-hero {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	margin: 20px 0 24px;
+	padding: 30px;
+	border: 1px solid #184fb1;
+	border-radius: 16px;
+	background: linear-gradient(135deg, #081a45 0%, #0b2c68 48%, #123b8d 100%);
+	box-shadow: 0 12px 32px rgba(8, 26, 69, 0.16);
+	color: #fff;
+}
+
+.kat-dashboard-hero h1 {
+	margin: 4px 0 8px;
+	color: #fff;
+	font-size: clamp(28px, 4vw, 42px);
+	line-height: 1.08;
+}
+
+.kat-dashboard-hero p {
+	max-width: 760px;
+	margin: 0;
+	color: #d9e8ff;
+	font-size: 15px;
+}
+
+.kat-dashboard-kicker {
+	font-size: 12px !important;
+	font-weight: 700;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	color: #66e4ff !important;
+}
+
+.kat-dashboard-version {
+	min-width: 130px;
+	padding: 14px 16px;
+	border: 1px solid rgba(255, 255, 255, .18);
+	border-radius: 12px;
+	background: rgba(255, 255, 255, .08);
+	text-align: center;
+}
+
+.kat-dashboard-version span,
+.kat-dashboard-version strong {
+	display: block;
+}
+
+.kat-dashboard-version span {
+	margin-bottom: 4px;
+	font-size: 12px;
+	color: #bcd5ff;
+}
+
+.kat-dashboard-version strong {
+	font-size: 22px;
+	color: #fff;
+}
+
+.kat-dashboard-metrics {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.kat-dashboard-metric {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	min-width: 0;
+	padding: 18px;
+	border: 1px solid #d8e3f5;
+	border-radius: 12px;
+	background: #fff;
+	box-shadow: 0 4px 14px rgba(17, 47, 95, .06);
+}
+
+.kat-dashboard-metric > .dashicons {
+	width: 42px;
+	height: 42px;
+	border-radius: 10px;
+	background: #eaf5ff;
+	color: #0f72cf;
+	font-size: 23px;
+	line-height: 42px;
+	text-align: center;
+}
+
+.kat-dashboard-metric strong,
+.kat-dashboard-metric span {
+	display: block;
+}
+
+.kat-dashboard-metric strong {
+	font-size: 26px;
+	line-height: 1;
+	color: #10213f;
+}
+
+.kat-dashboard-metric div > span {
+	margin-top: 5px;
+	color: #52637d;
+}
+
+.kat-dashboard-status {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	margin: 0 0 28px;
+	padding: 20px 22px;
+	border: 1px solid #cfe6ef;
+	border-left: 4px solid #16a6c9;
+	border-radius: 10px;
+	background: #f8fdff;
+}
+
+.kat-dashboard-status h2 {
+	margin: 0 0 8px;
+	font-size: 18px;
+}
+
+.kat-dashboard-status-list {
+	margin: 0;
+	padding-left: 20px;
+}
+
+.kat-dashboard-status-list li {
+	margin: 4px 0;
+}
+
+.kat-dashboard-section-title {
+	margin: 0 0 14px;
+	font-size: 20px;
+}
+
+.kat-dashboard-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.kat-dashboard-card {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 210px;
+	padding: 22px;
+	border: 1px solid #d7e2f1;
+	border-radius: 14px;
+	background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+	box-shadow: 0 5px 18px rgba(17, 47, 95, .06);
+}
+
+.kat-dashboard-card-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	margin-bottom: 14px;
+	border-radius: 11px;
+	background: linear-gradient(135deg, #e2f9ff, #eef0ff);
+	color: #176fd1;
+}
+
+.kat-dashboard-card-icon .dashicons {
+	width: 24px;
+	height: 24px;
+	font-size: 24px;
+}
+
+.kat-dashboard-card h3 {
+	margin: 0 0 8px;
+	font-size: 17px;
+	color: #10213f;
+}
+
+.kat-dashboard-card p {
+	flex: 1;
+	margin: 0 0 18px;
+	color: #52637d;
+	line-height: 1.55;
+}
+
+.kat-dashboard-card-link {
+	align-self: flex-start;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.kat-dashboard-card-link:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+.kat-dashboard-boundary {
+	max-width: 920px;
+	margin: 24px 0 0;
+	color: #59677a;
+}
+
+@media screen and (max-width: 1100px) {
+	.kat-dashboard-metrics {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.kat-dashboard-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
 @media screen and (max-width: 782px) {
 	.ai-transparency-admin .form-table th,
 	.ai-transparency-admin .form-table td {
@@ -173,5 +392,24 @@
 		justify-content: center;
 		max-width: 100%;
 		min-height: 44px;
+	}
+
+	.kat-dashboard-hero,
+	.kat-dashboard-status {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.kat-dashboard-version {
+		text-align: left;
+	}
+
+	.kat-dashboard-metrics,
+	.kat-dashboard-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kat-dashboard-card {
+		min-height: 0;
 	}
 }

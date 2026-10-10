@@ -16,10 +16,10 @@ final class Finding {
 	public const PRIORITY_REVIEW = 'review';
 	public const PRIORITY_INFO   = 'info';
 
-	public const FACT_REVIEW_PENDING            = 'review_pending';
-	public const FACT_CONTEXT_MISSING           = 'interaction_context_missing';
-	public const FACT_ADMIN_CONTEXT_INCOMPLETE  = 'administrator_context_incomplete';
-	public const FACT_SYSTEM_ACTIVE             = 'system_active';
+	public const FACT_REVIEW_PENDING           = 'review_pending';
+	public const FACT_CONTEXT_MISSING          = 'interaction_context_missing';
+	public const FACT_ADMIN_CONTEXT_INCOMPLETE = 'administrator_context_incomplete';
+	public const FACT_SYSTEM_ACTIVE            = 'system_active';
 
 	public const DECLARATION_NONE                = '';
 	public const DECLARATION_DISCLOSURE_REQUIRED = 'interaction_disclosure_required';

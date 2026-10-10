@@ -142,17 +142,13 @@ final class AdminNavigation {
 	}
 
 	/**
-	 * Ensure shared plugin styling loads on the new submenu screen hooks.
+	 * Ensure shared plugin styling loads on the dashboard and submenu screens.
 	 *
 	 * @param string $hook_suffix Current admin hook suffix.
 	 * @return void
 	 */
 	public function enqueue_shared_assets( string $hook_suffix ): void {
-		if ( 'toplevel_page_kairoseth-ai-transparency' === $hook_suffix ) {
-			return;
-		}
-
-		if ( false === strpos( $hook_suffix, 'ai-transparency' ) ) {
+		if ( false === strpos( $hook_suffix, 'ai-transparency' ) && 'toplevel_page_kairoseth-ai-transparency' !== $hook_suffix ) {
 			return;
 		}
 
@@ -160,6 +156,13 @@ final class AdminNavigation {
 			'ai-transparency-admin',
 			plugins_url( 'assets/admin.css', KAIROSETH_AI_TRANSPARENCY_FILE ),
 			array(),
+			KAIROSETH_AI_TRANSPARENCY_VERSION
+		);
+
+		wp_enqueue_style(
+			'ai-transparency-admin-v11',
+			plugins_url( 'assets/admin-v11.css', KAIROSETH_AI_TRANSPARENCY_FILE ),
+			array( 'ai-transparency-admin' ),
 			KAIROSETH_AI_TRANSPARENCY_VERSION
 		);
 	}

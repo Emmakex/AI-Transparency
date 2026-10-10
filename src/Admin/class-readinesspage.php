@@ -171,6 +171,8 @@ final class ReadinessPage {
 				return __( 'The active registry record is still pending administrator review.', 'kairoseth-ai-transparency' );
 			case Finding::FACT_CONTEXT_MISSING:
 				return __( 'No interaction context is recorded for this active AI system.', 'kairoseth-ai-transparency' );
+			case Finding::FACT_ADMIN_CONTEXT_INCOMPLETE:
+				return __( 'One or more administrator context fields are not documented for this active AI system.', 'kairoseth-ai-transparency' );
 			case Finding::FACT_SYSTEM_ACTIVE:
 				return __( 'This AI system is active in the local AI Systems Registry.', 'kairoseth-ai-transparency' );
 			default:
@@ -204,6 +206,8 @@ final class ReadinessPage {
 				return __( 'Review the system actual use, type, interaction context and transparency configuration.', 'kairoseth-ai-transparency' );
 			case Finding::GUIDANCE_DOCUMENT_CONTEXT:
 				return __( 'Document where or how visitors, staff or customers interact with this AI system.', 'kairoseth-ai-transparency' );
+			case Finding::GUIDANCE_DOCUMENT_ADMIN_CONTEXT:
+				return __( 'Review the missing administrator context fields and document those that are applicable to this system.', 'kairoseth-ai-transparency' );
 			case Finding::GUIDANCE_VERIFY_DISCLOSURE:
 				return __( 'Verify that the configured disclosure has an appropriate implementation and placement for the actual workflow.', 'kairoseth-ai-transparency' );
 			default:

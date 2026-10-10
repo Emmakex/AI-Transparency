@@ -65,6 +65,28 @@ final class DiscoveryEngineTest extends TestCase {
 		$this->assertFalse( $results[1]->supported() );
 	}
 
+	public function test_finds_only_a_fresh_server_generated_result_matching_both_selectors(): void {
+		$engine       = new DiscoveryEngine( array( new AiEngineDetector() ) );
+		$observations = array(
+			new PluginObservation( 'ai-engine/ai-engine.php', 'AI Engine', '3.7.7', 'ai-engine', true ),
+		);
+		$generated    = $engine->discover( $observations );
+		$expected     = $generated[0];
+
+		$matched = $engine->find(
+			$observations,
+			$expected->detector_id(),
+			$expected->source_signature()
+		);
+
+		$this->assertNotNull( $matched );
+		$this->assertSame( $expected->source_signature(), $matched->source_signature() );
+		$this->assertNull( $engine->find( $observations, 'other-detector', $expected->source_signature() ) );
+		$this->assertNull( $engine->find( $observations, $expected->detector_id(), str_repeat( '0', 64 ) ) );
+		$this->assertNull( $engine->find( $observations, '', $expected->source_signature() ) );
+		$this->assertNull( $engine->find( $observations, $expected->detector_id(), '' ) );
+	}
+
 	public function test_rejects_invalid_detector_registration(): void {
 		$this->expectException( InvalidArgumentException::class );
 
@@ -76,5 +98,12 @@ final class DiscoveryEngineTest extends TestCase {
 
 		$this->expectException( InvalidArgumentException::class );
 		$engine->discover( array( new stdClass() ) );
+	}
+
+	public function test_find_rejects_invalid_observation_input(): void {
+		$engine = new DiscoveryEngine( array( new AiEngineDetector() ) );
+
+		$this->expectException( InvalidArgumentException::class );
+		$engine->find( array( new stdClass() ), 'ai-engine-plugin', str_repeat( 'a', 64 ) );
 	}
 }

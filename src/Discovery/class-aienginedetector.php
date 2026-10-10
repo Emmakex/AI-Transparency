@@ -10,7 +10,7 @@ namespace Kairoseth\AITransparency\Discovery;
 /**
  * Detects a validated AI Engine installation from WordPress plugin inventory evidence.
  */
-final class AiEngineDetector {
+final class AiEngineDetector implements DetectorInterface {
 	public const DETECTOR_ID       = 'ai-engine-plugin';
 	public const INTEGRATION_SLUG  = 'ai-engine';
 	public const INTEGRATION_NAME  = 'AI Engine';

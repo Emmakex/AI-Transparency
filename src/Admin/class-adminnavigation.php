@@ -57,12 +57,12 @@ final class AdminNavigation {
 	/**
 	 * Create the unified navigation coordinator.
 	 *
-	 * @param AdminPage           $registry_page Registry administration screen.
-	 * @param DiscoveryPage       $discovery_page Discovery administration screen.
-	 * @param ReadinessPage       $readiness_page Readiness administration screen.
-	 * @param DisclosurePage      $disclosure_page Disclosure administration screen.
-	 * @param EvidenceExportPage  $evidence_export_page Evidence export administration screen.
-	 * @param SupportPage         $support_page Support administration screen.
+	 * @param AdminPage          $registry_page Registry administration screen.
+	 * @param DiscoveryPage      $discovery_page Discovery administration screen.
+	 * @param ReadinessPage      $readiness_page Readiness administration screen.
+	 * @param DisclosurePage     $disclosure_page Disclosure administration screen.
+	 * @param EvidenceExportPage $evidence_export_page Evidence export administration screen.
+	 * @param SupportPage        $support_page Support administration screen.
 	 */
 	public function __construct(
 		AdminPage $registry_page,

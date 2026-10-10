@@ -8,6 +8,7 @@
 namespace Kairoseth\AITransparency\Admin;
 
 use Kairoseth\AITransparency\Discovery\AiEngineDetector;
+use Kairoseth\AITransparency\Discovery\DiscoveryEngine;
 use Kairoseth\AITransparency\Discovery\DiscoveryResult;
 use Kairoseth\AITransparency\Discovery\WordPressPluginInventory;
 use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
@@ -31,19 +32,19 @@ final class DiscoveryPage {
 	private $inventory;
 
 	/**
-	 * First validated deterministic detector.
+	 * Deterministic detector orchestration engine.
 	 *
-	 * @var AiEngineDetector
+	 * @var DiscoveryEngine
 	 */
-	private $ai_engine_detector;
+	private $discovery_engine;
 
 	/**
 	 * Create the discovery surface.
 	 */
 	public function __construct() {
-		$this->repository         = new WordPressOptionsRegistryRepository();
-		$this->inventory          = new WordPressPluginInventory();
-		$this->ai_engine_detector = new AiEngineDetector();
+		$this->repository       = new WordPressOptionsRegistryRepository();
+		$this->inventory        = new WordPressPluginInventory();
+		$this->discovery_engine = new DiscoveryEngine( array( new AiEngineDetector() ) );
 	}
 
 	/**
@@ -99,7 +100,7 @@ final class DiscoveryPage {
 	public function render(): void {
 		$this->require_permission();
 
-		$result    = $this->detect_ai_engine();
+		$result    = $this->detect_first_result();
 		$registry  = $this->repository->load();
 		$candidate = $result && $result->supported() ? $result->candidate( gmdate( 'c' ) ) : null;
 		$existing  = $candidate ? $registry->find( $candidate->id() ) : null;
@@ -137,7 +138,7 @@ final class DiscoveryPage {
 		$this->require_permission();
 		check_admin_referer( 'ai_transparency_accept_ai_engine', '_kat_discovery_nonce' );
 
-		$result = $this->detect_ai_engine();
+		$result = $this->detect_first_result();
 		if ( null === $result ) {
 			$this->redirect_with_notice( 'not_found' );
 		}
@@ -228,19 +229,18 @@ final class DiscoveryPage {
 	}
 
 	/**
-	 * Re-run the AI Engine detector from the current WordPress inventory.
+	 * Return the first deterministic discovery result for the current inventory.
+	 *
+	 * v1.2 starts by routing the existing single-result UX through the generic
+	 * engine. A later microphase can render multiple results without changing the
+	 * detector contract or the server-side inventory boundary introduced here.
 	 *
 	 * @return DiscoveryResult|null
 	 */
-	private function detect_ai_engine() {
-		foreach ( $this->inventory->observations() as $observation ) {
-			$result = $this->ai_engine_detector->detect( $observation );
-			if ( null !== $result ) {
-				return $result;
-			}
-		}
+	private function detect_first_result() {
+		$results = $this->discovery_engine->discover( $this->inventory->observations() );
 
-		return null;
+		return empty( $results ) ? null : $results[0];
 	}
 
 	/**

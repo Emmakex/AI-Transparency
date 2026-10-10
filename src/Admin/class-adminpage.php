@@ -171,13 +171,19 @@ final class AdminPage {
 		$this->require_permission();
 		check_admin_referer( 'kairoseth_ai_transparency_save_system', '_kat_nonce' );
 
-		$registry = $this->repository->load();
-		$id       = isset( $_POST['system_id'] ) ? sanitize_text_field( wp_unslash( $_POST['system_id'] ) ) : '';
-		$name     = isset( $_POST['system_name'] ) ? sanitize_text_field( wp_unslash( $_POST['system_name'] ) ) : '';
-		$type     = isset( $_POST['system_type'] ) ? sanitize_key( wp_unslash( $_POST['system_type'] ) ) : '';
-		$context  = isset( $_POST['interaction_context'] ) ? sanitize_textarea_field( wp_unslash( $_POST['interaction_context'] ) ) : '';
-		$review   = isset( $_POST['review_status'] ) ? sanitize_key( wp_unslash( $_POST['review_status'] ) ) : AiSystem::REVIEW_PENDING;
-		$required = isset( $_POST['interaction_disclosure_required'] ) && '1' === sanitize_text_field( wp_unslash( $_POST['interaction_disclosure_required'] ) );
+		$registry     = $this->repository->load();
+		$id           = isset( $_POST['system_id'] ) ? sanitize_text_field( wp_unslash( $_POST['system_id'] ) ) : '';
+		$name         = isset( $_POST['system_name'] ) ? sanitize_text_field( wp_unslash( $_POST['system_name'] ) ) : '';
+		$type         = isset( $_POST['system_type'] ) ? sanitize_key( wp_unslash( $_POST['system_type'] ) ) : '';
+		$context      = isset( $_POST['interaction_context'] ) ? sanitize_textarea_field( wp_unslash( $_POST['interaction_context'] ) ) : '';
+		$purpose      = isset( $_POST['purpose'] ) ? sanitize_textarea_field( wp_unslash( $_POST['purpose'] ) ) : '';
+		$provider     = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
+		$model        = isset( $_POST['model'] ) ? sanitize_text_field( wp_unslash( $_POST['model'] ) ) : '';
+		$audience     = isset( $_POST['audience'] ) ? sanitize_textarea_field( wp_unslash( $_POST['audience'] ) ) : '';
+		$oversight    = isset( $_POST['human_oversight'] ) ? sanitize_textarea_field( wp_unslash( $_POST['human_oversight'] ) ) : '';
+		$data_use     = isset( $_POST['data_use_context'] ) ? sanitize_textarea_field( wp_unslash( $_POST['data_use_context'] ) ) : '';
+		$review       = isset( $_POST['review_status'] ) ? sanitize_key( wp_unslash( $_POST['review_status'] ) ) : AiSystem::REVIEW_PENDING;
+		$required     = isset( $_POST['interaction_disclosure_required'] ) && '1' === sanitize_text_field( wp_unslash( $_POST['interaction_disclosure_required'] ) );
 
 		if ( '' === $name || ! in_array( $type, AiSystem::supported_types(), true ) || ! in_array( $review, AiSystem::supported_review_statuses(), true ) ) {
 			$this->redirect_with_notice( 'invalid' );
@@ -190,19 +196,24 @@ final class AdminPage {
 
 		$now         = gmdate( 'c' );
 		$reviewed_at = AiSystem::REVIEW_REVIEWED === $review ? $now : '';
+		$changes     = array(
+			'name'                            => $name,
+			'type'                            => $type,
+			'review_status'                   => $review,
+			'interaction_context'             => $context,
+			'purpose'                         => $purpose,
+			'provider'                        => $provider,
+			'model'                           => $model,
+			'audience'                        => $audience,
+			'human_oversight'                 => $oversight,
+			'data_use_context'                => $data_use,
+			'interaction_disclosure_required' => $required,
+			'updated_at'                      => $now,
+			'reviewed_at'                     => $reviewed_at,
+		);
 
 		if ( $existing ) {
-			$system = $existing->with_updates(
-				array(
-					'name'                            => $name,
-					'type'                            => $type,
-					'review_status'                   => $review,
-					'interaction_context'             => $context,
-					'interaction_disclosure_required' => $required,
-					'updated_at'                      => $now,
-					'reviewed_at'                     => $reviewed_at,
-				)
-			);
+			$system = $existing->with_updates( $changes );
 		} else {
 			$system = new AiSystem(
 				wp_generate_uuid4(),
@@ -210,14 +221,13 @@ final class AdminPage {
 				$type,
 				'manual',
 				$required,
-				array(
-					'source_origin'       => AiSystem::SOURCE_MANUAL,
-					'status'              => AiSystem::STATUS_ACTIVE,
-					'review_status'       => $review,
-					'interaction_context' => $context,
-					'created_at'          => $now,
-					'updated_at'          => $now,
-					'reviewed_at'         => $reviewed_at,
+				array_merge(
+					$changes,
+					array(
+						'source_origin' => AiSystem::SOURCE_MANUAL,
+						'status'        => AiSystem::STATUS_ACTIVE,
+						'created_at'    => $now,
+					)
 				)
 			);
 		}
@@ -271,11 +281,17 @@ final class AdminPage {
 	 * @return void
 	 */
 	private function render_form( $system ): void {
-		$name     = $system ? $system->name() : '';
-		$type     = $system ? $system->type() : AiSystem::TYPE_CHATBOT;
-		$context  = $system ? $system->interaction_context() : '';
-		$review   = $system ? $system->review_status() : AiSystem::REVIEW_PENDING;
-		$required = $system ? $system->interaction_disclosure_required() : false;
+		$name      = $system ? $system->name() : '';
+		$type      = $system ? $system->type() : AiSystem::TYPE_CHATBOT;
+		$context   = $system ? $system->interaction_context() : '';
+		$purpose   = $system ? $system->purpose() : '';
+		$provider  = $system ? $system->provider() : '';
+		$model     = $system ? $system->model() : '';
+		$audience  = $system ? $system->audience() : '';
+		$oversight = $system ? $system->human_oversight() : '';
+		$data_use  = $system ? $system->data_use_context() : '';
+		$review    = $system ? $system->review_status() : AiSystem::REVIEW_PENDING;
+		$required  = $system ? $system->interaction_disclosure_required() : false;
 		?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="kairoseth_ai_transparency_save_system">
@@ -295,6 +311,48 @@ final class AdminPage {
 								<option value="<?php echo esc_attr( $type_value ); ?>" <?php selected( $type, $type_value ); ?>><?php echo esc_html( $this->type_label( $type_value ) ); ?></option>
 							<?php endforeach; ?>
 						</select>
+					</td>
+				</tr>
+				<tr class="kat-form-section">
+					<td colspan="2">
+						<h3><?php echo esc_html__( 'Administrator context', 'kairoseth-ai-transparency' ); ?></h3>
+						<p class="description"><?php echo esc_html__( 'These fields are administrator declarations. Discovery does not infer them from plugin identity or version.', 'kairoseth-ai-transparency' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="kat-purpose"><?php echo esc_html__( 'Purpose', 'kairoseth-ai-transparency' ); ?></label></th>
+					<td>
+						<textarea name="purpose" id="kat-purpose" class="large-text" rows="2" aria-describedby="kat-purpose-description"><?php echo esc_textarea( $purpose ); ?></textarea>
+						<p class="description" id="kat-purpose-description"><?php echo esc_html__( 'Describe what this AI system is used for in this site or workflow.', 'kairoseth-ai-transparency' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="kat-provider"><?php echo esc_html__( 'Provider', 'kairoseth-ai-transparency' ); ?></label></th>
+					<td><input name="provider" id="kat-provider" type="text" class="regular-text" value="<?php echo esc_attr( $provider ); ?>"></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="kat-model"><?php echo esc_html__( 'Model or model family', 'kairoseth-ai-transparency' ); ?></label></th>
+					<td><input name="model" id="kat-model" type="text" class="regular-text" value="<?php echo esc_attr( $model ); ?>"></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="kat-audience"><?php echo esc_html__( 'Audience', 'kairoseth-ai-transparency' ); ?></label></th>
+					<td>
+						<textarea name="audience" id="kat-audience" class="large-text" rows="2" aria-describedby="kat-audience-description"><?php echo esc_textarea( $audience ); ?></textarea>
+						<p class="description" id="kat-audience-description"><?php echo esc_html__( 'Describe the people who use, receive, or are affected by this system.', 'kairoseth-ai-transparency' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="kat-human-oversight"><?php echo esc_html__( 'Human oversight', 'kairoseth-ai-transparency' ); ?></label></th>
+					<td>
+						<textarea name="human_oversight" id="kat-human-oversight" class="large-text" rows="3" aria-describedby="kat-human-oversight-description"><?php echo esc_textarea( $oversight ); ?></textarea>
+						<p class="description" id="kat-human-oversight-description"><?php echo esc_html__( 'Describe who reviews, approves, or can intervene in the system outputs or decisions.', 'kairoseth-ai-transparency' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="kat-data-use-context"><?php echo esc_html__( 'Data use context', 'kairoseth-ai-transparency' ); ?></label></th>
+					<td>
+						<textarea name="data_use_context" id="kat-data-use-context" class="large-text" rows="3" aria-describedby="kat-data-use-context-description"><?php echo esc_textarea( $data_use ); ?></textarea>
+						<p class="description" id="kat-data-use-context-description"><?php echo esc_html__( 'Describe the categories of data the workflow uses or receives. Do not enter secrets or credentials.', 'kairoseth-ai-transparency' ); ?></p>
 					</td>
 				</tr>
 				<tr>

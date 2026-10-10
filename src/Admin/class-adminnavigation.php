@@ -173,7 +173,7 @@ final class AdminNavigation {
 	}
 
 	/**
-	 * Ensure shared plugin styling loads on the dashboard and submenu screens.
+	 * Ensure shared plugin assets load on the dashboard and submenu screens.
 	 *
 	 * @param string $hook_suffix Current admin hook suffix.
 	 * @return void
@@ -195,6 +195,14 @@ final class AdminNavigation {
 			plugins_url( 'assets/admin-v11.css', KAIROSETH_AI_TRANSPARENCY_FILE ),
 			array( 'ai-transparency-admin' ),
 			KAIROSETH_AI_TRANSPARENCY_VERSION
+		);
+
+		wp_enqueue_script(
+			'ai-transparency-admin-v11',
+			plugins_url( 'assets/admin-v11.js', KAIROSETH_AI_TRANSPARENCY_FILE ),
+			array(),
+			KAIROSETH_AI_TRANSPARENCY_VERSION,
+			true
 		);
 	}
 

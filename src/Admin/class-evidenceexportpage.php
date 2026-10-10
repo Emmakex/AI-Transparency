@@ -123,7 +123,7 @@ final class EvidenceExportPage {
 			</form>
 
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'tools.php?page=ai-transparency' ) ); ?>">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=ai-transparency' ) ); ?>">
 					<?php echo esc_html__( 'Open AI Systems Registry', 'kairoseth-ai-transparency' ); ?>
 				</a>
 			</p>

@@ -4,7 +4,7 @@ Tags: ai transparency, eu ai act, ai disclosure, article 50, artificial intellig
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: MIT
 License URI: https://opensource.org/license/mit/
 
@@ -16,12 +16,15 @@ Kairoseth AI Transparency is an official Kairoseth product developed and maintai
 
 The stable release includes:
 
-* a local AI Systems Registry under **Tools > AI Transparency**;
-* deterministic AI integration discovery under **Tools > AI Discovery**;
-* deterministic technical readiness findings under **Tools > AI Readiness**;
-* explicit administrator-controlled disclosure readiness under **Tools > AI Disclosure**;
-* privileged local JSON evidence export under **Tools > AI Evidence Export**;
-* an optional, administrator-initiated Kairoseth support bridge under **Tools > AI Transparency Support**.
+* a dedicated **Kairoseth AI Transparency** admin dashboard with live Registry, review, readiness and disclosure-ready metrics;
+* a local AI Systems Registry under **Kairoseth AI Transparency > AI Systems Registry**, including instant local search and filters by type, review and lifecycle status;
+* deterministic AI integration discovery under **Kairoseth AI Transparency > AI Discovery**;
+* deterministic technical readiness findings under **Kairoseth AI Transparency > AI Readiness**;
+* explicit administrator-controlled disclosure readiness under **Kairoseth AI Transparency > AI Disclosure**;
+* privileged local JSON evidence export under **Kairoseth AI Transparency > AI Evidence Export**;
+* an optional, administrator-initiated Kairoseth support bridge under **Kairoseth AI Transparency > AI Transparency Support**.
+
+Legacy Tools URLs from the 1.0.x line remain registered for backwards compatibility, while the visible workflow is grouped under the dedicated Kairoseth AI Transparency menu.
 
 An authorized administrator can add, edit, review and archive AI system records. Registry data is stored locally in the current WordPress site's Options storage with a versioned schema.
 
@@ -64,7 +67,7 @@ The plugin does not perform generic probabilistic detection of whether arbitrary
 
 The plugin is local-first. Registry, Discovery, Readiness, Disclosure and Evidence Export do not require Kairoseth or automatically send their state to an external service.
 
-**Kairoseth Custom Requests** is an optional support/custom-integration service used only after an administrator deliberately clicks a link on **Tools > AI Transparency Support**. Loading the WordPress support page itself makes no Kairoseth request.
+**Kairoseth Custom Requests** is an optional support/custom-integration service used only after an administrator deliberately clicks a link on **Kairoseth AI Transparency > AI Transparency Support**. Loading the WordPress support page itself makes no Kairoseth request.
 
 The explicit browser navigation goes to `https://kairoseth.com/custom-requests` and includes only this bounded technical/product context in the URL:
 
@@ -89,12 +92,13 @@ Privacy policy: https://kairoseth.com/privacy
 
 1. Upload the plugin directory to `/wp-content/plugins/` or install the packaged ZIP.
 2. Activate **Kairoseth AI Transparency** from the Plugins screen.
-3. Open **Tools > AI Transparency** to maintain the local Registry.
-4. Open **Tools > AI Discovery** to review supported deterministic integration evidence.
-5. Open **Tools > AI Readiness** to review current technical findings.
-6. Open **Tools > AI Disclosure** to review disclosure readiness and copy a shortcode for an eligible system.
-7. Open **Tools > AI Evidence Export** to download the current site-local JSON evidence snapshot.
-8. Optionally open **Tools > AI Transparency Support** for an explicit privacy-bounded handoff to Kairoseth support/custom requests.
+3. Open **Kairoseth AI Transparency** for the overview dashboard and current technical status.
+4. Open **Kairoseth AI Transparency > AI Systems Registry** to maintain, search and filter the local Registry.
+5. Open **Kairoseth AI Transparency > AI Discovery** to review supported deterministic integration evidence.
+6. Open **Kairoseth AI Transparency > AI Readiness** to review current technical findings.
+7. Open **Kairoseth AI Transparency > AI Disclosure** to review disclosure readiness and copy a shortcode for an eligible system.
+8. Open **Kairoseth AI Transparency > AI Evidence Export** to download the current site-local JSON evidence snapshot.
+9. Optionally open **Kairoseth AI Transparency > AI Transparency Support** for an explicit privacy-bounded handoff to Kairoseth support/custom requests.
 
 == Frequently Asked Questions ==
 
@@ -136,6 +140,15 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 
 == Changelog ==
 
+= 1.1.0 =
+* Adds a dedicated top-level Kairoseth AI Transparency dashboard with live Registry, review, readiness and disclosure-ready metrics.
+* Groups Registry, Discovery, Readiness, Disclosure, Evidence Export and Support under one visible plugin menu while preserving legacy 1.0.x Tools URLs for backwards compatibility.
+* Adds a recent Registry activity table with direct edit actions from the dashboard.
+* Adds instant local Registry search and filters by system type, review status and lifecycle status without changing the persistence schema.
+* Improves admin cards, tables, forms, findings, responsive behavior, keyboard focus handling and reduced-motion behavior.
+* Aligns Spanish source-catalog metadata and the translation template with version 1.1.0 and the canonical `kairoseth-ai-transparency` text domain.
+* Keeps Registry storage, Evidence Export schema and existing local data compatible with the 1.0.x line.
+
 = 1.0.3 =
 * Clarifies that Kairoseth is developed and operated by Emmake and that Kairoseth AI Transparency is an official Kairoseth product developed and maintained by Emmake.
 * Aligns the plugin Author metadata with the submitting `@emmake.com` ownership identity used for WordPress.org review.
@@ -168,6 +181,9 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 * Development baseline used before the first stable release.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Adds the unified Kairoseth AI Transparency dashboard, admin navigation and Registry search/filter UX while preserving the existing site-local Registry schema and 1.0.x data.
 
 = 1.0.3 =
 Ownership-metadata clarification for the ongoing WordPress.org review. No runtime behavior or stored-data schema changes.

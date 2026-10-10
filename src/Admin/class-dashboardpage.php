@@ -17,25 +17,13 @@ use Kairoseth\AITransparency\Persistence\WordPressOptionsRegistryRepository;
  * Renders the plugin-owned WordPress admin overview.
  */
 final class DashboardPage {
-	/**
-	 * Site-local registry repository.
-	 *
-	 * @var WordPressOptionsRegistryRepository
-	 */
+	/** @var WordPressOptionsRegistryRepository */
 	private $repository;
 
-	/**
-	 * Deterministic readiness engine.
-	 *
-	 * @var FindingEngine
-	 */
+	/** @var FindingEngine */
 	private $finding_engine;
 
-	/**
-	 * Disclosure eligibility engine.
-	 *
-	 * @var DisclosureEngine
-	 */
+	/** @var DisclosureEngine */
 	private $disclosure_engine;
 
 	/**
@@ -131,6 +119,14 @@ final class DashboardPage {
 			}
 		}
 
+		usort(
+			$systems,
+			static function ( AiSystem $left, AiSystem $right ): int {
+				return strcmp( $right->updated_at(), $left->updated_at() );
+			}
+		);
+		$recent_systems = array_slice( $systems, 0, 5 );
+
 		$actions = array(
 			array(
 				'title'       => __( 'AI Systems Registry', 'kairoseth-ai-transparency' ),
@@ -218,6 +214,48 @@ final class DashboardPage {
 				</div>
 			</section>
 
+			<section class="kat-dashboard-registry" aria-labelledby="kat-dashboard-registry-title">
+				<div class="kat-dashboard-registry-header">
+					<h2 id="kat-dashboard-registry-title"><?php echo esc_html__( 'AI Systems Registry', 'kairoseth-ai-transparency' ); ?></h2>
+					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ai-transparency' ) ); ?>">
+						<?php echo esc_html__( 'Open AI Systems Registry', 'kairoseth-ai-transparency' ); ?>
+					</a>
+				</div>
+
+				<?php if ( empty( $recent_systems ) ) : ?>
+					<p><?php echo esc_html__( 'No AI systems have been registered yet.', 'kairoseth-ai-transparency' ); ?></p>
+				<?php else : ?>
+					<div class="ai-transparency-table-wrap" role="region" aria-label="<?php echo esc_attr__( 'AI Systems Registry', 'kairoseth-ai-transparency' ); ?>" tabindex="0">
+						<table class="widefat striped">
+							<thead>
+								<tr>
+									<th scope="col"><?php echo esc_html__( 'Name', 'kairoseth-ai-transparency' ); ?></th>
+									<th scope="col"><?php echo esc_html__( 'Review', 'kairoseth-ai-transparency' ); ?></th>
+									<th scope="col"><?php echo esc_html__( 'Status', 'kairoseth-ai-transparency' ); ?></th>
+									<th scope="col"><?php echo esc_html__( 'Updated', 'kairoseth-ai-transparency' ); ?></th>
+									<th scope="col"><?php echo esc_html__( 'Actions', 'kairoseth-ai-transparency' ); ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ( $recent_systems as $system ) : ?>
+									<tr>
+										<td><strong><?php echo esc_html( $system->name() ); ?></strong></td>
+										<td><?php echo esc_html( $this->review_label( $system ) ); ?></td>
+										<td><?php echo esc_html( $this->status_label( $system ) ); ?></td>
+										<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
+										<td>
+											<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'ai-transparency', 'system' => $system->id() ), admin_url( 'admin.php' ) ) ); ?>">
+												<?php echo esc_html__( 'Edit', 'kairoseth-ai-transparency' ); ?>
+											</a>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				<?php endif; ?>
+			</section>
+
 			<p class="kat-dashboard-boundary">
 				<strong><?php echo esc_html__( 'Readiness boundary:', 'kairoseth-ai-transparency' ); ?></strong>
 				<?php echo esc_html__( 'This registry records technical information and administrator declarations. It does not certify or guarantee legal compliance.', 'kairoseth-ai-transparency' ); ?>
@@ -244,6 +282,30 @@ final class DashboardPage {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Return the localized review label for a registry system.
+	 *
+	 * @param AiSystem $system Registry system.
+	 * @return string
+	 */
+	private function review_label( AiSystem $system ): string {
+		return AiSystem::REVIEW_REVIEWED === $system->review_status()
+			? __( 'Reviewed', 'kairoseth-ai-transparency' )
+			: __( 'Pending review', 'kairoseth-ai-transparency' );
+	}
+
+	/**
+	 * Return the localized lifecycle label for a registry system.
+	 *
+	 * @param AiSystem $system Registry system.
+	 * @return string
+	 */
+	private function status_label( AiSystem $system ): string {
+		return AiSystem::STATUS_ACTIVE === $system->status()
+			? __( 'Active', 'kairoseth-ai-transparency' )
+			: __( 'Archived', 'kairoseth-ai-transparency' );
 	}
 
 	/**

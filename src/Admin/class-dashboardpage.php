@@ -65,7 +65,7 @@ final class DashboardPage {
 	public function register_menu(): void {
 		add_menu_page(
 			__( 'Kairoseth AI Transparency', 'kairoseth-ai-transparency' ),
-			__( 'Kairoseth AI', 'kairoseth-ai-transparency' ),
+			__( 'Kairoseth AI Transparency', 'kairoseth-ai-transparency' ),
 			'manage_options',
 			'kairoseth-ai-transparency',
 			array( $this, 'render' ),
@@ -134,43 +134,43 @@ final class DashboardPage {
 		$actions = array(
 			array(
 				'title'       => __( 'AI Systems Registry', 'kairoseth-ai-transparency' ),
-				'description' => __( 'Catalog, review and maintain every AI system used on this WordPress site.', 'kairoseth-ai-transparency' ),
-				'label'       => __( 'Manage systems', 'kairoseth-ai-transparency' ),
+				'description' => __( 'Maintain a local inventory of AI systems used by this WordPress site.', 'kairoseth-ai-transparency' ),
+				'label'       => __( 'Open AI Systems Registry', 'kairoseth-ai-transparency' ),
 				'url'         => admin_url( 'tools.php?page=ai-transparency' ),
 				'icon'        => 'dashicons-list-view',
 			),
 			array(
 				'title'       => __( 'AI Discovery', 'kairoseth-ai-transparency' ),
-				'description' => __( 'Review explainable technical evidence from supported AI integrations.', 'kairoseth-ai-transparency' ),
-				'label'       => __( 'Run discovery', 'kairoseth-ai-transparency' ),
+				'description' => __( 'Discovery reports only explainable technical evidence from supported WordPress integrations.', 'kairoseth-ai-transparency' ),
+				'label'       => __( 'AI Discovery', 'kairoseth-ai-transparency' ),
 				'url'         => admin_url( 'tools.php?page=ai-transparency-discovery' ),
 				'icon'        => 'dashicons-search',
 			),
 			array(
 				'title'       => __( 'AI Readiness', 'kairoseth-ai-transparency' ),
-				'description' => __( 'Review deterministic technical findings and the actions that need attention.', 'kairoseth-ai-transparency' ),
-				'label'       => __( 'View readiness', 'kairoseth-ai-transparency' ),
+				'description' => __( 'Technical readiness findings are generated from the current local AI Systems Registry.', 'kairoseth-ai-transparency' ),
+				'label'       => __( 'AI Readiness', 'kairoseth-ai-transparency' ),
 				'url'         => admin_url( 'tools.php?page=ai-transparency-readiness' ),
 				'icon'        => 'dashicons-shield-alt',
 			),
 			array(
 				'title'       => __( 'AI Disclosure', 'kairoseth-ai-transparency' ),
-				'description' => __( 'Prepare public AI interaction disclosures from reviewed registry state.', 'kairoseth-ai-transparency' ),
-				'label'       => __( 'Manage disclosures', 'kairoseth-ai-transparency' ),
+				'description' => __( 'Review which registered AI systems are ready for explicit frontend disclosure placement.', 'kairoseth-ai-transparency' ),
+				'label'       => __( 'AI Disclosure', 'kairoseth-ai-transparency' ),
 				'url'         => admin_url( 'tools.php?page=ai-transparency-disclosure' ),
 				'icon'        => 'dashicons-media-document',
 			),
 			array(
-				'title'       => __( 'Evidence Export', 'kairoseth-ai-transparency' ),
-				'description' => __( 'Generate a deterministic JSON evidence snapshot for review or audit workflows.', 'kairoseth-ai-transparency' ),
-				'label'       => __( 'Export evidence', 'kairoseth-ai-transparency' ),
+				'title'       => __( 'AI Evidence Export', 'kairoseth-ai-transparency' ),
+				'description' => __( 'Create a local JSON snapshot of the current site AI Systems Registry, technical findings and disclosure readiness.', 'kairoseth-ai-transparency' ),
+				'label'       => __( 'AI Evidence Export', 'kairoseth-ai-transparency' ),
 				'url'         => admin_url( 'tools.php?page=ai-transparency-evidence-export' ),
 				'icon'        => 'dashicons-download',
 			),
 			array(
-				'title'       => __( 'Support', 'kairoseth-ai-transparency' ),
-				'description' => __( 'Open support guidance and the optional privacy-bounded Kairoseth handoff.', 'kairoseth-ai-transparency' ),
-				'label'       => __( 'Open support', 'kairoseth-ai-transparency' ),
+				'title'       => __( 'AI Transparency Support', 'kairoseth-ai-transparency' ),
+				'description' => __( 'Optional Kairoseth support for implementation questions, third-party integrations and custom work.', 'kairoseth-ai-transparency' ),
+				'label'       => __( 'Get support', 'kairoseth-ai-transparency' ),
 				'url'         => admin_url( 'tools.php?page=ai-transparency-support' ),
 				'icon'        => 'dashicons-sos',
 			),
@@ -179,35 +179,31 @@ final class DashboardPage {
 		<div class="wrap ai-transparency-admin kat-dashboard">
 			<section class="kat-dashboard-hero" aria-labelledby="kat-dashboard-title">
 				<div>
-					<p class="kat-dashboard-kicker"><?php echo esc_html__( 'Kairoseth AI Transparency', 'kairoseth-ai-transparency' ); ?></p>
-					<h1 id="kat-dashboard-title"><?php echo esc_html__( 'AI transparency overview', 'kairoseth-ai-transparency' ); ?></h1>
-					<p><?php echo esc_html__( 'Discover, document, review and disclose AI use from one technical evidence workflow.', 'kairoseth-ai-transparency' ); ?></p>
-				</div>
-				<div class="kat-dashboard-version">
-					<span><?php echo esc_html__( 'Plugin version', 'kairoseth-ai-transparency' ); ?></span>
-					<strong><?php echo esc_html( KAIROSETH_AI_TRANSPARENCY_VERSION ); ?></strong>
+					<p class="kat-dashboard-kicker"><?php echo esc_html__( 'Local-first:', 'kairoseth-ai-transparency' ); ?></p>
+					<h1 id="kat-dashboard-title"><?php echo esc_html__( 'Kairoseth AI Transparency', 'kairoseth-ai-transparency' ); ?></h1>
+					<p><?php echo esc_html__( 'Maintain a local inventory of AI systems used by this WordPress site.', 'kairoseth-ai-transparency' ); ?></p>
 				</div>
 			</section>
 
-			<section class="kat-dashboard-metrics" aria-label="<?php echo esc_attr__( 'AI transparency summary', 'kairoseth-ai-transparency' ); ?>">
-				<?php $this->render_metric( __( 'Active AI systems', 'kairoseth-ai-transparency' ), $active_count, 'dashicons-database' ); ?>
-				<?php $this->render_metric( __( 'Pending reviews', 'kairoseth-ai-transparency' ), $pending_count, 'dashicons-visibility' ); ?>
-				<?php $this->render_metric( __( 'Readiness items', 'kairoseth-ai-transparency' ), $review_findings, 'dashicons-warning' ); ?>
-				<?php $this->render_metric( __( 'Disclosure-ready', 'kairoseth-ai-transparency' ), $disclosure_ready, 'dashicons-yes-alt' ); ?>
+			<section class="kat-dashboard-metrics" aria-label="<?php echo esc_attr__( 'AI Transparency', 'kairoseth-ai-transparency' ); ?>">
+				<?php $this->render_metric( __( 'Active', 'kairoseth-ai-transparency' ), $active_count, 'dashicons-database' ); ?>
+				<?php $this->render_metric( __( 'Pending review', 'kairoseth-ai-transparency' ), $pending_count, 'dashicons-visibility' ); ?>
+				<?php $this->render_metric( __( 'Review', 'kairoseth-ai-transparency' ), $review_findings, 'dashicons-warning' ); ?>
+				<?php $this->render_metric( __( 'Ready', 'kairoseth-ai-transparency' ), $disclosure_ready, 'dashicons-yes-alt' ); ?>
 			</section>
 
 			<section class="kat-dashboard-status" aria-labelledby="kat-dashboard-status-title">
 				<div>
-					<h2 id="kat-dashboard-status-title"><?php echo esc_html__( 'What needs attention', 'kairoseth-ai-transparency' ); ?></h2>
-					<?php $this->render_status_summary( $active_count, $pending_count, $review_findings, $disclosure_ready ); ?>
+					<h2 id="kat-dashboard-status-title"><?php echo esc_html__( 'Guidance', 'kairoseth-ai-transparency' ); ?></h2>
+					<p><?php echo esc_html__( 'Findings keep observed facts, administrator declarations and guidance separate. They do not determine or certify legal compliance.', 'kairoseth-ai-transparency' ); ?></p>
 				</div>
 				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'tools.php?page=ai-transparency-readiness' ) ); ?>">
-					<?php echo esc_html__( 'Review action items', 'kairoseth-ai-transparency' ); ?>
+					<?php echo esc_html__( 'AI Readiness', 'kairoseth-ai-transparency' ); ?>
 				</a>
 			</section>
 
 			<section aria-labelledby="kat-dashboard-tools-title">
-				<h2 id="kat-dashboard-tools-title" class="kat-dashboard-section-title"><?php echo esc_html__( 'Transparency workflow', 'kairoseth-ai-transparency' ); ?></h2>
+				<h2 id="kat-dashboard-tools-title" class="kat-dashboard-section-title"><?php echo esc_html__( 'AI Transparency', 'kairoseth-ai-transparency' ); ?></h2>
 				<div class="kat-dashboard-grid">
 					<?php foreach ( $actions as $action ) : ?>
 						<article class="kat-dashboard-card">
@@ -223,8 +219,8 @@ final class DashboardPage {
 			</section>
 
 			<p class="kat-dashboard-boundary">
-				<strong><?php echo esc_html__( 'Technical boundary:', 'kairoseth-ai-transparency' ); ?></strong>
-				<?php echo esc_html__( 'The dashboard summarizes technical evidence and administrator declarations. It does not determine or certify legal compliance.', 'kairoseth-ai-transparency' ); ?>
+				<strong><?php echo esc_html__( 'Readiness boundary:', 'kairoseth-ai-transparency' ); ?></strong>
+				<?php echo esc_html__( 'This registry records technical information and administrator declarations. It does not certify or guarantee legal compliance.', 'kairoseth-ai-transparency' ); ?>
 			</p>
 		</div>
 		<?php
@@ -247,58 +243,6 @@ final class DashboardPage {
 				<span><?php echo esc_html( $label ); ?></span>
 			</div>
 		</div>
-		<?php
-	}
-
-	/**
-	 * Render a concise state-dependent summary.
-	 *
-	 * @param int $active Active systems.
-	 * @param int $pending Pending reviews.
-	 * @param int $review_findings Review-priority findings.
-	 * @param int $disclosure_ready Disclosure-ready systems.
-	 * @return void
-	 */
-	private function render_status_summary( int $active, int $pending, int $review_findings, int $disclosure_ready ): void {
-		$items = array();
-
-		if ( 0 === $active ) {
-			$items[] = __( 'No active AI systems are registered yet. Add one manually or review supported discovery evidence.', 'kairoseth-ai-transparency' );
-		} else {
-			if ( $pending > 0 ) {
-				$items[] = sprintf(
-					/* translators: %d: number of AI systems pending review. */
-					_n( '%d AI system still needs administrator review.', '%d AI systems still need administrator review.', $pending, 'kairoseth-ai-transparency' ),
-					$pending
-				);
-			}
-
-			if ( $review_findings > 0 ) {
-				$items[] = sprintf(
-					/* translators: %d: number of readiness findings requiring review. */
-					_n( '%d readiness item needs attention.', '%d readiness items need attention.', $review_findings, 'kairoseth-ai-transparency' ),
-					$review_findings
-				);
-			}
-
-			if ( $disclosure_ready > 0 ) {
-				$items[] = sprintf(
-					/* translators: %d: number of disclosure-ready AI systems. */
-					_n( '%d AI system is ready to render a disclosure.', '%d AI systems are ready to render disclosures.', $disclosure_ready, 'kairoseth-ai-transparency' ),
-					$disclosure_ready
-				);
-			}
-		}
-
-		if ( empty( $items ) ) {
-			$items[] = __( 'No review-priority technical issues are currently reported from the active registry.', 'kairoseth-ai-transparency' );
-		}
-		?>
-		<ul class="kat-dashboard-status-list">
-			<?php foreach ( $items as $item ) : ?>
-				<li><?php echo esc_html( $item ); ?></li>
-			<?php endforeach; ?>
-		</ul>
 		<?php
 	}
 

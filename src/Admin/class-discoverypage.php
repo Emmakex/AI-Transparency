@@ -231,7 +231,7 @@ final class DiscoveryPage {
 	/**
 	 * Return the first deterministic discovery result for the current inventory.
 	 *
-	 * v1.2 starts by routing the existing single-result UX through the generic
+	 * Version 1.2 starts by routing the existing single-result UX through the generic
 	 * engine. A later microphase can render multiple results without changing the
 	 * detector contract or the server-side inventory boundary introduced here.
 	 *

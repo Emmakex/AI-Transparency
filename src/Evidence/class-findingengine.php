@@ -14,9 +14,10 @@ use Kairoseth\AITransparency\Registry\AiSystemsRegistry;
  * Generates technical readiness findings from current registry state.
  */
 final class FindingEngine {
-	public const RULE_REVIEW_PENDING    = 'registry_review_pending_v1';
-	public const RULE_CONTEXT_MISSING   = 'interaction_context_missing_v1';
-	public const RULE_DISCLOSURE_REVIEW = 'configured_disclosure_review_v1';
+	public const RULE_REVIEW_PENDING           = 'registry_review_pending_v1';
+	public const RULE_CONTEXT_MISSING          = 'interaction_context_missing_v1';
+	public const RULE_ADMIN_CONTEXT_INCOMPLETE = 'administrator_context_incomplete_v1';
+	public const RULE_DISCLOSURE_REVIEW        = 'configured_disclosure_review_v1';
 
 	/**
 	 * Generate all current findings in deterministic id order.
@@ -67,6 +68,24 @@ final class FindingEngine {
 				);
 			}
 
+			$missing_admin_context = $this->missing_admin_context( $system );
+			if ( ! empty( $missing_admin_context ) ) {
+				$findings[] = $this->build_finding(
+					self::RULE_ADMIN_CONTEXT_INCOMPLETE,
+					'registry_completeness',
+					Finding::PRIORITY_REVIEW,
+					$system,
+					Finding::FACT_ADMIN_CONTEXT_INCOMPLETE,
+					Finding::DECLARATION_NONE,
+					Finding::GUIDANCE_DOCUMENT_ADMIN_CONTEXT,
+					array(
+						'missing_fields' => $missing_admin_context,
+						'status'         => $system->status(),
+					),
+					$generated_at
+				);
+			}
+
 			if ( $system->interaction_disclosure_required() ) {
 				$findings[] = $this->build_finding(
 					self::RULE_DISCLOSURE_REVIEW,
@@ -93,6 +112,32 @@ final class FindingEngine {
 		);
 
 		return $findings;
+	}
+
+	/**
+	 * Return administrator-authored context fields that remain undocumented.
+	 *
+	 * @param AiSystem $system AI system record.
+	 * @return string[]
+	 */
+	private function missing_admin_context( AiSystem $system ): array {
+		$context = array(
+			'purpose'          => $system->purpose(),
+			'provider'         => $system->provider(),
+			'model'            => $system->model(),
+			'audience'         => $system->audience(),
+			'human_oversight'  => $system->human_oversight(),
+			'data_use_context' => $system->data_use_context(),
+		);
+		$missing = array();
+
+		foreach ( $context as $field => $value ) {
+			if ( '' === $value ) {
+				$missing[] = $field;
+			}
+		}
+
+		return $missing;
 	}
 
 	/**

@@ -250,22 +250,21 @@ final class DashboardPage {
 							</thead>
 							<tbody>
 								<?php foreach ( $recent_systems as $system ) : ?>
+									<?php
+									$edit_url = add_query_arg(
+										array(
+											'page'   => 'ai-transparency',
+											'system' => $system->id(),
+										),
+										admin_url( 'admin.php' )
+									);
+									?>
 									<tr>
 										<td><strong><?php echo esc_html( $system->name() ); ?></strong></td>
 										<td><?php echo esc_html( $this->review_label( $system ) ); ?></td>
 										<td><?php echo esc_html( $this->status_label( $system ) ); ?></td>
 										<td><?php echo esc_html( '' !== $system->updated_at() ? $system->updated_at() : '—' ); ?></td>
-										<td>
-											<a href="<?php echo esc_url( add_query_arg(
-												array(
-													'page'   => 'ai-transparency',
-													'system' => $system->id(),
-												),
-												admin_url( 'admin.php' )
-											) ); ?>">
-												<?php echo esc_html__( 'Edit', 'kairoseth-ai-transparency' ); ?>
-											</a>
-										</td>
+										<td><a href="<?php echo esc_url( $edit_url ); ?>"><?php echo esc_html__( 'Edit', 'kairoseth-ai-transparency' ); ?></a></td>
 									</tr>
 								<?php endforeach; ?>
 							</tbody>

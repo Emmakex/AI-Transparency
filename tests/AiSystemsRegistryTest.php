@@ -45,7 +45,7 @@ final class AiSystemsRegistryTest extends TestCase {
 		new AiSystem( 'x', 'Unknown', 'magic-ai', 'manual' );
 	}
 
-	public function test_ai_system_exports_stable_phase_2_shape(): void {
+	public function test_ai_system_exports_stable_registry_v2_shape(): void {
 		$system = new AiSystem(
 			'assistant',
 			'Assistant',
@@ -57,6 +57,12 @@ final class AiSystemsRegistryTest extends TestCase {
 				'status'              => AiSystem::STATUS_ACTIVE,
 				'review_status'       => AiSystem::REVIEW_REVIEWED,
 				'interaction_context' => 'Support widget',
+				'purpose'             => 'Answer customer support questions.',
+				'provider'            => 'Example Provider',
+				'model'               => 'Example Model Family',
+				'audience'            => 'Website customers',
+				'human_oversight'     => 'Support staff review escalated answers.',
+				'data_use_context'    => 'Customer questions and public knowledge-base content.',
 				'created_at'          => '2026-09-09T10:00:00+00:00',
 				'updated_at'          => '2026-09-09T11:00:00+00:00',
 				'reviewed_at'         => '2026-09-09T11:00:00+00:00',
@@ -73,6 +79,12 @@ final class AiSystemsRegistryTest extends TestCase {
 				'status'                          => AiSystem::STATUS_ACTIVE,
 				'review_status'                   => AiSystem::REVIEW_REVIEWED,
 				'interaction_context'             => 'Support widget',
+				'purpose'                         => 'Answer customer support questions.',
+				'provider'                        => 'Example Provider',
+				'model'                           => 'Example Model Family',
+				'audience'                        => 'Website customers',
+				'human_oversight'                 => 'Support staff review escalated answers.',
+				'data_use_context'                => 'Customer questions and public knowledge-base content.',
 				'interaction_disclosure_required' => true,
 				'created_at'                      => '2026-09-09T10:00:00+00:00',
 				'updated_at'                      => '2026-09-09T11:00:00+00:00',
@@ -82,8 +94,37 @@ final class AiSystemsRegistryTest extends TestCase {
 		);
 	}
 
+	public function test_ai_system_hydrates_older_records_with_empty_context_defaults(): void {
+		$system = AiSystem::from_array(
+			array(
+				'id'     => 'legacy',
+				'name'   => 'Legacy system',
+				'type'   => AiSystem::TYPE_OTHER,
+				'source' => 'manual',
+			)
+		);
+
+		$this->assertSame( '', $system->purpose() );
+		$this->assertSame( '', $system->provider() );
+		$this->assertSame( '', $system->model() );
+		$this->assertSame( '', $system->audience() );
+		$this->assertSame( '', $system->human_oversight() );
+		$this->assertSame( '', $system->data_use_context() );
+	}
+
 	public function test_ai_system_can_be_archived_without_losing_existing_metadata(): void {
-		$system   = new AiSystem( 'assistant', 'Assistant', 'assistant', 'manual' );
+		$system = new AiSystem(
+			'assistant',
+			'Assistant',
+			'assistant',
+			'manual',
+			false,
+			array(
+				'purpose'         => 'Internal drafting',
+				'provider'        => 'Example Provider',
+				'human_oversight' => 'Every draft is reviewed before publication.',
+			)
+		);
 		$archived = $system->with_updates(
 			array(
 				'status'     => AiSystem::STATUS_ARCHIVED,
@@ -94,5 +135,8 @@ final class AiSystemsRegistryTest extends TestCase {
 		$this->assertSame( AiSystem::STATUS_ARCHIVED, $archived->status() );
 		$this->assertSame( 'Assistant', $archived->name() );
 		$this->assertSame( 'manual', $archived->source() );
+		$this->assertSame( 'Internal drafting', $archived->purpose() );
+		$this->assertSame( 'Example Provider', $archived->provider() );
+		$this->assertSame( 'Every draft is reviewed before publication.', $archived->human_oversight() );
 	}
 }

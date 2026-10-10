@@ -14,7 +14,7 @@ use Throwable;
  * Converts registry state to and from a stable versioned persistence shape.
  */
 final class RegistrySchema {
-	public const VERSION = 1;
+	public const VERSION = 2;
 
 	/**
 	 * Encode registry state for persistence and deterministic export.
@@ -66,7 +66,9 @@ final class RegistrySchema {
 	 * Normalize supported older payloads to the current schema.
 	 *
 	 * Version 0 accepted either a raw list of records or an array with a systems key.
-	 * Missing Phase 2 metadata is filled by AiSystem defaults during hydration.
+	 * Version 1 introduced lifecycle and review metadata. Version 2 adds optional
+	 * administrator-authored system context. Missing fields are always normalized
+	 * to empty strings rather than inferred from detector evidence.
 	 *
 	 * @param mixed $payload Persisted value.
 	 * @return array<string, mixed>
@@ -104,6 +106,12 @@ final class RegistrySchema {
 				'status'                          => isset( $system_data['status'] ) ? (string) $system_data['status'] : AiSystem::STATUS_ACTIVE,
 				'review_status'                   => isset( $system_data['review_status'] ) ? (string) $system_data['review_status'] : AiSystem::REVIEW_PENDING,
 				'interaction_context'             => isset( $system_data['interaction_context'] ) ? (string) $system_data['interaction_context'] : '',
+				'purpose'                         => isset( $system_data['purpose'] ) ? (string) $system_data['purpose'] : '',
+				'provider'                        => isset( $system_data['provider'] ) ? (string) $system_data['provider'] : '',
+				'model'                           => isset( $system_data['model'] ) ? (string) $system_data['model'] : '',
+				'audience'                        => isset( $system_data['audience'] ) ? (string) $system_data['audience'] : '',
+				'human_oversight'                 => isset( $system_data['human_oversight'] ) ? (string) $system_data['human_oversight'] : '',
+				'data_use_context'                => isset( $system_data['data_use_context'] ) ? (string) $system_data['data_use_context'] : '',
 				'interaction_disclosure_required' => ! empty( $system_data['interaction_disclosure_required'] ),
 				'created_at'                      => isset( $system_data['created_at'] ) ? (string) $system_data['created_at'] : '',
 				'updated_at'                      => isset( $system_data['updated_at'] ) ? (string) $system_data['updated_at'] : '',

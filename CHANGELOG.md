@@ -6,19 +6,25 @@ The project follows semantic versioning for public releases.
 
 ## [Unreleased]
 
+No changes yet.
+
+## [1.1.0] - 2026-10-10
+
 ### Added
 
 - Dedicated top-level **Kairoseth AI Transparency** dashboard with live Registry, review, readiness and disclosure-ready metrics.
 - Unified Kairoseth AI admin navigation for Registry, Discovery, Readiness, Disclosure, Evidence Export and Support while preserving legacy Tools routes for backwards compatibility.
 - Dashboard Registry activity table with direct edit links to recent systems.
+- Instant local Registry search and filters by system type, review status and lifecycle status without changing the persistence schema.
 - Dedicated v1.1 admin experience layer with improved cards, tables, forms, findings, responsive behavior and reduced-motion handling.
-- End-to-end browser acceptance covering the dashboard, unified menu, duplicate Tools-menu removal, responsive behavior, accessibility and shared v1.1 styling.
+- End-to-end browser acceptance covering the dashboard, unified menu, duplicate Tools-menu removal, Registry filtering, responsive behavior, accessibility and shared v1.1 styling.
 
 ### Changed
 
-- Dashboard actions now stay inside the unified Kairoseth AI admin area instead of routing users back through Tools.
-- Disclosure edit links now stay inside the unified Kairoseth AI Registry route.
-- The WordPress.org 1.0.3 release remains untouched while v1.1 work is developed and validated on a dedicated feature branch.
+- Dashboard and internal workflow actions now stay inside the unified Kairoseth AI admin area instead of routing users back through Tools.
+- Spanish source-catalog metadata and the POT template now target version 1.1.0 and the canonical `kairoseth-ai-transparency` text domain.
+- WordPress.org-facing readme navigation and release metadata now describe the unified 1.1 admin experience.
+- Registry persistence, Evidence Export schema and existing 1.0.x site-local data remain compatible.
 
 ## [1.0.3] - 2026-09-26
 

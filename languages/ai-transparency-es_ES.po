@@ -296,6 +296,9 @@ msgstr "El registro activo todavía está pendiente de revisión por un administ
 msgid "No interaction context is recorded for this active AI system."
 msgstr "No se ha registrado un contexto de interacción para este sistema de IA activo."
 
+msgid "One or more administrator context fields are not documented for this active AI system."
+msgstr "Uno o más campos de contexto del administrador no están documentados para este sistema de IA activo."
+
 msgid "This AI system is active in the local AI Systems Registry."
 msgstr "Este sistema de IA está activo en el Registro local de sistemas de IA."
 
@@ -313,6 +316,9 @@ msgstr "Revisa el uso real del sistema, su tipo, el contexto de interacción y l
 
 msgid "Document where or how visitors, staff or customers interact with this AI system."
 msgstr "Documenta dónde o cómo interactúan los visitantes, el personal o los clientes con este sistema de IA."
+
+msgid "Review the missing administrator context fields and document those that are applicable to this system."
+msgstr "Revisa los campos de contexto del administrador que faltan y documenta los que sean aplicables a este sistema."
 
 msgid "Verify that the configured disclosure has an appropriate implementation and placement for the actual workflow."
 msgstr "Verifica que el aviso configurado tenga una implementación y ubicación adecuadas para el flujo real."

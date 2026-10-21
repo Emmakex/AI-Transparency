@@ -4,7 +4,7 @@ Tags: ai transparency, eu ai act, ai disclosure, article 50, artificial intellig
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: MIT
 License URI: https://opensource.org/license/mit/
 
@@ -156,6 +156,12 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 
 == Changelog ==
 
+= 1.2.1 =
+* Makes the plugin follow the WordPress locale automatically with a bundled Spanish (`es_ES`) runtime fallback.
+* Keeps installed WordPress.org language packs authoritative when they are available.
+* Preserves English as the source/fallback language and does not add a plugin-specific language selector.
+* Adds production-package and real WordPress runtime checks for Spanish and English locale behavior.
+
 = 1.2.0 =
 * Adds an extensible multi-detector Discovery engine while preserving server-authoritative, deterministic evidence selection.
 * Adds validated deterministic Discovery support for AI Puffer 2.4.97 alongside AI Engine 3.7.7.
@@ -208,6 +214,9 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 * Development baseline used before the first stable release.
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Adds automatic locale-aware Spanish rendering for `es_ES` WordPress sites while keeping official WordPress.org language packs authoritative and English as the fallback for unsupported locales.
 
 = 1.2.0 =
 Adds multi-detector Discovery, AI Puffer support and Registry schema v2 with explicit administrator context. Existing Registry records are preserved and migrated safely with new declaration fields empty until reviewed.

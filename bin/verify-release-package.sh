@@ -59,18 +59,31 @@ if grep -Ev "^${PLUGIN_SLUG}/" "${ARCHIVE_LIST}" >/dev/null; then
   exit 1
 fi
 
-for forbidden_fragment in '/tests/' '/.github/' '/docs/' '/vendor/' '/node_modules/' '/build/' '/dist/' '/composer.json' '/package.json' '/phpcs.xml.dist' '/phpunit.xml.dist' '/playwright.config.js' '/languages/'; do
+for forbidden_fragment in '/tests/' '/.github/' '/docs/' '/vendor/' '/node_modules/' '/build/' '/dist/' '/composer.json' '/package.json' '/phpcs.xml.dist' '/phpunit.xml.dist' '/playwright.config.js'; do
   if grep -F "${forbidden_fragment}" "${ARCHIVE_LIST}" >/dev/null; then
-    echo "Development-only or WordPress.org-managed content leaked into release ZIP: ${forbidden_fragment}" >&2
+    echo "Development-only content leaked into release ZIP: ${forbidden_fragment}" >&2
     exit 1
   fi
 done
+
+if grep -E '\.(po|pot)$' "${ARCHIVE_LIST}" >/dev/null; then
+  echo "Source translation catalogs leaked into release ZIP; only compiled runtime catalogs should ship." >&2
+  exit 1
+fi
 
 mkdir -p "${EXTRACT_ROOT}"
 unzip -q "${ZIP_PATH}" -d "${EXTRACT_ROOT}"
 PLUGIN_ROOT="${EXTRACT_ROOT}/${PLUGIN_SLUG}"
 
-required_paths=("ai-transparency.php" "uninstall.php" "readme.txt" "LICENSE" "assets/admin.css" "assets/frontend.css")
+required_paths=(
+  "ai-transparency.php"
+  "uninstall.php"
+  "readme.txt"
+  "LICENSE"
+  "assets/admin.css"
+  "assets/frontend.css"
+  "languages/${PLUGIN_SLUG}-es_ES.mo"
+)
 for required_path in "${required_paths[@]}"; do
   [[ -s "${PLUGIN_ROOT}/${required_path}" ]] || { echo "Required file is missing from exact release ZIP: ${required_path}" >&2; exit 1; }
 done
@@ -82,11 +95,11 @@ EXTRACTED_TEXT_DOMAIN="$(sed -n 's/^ \* Text Domain:[[:space:]]*//p' "${PLUGIN_R
 [[ "${EXTRACTED_VERSION}" == "${VERSION}" && "${EXTRACTED_STABLE_TAG}" == "${VERSION}" ]] || { echo "Exact release ZIP metadata does not resolve to ${VERSION}." >&2; exit 1; }
 [[ "${EXTRACTED_TEXT_DOMAIN}" == "${PLUGIN_SLUG}" ]] || { echo "Exact release ZIP text domain does not match ${PLUGIN_SLUG}." >&2; exit 1; }
 
-if grep -R --include='*.php' -F "load_plugin_textdomain(" "${PLUGIN_ROOT}" >/dev/null; then
-  echo "Exact release ZIP PHP still contains a manual plugin text-domain loader call." >&2
+if ! grep -R --include='*.php' -F "load_plugin_textdomain(" "${PLUGIN_ROOT}" >/dev/null; then
+  echo "Exact release ZIP does not register the bundled locale fallback path." >&2
   exit 1
 fi
 
 php -l "${PLUGIN_ROOT}/ai-transparency.php" >/dev/null
 php -l "${PLUGIN_ROOT}/uninstall.php" >/dev/null
-printf 'Release package gate passed: %s is reproducible with SHA-256 %s.\n' "${ZIP_NAME}" "${SECOND_HASH}"
+printf 'Release package gate passed: %s is reproducible with SHA-256 %s and includes the es_ES runtime fallback.\n' "${ZIP_NAME}" "${SECOND_HASH}"

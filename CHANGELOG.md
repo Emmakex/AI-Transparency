@@ -8,6 +8,20 @@ The project follows semantic versioning for public releases.
 
 No changes yet.
 
+## [1.2.1] - 2026-10-21
+
+### Fixed
+
+- Spanish WordPress installations now have a bundled `es_ES` runtime fallback, so the plugin interface follows the WordPress locale even while the WordPress.org translation is awaiting validation, propagation or download.
+- Installed WordPress.org language packs remain authoritative and take precedence over the plugin-local fallback.
+- English WordPress installations continue to use the English source strings without a plugin-specific language selector.
+
+### Validation
+
+- Production builds now compile the maintained Spanish source catalog to `languages/kairoseth-ai-transparency-es_ES.mo`.
+- CI validates that the compiled Spanish fallback is present while source `.po`/`.pot` catalogs remain outside the production ZIP.
+- Real WordPress runtime acceptance switches the site to `es_ES`, verifies representative dashboard translations, then switches back to `en_US` and verifies the English fallback.
+
 ## [1.2.0] - 2026-10-10
 
 ### Added

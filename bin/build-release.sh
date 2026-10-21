@@ -35,6 +35,7 @@ required_paths=(
   "LICENSE"
   "assets/admin.css"
   "assets/frontend.css"
+  "languages/${PLUGIN_SLUG}-es_ES.mo"
 )
 
 for required_path in "${required_paths[@]}"; do
@@ -44,12 +45,17 @@ for required_path in "${required_paths[@]}"; do
   fi
 done
 
-for forbidden_path in tests .github docs vendor node_modules build dist composer.json package.json phpcs.xml.dist phpunit.xml.dist playwright.config.js languages; do
+for forbidden_path in tests .github docs vendor node_modules build dist composer.json package.json phpcs.xml.dist phpunit.xml.dist playwright.config.js; do
   if [[ -e "${PLUGIN_DIR}/${forbidden_path}" ]]; then
-    echo "Development-only or WordPress.org-managed path leaked into release package: ${forbidden_path}" >&2
+    echo "Development-only path leaked into release package: ${forbidden_path}" >&2
     exit 1
   fi
 done
+
+if find "${PLUGIN_DIR}/languages" -type f \( -name '*.po' -o -name '*.pot' \) -print -quit | grep -q .; then
+  echo "Source translation catalogs leaked into release package; only compiled runtime catalogs are allowed." >&2
+  exit 1
+fi
 
 # ZIP stores file timestamps. Normalize the copied release tree to the earliest
 # portable ZIP timestamp and force UTC so the same source produces the same

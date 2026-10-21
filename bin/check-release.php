@@ -146,8 +146,13 @@ if ( '' !== $plugin_uri && '' !== $author_uri && $plugin_uri === $author_uri ) {
 	$failures[] = 'Plugin URI and Author URI must be different for WordPress.org submission.';
 }
 
-if ( false !== strpos( $plugin, 'load_plugin_textdomain(' ) ) {
-	$failures[] = 'WordPress.org package must not call load_plugin_textdomain() for this WordPress 6.6+ plugin.';
+if ( false === strpos( $plugin, 'Domain Path:' ) ) {
+	$failures[] = 'Plugin header must declare Domain Path for the bundled locale fallback.';
+}
+
+$plugin_runtime = file_get_contents( $root . '/src/class-plugin.php' );
+if ( false === $plugin_runtime || false === strpos( $plugin_runtime, 'load_plugin_textdomain(' ) ) {
+	$failures[] = 'Plugin runtime must register the bundled locale fallback path.';
 }
 
 if ( '' !== $header_version && false === strpos( $changelog, '## [' . $header_version . ']' ) ) {

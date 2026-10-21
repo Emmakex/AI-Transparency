@@ -51,9 +51,10 @@ final class Plugin {
 	/**
 	 * Register WordPress hooks once.
 	 *
-	 * WordPress.org language packs use just-in-time translation loading for
-	 * supported WordPress versions, so no manual plugin text-domain loader is
-	 * registered here.
+	 * WordPress.org language packs remain authoritative when installed. The
+	 * bundled Spanish catalog is registered as a local fallback so an es_ES
+	 * WordPress site does not remain in English while a directory translation
+	 * is still waiting for validation or download.
 	 *
 	 * @return void
 	 */
@@ -63,6 +64,8 @@ final class Plugin {
 		}
 
 		$this->booted = true;
+
+		add_action( 'init', array( $this, 'register_translation_path' ), 0 );
 
 		( new DisclosureShortcode() )->register();
 
@@ -92,6 +95,22 @@ final class Plugin {
 				$support_page
 			) )->register();
 		}
+	}
+
+	/**
+	 * Register the bundled translation directory for WordPress just-in-time i18n.
+	 *
+	 * WordPress checks WP_LANG_DIR first, so an installed WordPress.org language
+	 * pack takes precedence over this bundled fallback automatically.
+	 *
+	 * @return void
+	 */
+	public function register_translation_path(): void {
+		load_plugin_textdomain(
+			'kairoseth-ai-transparency',
+			false,
+			dirname( plugin_basename( KAIROSETH_AI_TRANSPARENCY_FILE ) ) . '/languages'
+		);
 	}
 
 	/**

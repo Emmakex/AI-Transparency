@@ -57,13 +57,14 @@ jobs:
         run: bash bin/run-with-diagnostics.sh "EN ES source coverage" -- php bin/check-i18n.php
       - name: Build WordPress.org production package
         run: bash bin/run-with-diagnostics.sh "WordPress.org production package" -- bash bin/build-plugin.sh
-      - name: Verify directory package uses language packs
+      - name: Verify locale-aware EN/ES package
         shell: bash
         run: |
           set -euo pipefail
-          test ! -d build/kairoseth-ai-transparency/languages
+          test -s build/kairoseth-ai-transparency/languages/kairoseth-ai-transparency-es_ES.mo
           grep -Fq "Text Domain:       kairoseth-ai-transparency" build/kairoseth-ai-transparency/ai-transparency.php
-          ! grep -R --include='*.php' -F "load_plugin_textdomain(" build/kairoseth-ai-transparency
+          grep -R --include='*.php' -Fq "load_plugin_textdomain(" build/kairoseth-ai-transparency
+          ! find build/kairoseth-ai-transparency/languages -type f \( -name '*.po' -o -name '*.pot' \) -print -quit | grep -q .
       - name: Upload bilingual diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -158,6 +159,15 @@ jobs:
         run: bash bin/run-with-diagnostics.sh "WordPress single-site start" -- npm exec -- wp-env start
       - name: Verify production plugin activation
         run: bash bin/run-with-diagnostics.sh "WordPress plugin activation" -- npm exec -- wp-env run cli -- wp plugin is-active kairoseth-ai-transparency
+      - name: Verify automatic Spanish locale fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm exec -- wp-env run cli -- wp language core install es_ES
+          npm exec -- wp-env run cli -- wp site switch-language es_ES
+          bash bin/run-with-diagnostics.sh "Spanish locale runtime" -- npm exec -- wp-env run cli -- wp eval-file wp-content/ai-transparency-runtime-tests/locale-smoke.php
+          npm exec -- wp-env run cli -- wp site switch-language en_US
+          npm exec -- wp-env run cli -- wp eval 'if ( "Active" !== __( "Active", "kairoseth-ai-transparency" ) ) { fwrite( STDERR, "English fallback failed.\n" ); exit( 1 ); } echo "English locale fallback passed.\n";'
       - name: Install AI Engine 3.7.7 discovery fixture
         run: >-
           bash bin/run-with-diagnostics.sh "AI Engine 3.7.7 fixture" --

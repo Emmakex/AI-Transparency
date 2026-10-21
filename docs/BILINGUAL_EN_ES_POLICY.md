@@ -40,10 +40,10 @@ Exceptions must never be used to bypass translation of surrounding explanatory t
 
 ### WordPress implementation contract
 
-Customer-facing PHP strings use the plugin text domain:
+Customer-facing PHP strings use the canonical plugin text domain:
 
 ```text
-ai-transparency
+kairoseth-ai-transparency
 ```
 
 Source language is English. Spanish source translations live in:
@@ -52,17 +52,28 @@ Source language is English. Spanish source translations live in:
 languages/ai-transparency-es_ES.po
 ```
 
-The release build compiles the Spanish catalog into the production package.
+The production build compiles that maintained source catalog to the canonical runtime fallback path:
+
+```text
+languages/kairoseth-ai-transparency-es_ES.mo
+```
+
+WordPress.org language packs remain authoritative. When an official language pack is installed under `WP_LANG_DIR/plugins`, WordPress resolves it before the plugin-local fallback. The bundled `es_ES` catalog exists so a Spanish WordPress installation still receives complete Spanish UI while a WordPress.org translation is awaiting validation, propagation or download.
+
+The plugin does not expose its own language selector. Runtime language follows the WordPress locale. English remains the source/fallback language for unsupported locales.
 
 ### CI gate
 
 The bilingual gate must fail when:
 
-1. a discovered runtime gettext string is missing from the Spanish catalog;
+1. a discovered runtime gettext string is missing from the Spanish source catalog;
 2. a Spanish `msgstr` is empty;
 3. a source gettext call uses the wrong text domain;
-4. the production build omits the Spanish catalog/compiled translation;
-5. a customer-facing PR explicitly declares EN/ES incomplete.
+4. the production build omits the compiled Spanish fallback catalog;
+5. source `.po`/`.pot` catalogs leak into the production ZIP unnecessarily;
+6. a real `es_ES` WordPress runtime does not resolve representative plugin strings to Spanish;
+7. an English WordPress runtime does not retain the English source strings;
+8. a customer-facing PR explicitly declares EN/ES incomplete.
 
 WPCS/Plugin Check continue to enforce WordPress internationalization conventions. The Kairoseth bilingual checker adds the stronger business rule that **Spanish coverage cannot be incomplete**.
 
@@ -88,7 +99,7 @@ For locales other than EN/ES, WordPress may fall back to English until additiona
 
 ### Regla de producto
 
-Cada extensión Kairoseth publica **inglés y español juntos con cobertura customer-facing del 100%**.
+Cada extensión Kairoseth publica **inglés y español juntos con cobertura de cara al usuario del 100%**.
 
 No es un objetivo futuro de traducción. Es una condición de merge y release.
 
@@ -98,10 +109,10 @@ En cada release funcional de cara al usuario:
 
 - cada cadena runtime traducible tiene una cadena fuente en inglés;
 - cada cadena runtime traducible tiene traducción española no vacía;
-- ninguna cadena customer-facing nueva cae involuntariamente al inglés con locale español;
+- ninguna cadena de cara al usuario nueva cae involuntariamente al inglés con locale español;
 - EN y ES describen la misma funcionalidad/estado sin copy desactualizado o contradictorio;
 - se incluyen errores, warnings, notices, validaciones, disclosures, botones, labels, ayuda y CTA de Custom Requests;
-- exports/emails/informes customer-facing creados por el plugin son bilingües cuando exista esa superficie;
+- exports/emails/informes de cara al usuario creados por el plugin son bilingües cuando exista esa superficie;
 - la documentación de usuario de la función publicada está disponible en EN y ES, dentro del mismo documento bilingüe o en equivalentes localizados.
 
 ### Excepciones normales
@@ -118,35 +129,46 @@ Estas excepciones nunca permiten dejar sin traducir el texto explicativo que las
 
 ### Contrato WordPress
 
-Las cadenas PHP customer-facing usan el text domain:
+Las cadenas PHP de cara al usuario usan el text domain canónico:
 
 ```text
-ai-transparency
+kairoseth-ai-transparency
 ```
 
-El idioma fuente es inglés. Las traducciones españolas viven en:
+El idioma fuente es inglés. Las traducciones españolas fuente viven en:
 
 ```text
 languages/ai-transparency-es_ES.po
 ```
 
-El build de release compila el catálogo español dentro del paquete de producción.
+El build de producción compila ese catálogo mantenido al fallback runtime canónico:
+
+```text
+languages/kairoseth-ai-transparency-es_ES.mo
+```
+
+Los paquetes de idioma de WordPress.org siguen siendo autoritativos. Cuando existe un paquete oficial en `WP_LANG_DIR/plugins`, WordPress lo resuelve antes que el fallback local del plugin. El catálogo `es_ES` incluido garantiza que una instalación de WordPress en español siga mostrando el plugin completamente en español mientras la traducción de WordPress.org espera validación, propagación o descarga.
+
+El plugin no incluye un selector de idioma propio. El idioma de ejecución sigue el locale de WordPress. El inglés permanece como idioma fuente/fallback para locales no soportados.
 
 ### Gate CI
 
 El gate bilingüe debe fallar cuando:
 
-1. una cadena gettext runtime detectada falta en el catálogo español;
+1. una cadena gettext runtime detectada falta en el catálogo español fuente;
 2. un `msgstr` español está vacío;
 3. una llamada gettext usa un text domain incorrecto;
-4. el build de producción omite el catálogo/traducción compilada española;
-5. un PR customer-facing declara explícitamente EN/ES incompleto.
+4. el build de producción omite el catálogo español compilado de fallback;
+5. los catálogos fuente `.po`/`.pot` se filtran innecesariamente al ZIP de producción;
+6. un WordPress real en `es_ES` no resuelve cadenas representativas del plugin al español;
+7. un WordPress en inglés no conserva las cadenas fuente en inglés;
+8. un PR de cara al usuario declara explícitamente EN/ES incompleto.
 
 WPCS/Plugin Check siguen comprobando las convenciones de internacionalización WordPress. El checker bilingüe Kairoseth añade la regla más estricta de negocio: **la cobertura española no puede quedar incompleta**.
 
 ### Requisito del PR
 
-Cada PR customer-facing declara:
+Cada PR de cara al usuario declara:
 
 ```text
 Impacto EN: completo / no aplica
@@ -154,7 +176,7 @@ Impacto ES: completo / no aplica
 Gate bilingüe: pass
 ```
 
-`no aplica` solo es válido cuando el cambio realmente no afecta lenguaje ni UX customer-facing.
+`no aplica` solo es válido cuando el cambio realmente no afecta lenguaje ni UX de cara al usuario.
 
 ### Locales no soportados
 

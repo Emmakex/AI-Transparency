@@ -8,6 +8,27 @@ The project follows semantic versioning for public releases.
 
 No changes yet.
 
+## [1.3.0] - 2026-10-22
+
+### Added
+
+- Operational dashboard priority state that routes administrators to the most relevant next action from current local Registry and Readiness state.
+- Compact action rows for pending review, technical review findings and disclosure-ready systems.
+- Compact six-module workflow map covering Registry, Discovery, Readiness, Disclosure, Evidence Export and Support.
+- Dashboard version indicator, improved Registry empty state and localized WordPress-formatted update dates.
+
+### Changed
+
+- Reworked the plugin overview from a static module-card landing page into an operational center focused on current state, attention and next actions.
+- Strengthened visual semantics for active, pending, review and disclosure-ready metrics while preserving the same underlying deterministic data.
+- Recent Registry entries now use explicit visual badges for review and lifecycle state.
+- Responsive behavior, keyboard focus, reduced-motion handling and Playwright accessibility coverage were expanded for the new dashboard structure.
+
+### Privacy and authority
+
+- No Registry schema, stored-data lifecycle, Discovery evidence boundary, Readiness logic, Disclosure eligibility, Evidence Export payload or external-service behavior changed in 1.3.0.
+- Dashboard recommendations remain deterministic navigation guidance derived from local plugin state; they do not determine or certify legal compliance.
+
 ## [1.2.1] - 2026-10-21
 
 ### Fixed

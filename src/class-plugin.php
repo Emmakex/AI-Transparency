@@ -7,6 +7,7 @@
 
 namespace Kairoseth\AITransparency;
 
+use Kairoseth\AITransparency\Admin\ActionCenterPage;
 use Kairoseth\AITransparency\Admin\AdminNavigation;
 use Kairoseth\AITransparency\Admin\AdminPage;
 use Kairoseth\AITransparency\Admin\DashboardPage;
@@ -71,6 +72,7 @@ final class Plugin {
 
 		if ( is_admin() ) {
 			$dashboard_page       = new DashboardPage();
+			$action_center_page   = new ActionCenterPage();
 			$registry_page        = new AdminPage();
 			$discovery_page       = new DiscoveryPage();
 			$readiness_page       = new ReadinessPage();
@@ -79,6 +81,7 @@ final class Plugin {
 			$support_page         = new SupportPage();
 
 			$dashboard_page->register();
+			$action_center_page->register();
 			$registry_page->register();
 			$discovery_page->register();
 			$readiness_page->register();

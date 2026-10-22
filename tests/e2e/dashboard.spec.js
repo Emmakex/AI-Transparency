@@ -23,6 +23,7 @@ test('v1.3 dashboard acts as an accessible operational center for the plugin wor
   await page.goto('/wp-admin/admin.php?page=kairoseth-ai-transparency');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Kairoseth AI Transparency' })).toBeVisible();
+  // Assert the semantic marker, not formatting whitespace around the visible label.
   await expect(page.locator('.kat-dashboard-version')).toHaveAttribute('aria-label', /^v\d+\.\d+\.\d+$/);
   await expect(page.locator('.kat-dashboard-metric')).toHaveCount(4);
   await expect(page.locator('.kat-dashboard-priority')).toHaveCount(1);

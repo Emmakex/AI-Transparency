@@ -29,6 +29,12 @@ test('v1.3 dashboard acts as an accessible operational center for the plugin wor
   await expect(page.locator('.kat-dashboard-action')).toHaveCount(3);
   await expect(page.locator('.kat-dashboard-workflow-link')).toHaveCount(6);
 
+  const heroPrimary = page.locator('.kat-dashboard-hero-actions .button-primary');
+  await expect(heroPrimary).toBeVisible();
+  await expect(heroPrimary).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(heroPrimary).toHaveCSS('color', 'rgb(13, 68, 140)');
+  await expect(page.locator('.kat-dashboard-priority-label')).toBeHidden();
+
   await expect(page.getByRole('link', { name: 'Open AI Systems Registry' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'AI Discovery' }).first()).toBeVisible();
 

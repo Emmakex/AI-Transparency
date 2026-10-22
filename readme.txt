@@ -4,7 +4,7 @@ Tags: ai transparency, eu ai act, ai disclosure, article 50, artificial intellig
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: MIT
 License URI: https://opensource.org/license/mit/
 
@@ -17,6 +17,7 @@ Kairoseth AI Transparency is an official Kairoseth product developed and maintai
 The stable release includes:
 
 * a dedicated **Kairoseth AI Transparency** operational dashboard with live Registry, review, readiness and disclosure-ready metrics plus deterministic next-action guidance;
+* a deterministic per-system **Actions** view under **Kairoseth AI Transparency > Actions**, routing administrators to the highest-priority next step for each active AI system;
 * a local AI Systems Registry under **Kairoseth AI Transparency > AI Systems Registry**, including instant local search and filters by type, review and lifecycle status;
 * administrator-authored context for purpose, provider, model/model family, audience, human oversight and data-use context;
 * deterministic AI integration discovery under **Kairoseth AI Transparency > AI Discovery**;
@@ -27,9 +28,11 @@ The stable release includes:
 
 The 1.3 dashboard turns the plugin overview into an operational center. It highlights the highest-priority next action from the current site-local state, keeps pending review, technical review findings and disclosure-ready counts visible, provides direct access to the complete six-module workflow and shows recent Registry state with review/lifecycle badges. These dashboard signals are navigation guidance only; they do not determine or certify legal compliance.
 
+Version 1.4 adds a per-system Action Center. It derives one bounded next action for each active Registry record from the current Registry, Readiness findings and Disclosure eligibility. Actions are navigation guidance only, are not stored as a second source of truth, do not change Evidence Export identity and do not determine or certify legal compliance.
+
 Legacy Tools URLs from the 1.0.x line remain registered for backwards compatibility, while the visible workflow is grouped under the dedicated Kairoseth AI Transparency menu.
 
-An authorized administrator can add, edit, review and archive AI system records. Registry data is stored locally in the current WordPress site's Options storage with a versioned schema. Version 1.2 upgraded Registry persistence to schema v2 and migrates earlier records without inventing provider, model, purpose or other administrator declarations. Version 1.3 does not change the Registry schema.
+An authorized administrator can add, edit, review and archive AI system records. Registry data is stored locally in the current WordPress site's Options storage with a versioned schema. Version 1.2 upgraded Registry persistence to schema v2 and migrates earlier records without inventing provider, model, purpose or other administrator declarations. Versions 1.3 and 1.4 do not change the Registry schema.
 
 AI Discovery uses an extensible deterministic detector architecture. The validated detectors support:
 
@@ -75,7 +78,7 @@ The plugin does not perform generic probabilistic detection of whether arbitrary
 
 == External services ==
 
-The plugin is local-first. Registry, Discovery, Readiness, Disclosure and Evidence Export do not require Kairoseth or automatically send their state to an external service.
+The plugin is local-first. Registry, Discovery, Readiness, Disclosure, Actions and Evidence Export do not require Kairoseth or automatically send their state to an external service.
 
 **Kairoseth Custom Requests** is an optional support/custom-integration service used only after an administrator deliberately clicks a link on **Kairoseth AI Transparency > AI Transparency Support**. Loading the WordPress support page itself makes no Kairoseth request.
 
@@ -90,7 +93,7 @@ The explicit browser navigation goes to `https://kairoseth.com/custom-requests` 
 * bounded English/Spanish locale;
 * the administrator-selected bounded request type.
 
-The plugin does **not** automatically attach or transmit the site URL, administrator identity, Registry contents, AI system names, interaction context, administrator context fields, Discovery evidence, Readiness findings, Disclosure state, Evidence Export JSON/signature, plugin/theme inventory, server paths, credentials, prompts, conversations, logs or database contents.
+The plugin does **not** automatically attach or transmit the site URL, administrator identity, Registry contents, AI system names, interaction context, administrator context fields, Discovery evidence, Readiness findings, Disclosure state, Action Center state, Evidence Export JSON/signature, plugin/theme inventory, server paths, credentials, prompts, conversations, logs or database contents.
 
 After reaching Kairoseth, the administrator decides what contact, business or request information to enter and submit. Kairoseth owns the request form, its consent flow and final submission.
 
@@ -103,12 +106,13 @@ Privacy policy: https://kairoseth.com/privacy
 1. Upload the plugin directory to `/wp-content/plugins/` or install the packaged ZIP.
 2. Activate **Kairoseth AI Transparency** from the Plugins screen.
 3. Open **Kairoseth AI Transparency** for the operational dashboard and current technical status.
-4. Open **Kairoseth AI Transparency > AI Systems Registry** to maintain, search and filter the local Registry.
-5. Open **Kairoseth AI Transparency > AI Discovery** to review supported deterministic integration evidence.
-6. Open **Kairoseth AI Transparency > AI Readiness** to review current technical findings.
-7. Open **Kairoseth AI Transparency > AI Disclosure** to review disclosure readiness and copy a shortcode for an eligible system.
-8. Open **Kairoseth AI Transparency > AI Evidence Export** to download the current site-local JSON evidence snapshot.
-9. Optionally open **Kairoseth AI Transparency > AI Transparency Support** for an explicit privacy-bounded handoff to Kairoseth support/custom requests.
+4. Open **Kairoseth AI Transparency > Actions** to see one deterministic next action for each active AI system.
+5. Open **Kairoseth AI Transparency > AI Systems Registry** to maintain, search and filter the local Registry.
+6. Open **Kairoseth AI Transparency > AI Discovery** to review supported deterministic integration evidence.
+7. Open **Kairoseth AI Transparency > AI Readiness** to review current technical findings.
+8. Open **Kairoseth AI Transparency > AI Disclosure** to review disclosure readiness and copy a shortcode for an eligible system.
+9. Open **Kairoseth AI Transparency > AI Evidence Export** to download the current site-local JSON evidence snapshot.
+10. Optionally open **Kairoseth AI Transparency > AI Transparency Support** for an explicit privacy-bounded handoff to Kairoseth support/custom requests.
 
 == Frequently Asked Questions ==
 
@@ -116,9 +120,13 @@ Privacy policy: https://kairoseth.com/privacy
 
 No. It provides technical readiness, evidence and workflow tooling. It does not provide legal certification or guarantee compliance.
 
-= Does the plugin automatically send Registry, Discovery, Readiness, Disclosure or Evidence Export data to an external service? =
+= Does the plugin automatically send Registry, Discovery, Readiness, Actions, Disclosure or Evidence Export data to an external service? =
 
 No. The accepted local workflows remain inside the WordPress site and do not automatically send their state or generated evidence file to an external service. The optional support page only opens Kairoseth after an administrator deliberately clicks a support/custom-request link, and it sends only the bounded context documented above.
+
+= What does the 1.4 Action Center decide? =
+
+It does not make a legal compliance decision. It selects one bounded next navigation action per active AI system from current local Registry, Readiness and Disclosure state so an administrator can see what to review next. The derived action is not persisted as a second source of truth and does not change Evidence Export identity.
 
 = What does the 1.3 dashboard decide? =
 
@@ -146,7 +154,7 @@ No. Evidence Export v1 is built for the explicit administrator request and retur
 
 = What happens to my Registry if I update from an earlier version? =
 
-Version 1.2 migrated earlier Registry records to schema v2 on first access while preserving existing lifecycle, review, disclosure and interaction-context state. Version 1.3 changes the dashboard experience only and does not introduce a new Registry migration.
+Version 1.2 migrated earlier Registry records to schema v2 on first access while preserving existing lifecycle, review, disclosure and interaction-context state. Versions 1.3 and 1.4 do not introduce a new Registry migration.
 
 = What happens to my Registry if I deactivate or remove the plugin? =
 
@@ -154,13 +162,22 @@ Deactivation and upgrades preserve the site-local Registry. An explicit WordPres
 
 = How is Multisite handled? =
 
-Registry and Evidence Export follow the authoritative current blog/site context. The export does not aggregate the full network. A network uninstall removes only the plugin-owned Registry option from each existing site.
+Registry, Actions and Evidence Export follow the authoritative current blog/site context. The export does not aggregate the full network. A network uninstall removes only the plugin-owned Registry option from each existing site.
 
 = Does it detect whether any article was written by AI? =
 
 No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 
 == Changelog ==
+
+= 1.4.0 =
+* Adds a deterministic per-system Action Center under Kairoseth AI Transparency > Actions.
+* Derives one highest-priority next action for each active AI system from current Registry, Readiness and Disclosure state.
+* Routes Registry actions directly to the exact system record and disclosure-ready systems directly to AI Disclosure.
+* Adds deterministic unit coverage plus responsive/accessibility browser acceptance for Action Center.
+* Keeps archived-only/no-active states informational instead of presenting a compliance-like ready conclusion.
+* Adds no new Registry persistence or schema migration and does not change Evidence Export snapshot identity.
+* Action Center guidance does not determine, certify or guarantee legal compliance.
 
 = 1.3.0 =
 * Turns the plugin overview into an operational dashboard center with deterministic priority guidance from current local state.
@@ -229,6 +246,9 @@ No. Generic probabilistic AI-written-text detection is outside the plugin scope.
 * Development baseline used before the first stable release.
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Adds the deterministic per-system Action Center without changing the Registry schema or Evidence Export identity.
 
 = 1.3.0 =
 Upgrades the plugin overview into an operational center with deterministic next-action guidance, compact workflow navigation and improved Registry state presentation. No Registry schema migration is required.

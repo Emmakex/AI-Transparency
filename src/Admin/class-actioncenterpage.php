@@ -38,12 +38,20 @@ final class ActionCenterPage {
 	private $action_engine;
 
 	/**
+	 * Shared WordPress admin action presenter.
+	 *
+	 * @var SystemActionPresenter
+	 */
+	private $presenter;
+
+	/**
 	 * Create the Action Center surface.
 	 */
 	public function __construct() {
 		$this->repository     = new WordPressOptionsRegistryRepository();
 		$this->finding_engine = new FindingEngine();
 		$this->action_engine  = new SystemActionEngine();
+		$this->presenter      = new SystemActionPresenter();
 	}
 
 	/**
@@ -153,7 +161,7 @@ final class ActionCenterPage {
 	 * @return void
 	 */
 	private function render_action( SystemAction $action ): void {
-		$presentation = $this->presentation( $action );
+		$presentation = $this->presenter->present( $action );
 		?>
 		<article class="kat-action-center-item" data-action-code="<?php echo esc_attr( $action->code() ); ?>">
 			<div class="kat-action-center-icon" aria-hidden="true"><span class="dashicons <?php echo esc_attr( $presentation['icon'] ); ?>"></span></div>
@@ -165,79 +173,6 @@ final class ActionCenterPage {
 			<a class="button button-primary" href="<?php echo esc_url( $presentation['url'] ); ?>"><?php echo esc_html( $presentation['label'] ); ?></a>
 		</article>
 		<?php
-	}
-
-	/**
-	 * Map a bounded action code to localized presentation and destination.
-	 *
-	 * @param SystemAction $action Deterministic action.
-	 * @return array<string,string>
-	 */
-	private function presentation( SystemAction $action ): array {
-		$edit_url = add_query_arg(
-			array(
-				'page'   => 'ai-transparency',
-				'system' => $action->system_id(),
-			),
-			admin_url( 'admin.php' )
-		);
-
-		switch ( $action->code() ) {
-			case SystemAction::REVIEW_RECORD:
-				return array(
-					'title'       => __( 'Pending review', 'kairoseth-ai-transparency' ),
-					'description' => __( 'The active registry record is still pending administrator review.', 'kairoseth-ai-transparency' ),
-					'label'       => __( 'Edit', 'kairoseth-ai-transparency' ),
-					'url'         => $edit_url,
-					'icon'        => 'dashicons-visibility',
-				);
-
-			case SystemAction::DOCUMENT_INTERACTION_CONTEXT:
-				return array(
-					'title'       => __( 'Review', 'kairoseth-ai-transparency' ),
-					'description' => __( 'No interaction context is recorded for this active AI system.', 'kairoseth-ai-transparency' ),
-					'label'       => __( 'Edit registry record', 'kairoseth-ai-transparency' ),
-					'url'         => $edit_url,
-					'icon'        => 'dashicons-edit',
-				);
-
-			case SystemAction::COMPLETE_ADMIN_CONTEXT:
-				return array(
-					'title'       => __( 'Administrator context', 'kairoseth-ai-transparency' ),
-					'description' => __( 'One or more administrator context fields are not documented for this active AI system.', 'kairoseth-ai-transparency' ),
-					'label'       => __( 'Edit registry record', 'kairoseth-ai-transparency' ),
-					'url'         => $edit_url,
-					'icon'        => 'dashicons-forms',
-				);
-
-			case SystemAction::REVIEW_DISCLOSURE:
-				return array(
-					'title'       => __( 'AI Disclosure', 'kairoseth-ai-transparency' ),
-					'description' => __( 'Interaction disclosure is not configured.', 'kairoseth-ai-transparency' ),
-					'label'       => __( 'Edit registry record', 'kairoseth-ai-transparency' ),
-					'url'         => $edit_url,
-					'icon'        => 'dashicons-media-document',
-				);
-
-			case SystemAction::PLACE_DISCLOSURE:
-				return array(
-					'title'       => __( 'Ready', 'kairoseth-ai-transparency' ),
-					'description' => __( 'Review which registered AI systems are ready for explicit frontend disclosure placement.', 'kairoseth-ai-transparency' ),
-					'label'       => __( 'AI Disclosure', 'kairoseth-ai-transparency' ),
-					'url'         => admin_url( 'admin.php?page=ai-transparency-disclosure' ),
-					'icon'        => 'dashicons-yes-alt',
-				);
-
-			case SystemAction::REVIEW_READINESS:
-			default:
-				return array(
-					'title'       => __( 'Review', 'kairoseth-ai-transparency' ),
-					'description' => __( 'A technical registry condition requires review.', 'kairoseth-ai-transparency' ),
-					'label'       => __( 'AI Readiness', 'kairoseth-ai-transparency' ),
-					'url'         => admin_url( 'admin.php?page=ai-transparency-readiness' ),
-					'icon'        => 'dashicons-warning',
-				);
-		}
 	}
 
 	/**

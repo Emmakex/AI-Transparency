@@ -13,12 +13,12 @@ use InvalidArgumentException;
  * Represents one bounded next action derived from authoritative local state.
  */
 final class SystemAction {
-	public const REVIEW_RECORD = 'review_record';
+	public const REVIEW_RECORD                = 'review_record';
 	public const DOCUMENT_INTERACTION_CONTEXT = 'document_interaction_context';
-	public const COMPLETE_ADMIN_CONTEXT = 'complete_administrator_context';
-	public const REVIEW_READINESS = 'review_readiness';
-	public const REVIEW_DISCLOSURE = 'review_disclosure';
-	public const PLACE_DISCLOSURE = 'place_disclosure';
+	public const COMPLETE_ADMIN_CONTEXT       = 'complete_administrator_context';
+	public const REVIEW_READINESS             = 'review_readiness';
+	public const REVIEW_DISCLOSURE            = 'review_disclosure';
+	public const PLACE_DISCLOSURE             = 'place_disclosure';
 
 	/**
 	 * Stable local system identifier.

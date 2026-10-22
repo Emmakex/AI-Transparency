@@ -13,26 +13,46 @@ use InvalidArgumentException;
  * Represents one bounded next action derived from authoritative local state.
  */
 final class SystemAction {
-	public const REVIEW_RECORD                = 'review_record';
+	public const REVIEW_RECORD = 'review_record';
 	public const DOCUMENT_INTERACTION_CONTEXT = 'document_interaction_context';
-	public const COMPLETE_ADMIN_CONTEXT       = 'complete_administrator_context';
-	public const REVIEW_READINESS             = 'review_readiness';
-	public const REVIEW_DISCLOSURE             = 'review_disclosure';
-	public const PLACE_DISCLOSURE              = 'place_disclosure';
+	public const COMPLETE_ADMIN_CONTEXT = 'complete_administrator_context';
+	public const REVIEW_READINESS = 'review_readiness';
+	public const REVIEW_DISCLOSURE = 'review_disclosure';
+	public const PLACE_DISCLOSURE = 'place_disclosure';
 
-	/** @var string */
+	/**
+	 * Stable local system identifier.
+	 *
+	 * @var string
+	 */
 	private $system_id;
 
-	/** @var string */
+	/**
+	 * Human-readable system name.
+	 *
+	 * @var string
+	 */
 	private $system_name;
 
-	/** @var string */
+	/**
+	 * Stable bounded action code.
+	 *
+	 * @var string
+	 */
 	private $code;
 
-	/** @var int */
+	/**
+	 * Stable lower-is-higher action ordering rank.
+	 *
+	 * @var int
+	 */
 	private $rank;
 
-	/** @var string */
+	/**
+	 * Optional source readiness finding identifier.
+	 *
+	 * @var string
+	 */
 	private $finding_id;
 
 	/**
@@ -62,22 +82,47 @@ final class SystemAction {
 		$this->finding_id  = $finding_id;
 	}
 
+	/**
+	 * Get the stable system identifier.
+	 *
+	 * @return string
+	 */
 	public function system_id(): string {
 		return $this->system_id;
 	}
 
+	/**
+	 * Get the system display name.
+	 *
+	 * @return string
+	 */
 	public function system_name(): string {
 		return $this->system_name;
 	}
 
+	/**
+	 * Get the bounded action code.
+	 *
+	 * @return string
+	 */
 	public function code(): string {
 		return $this->code;
 	}
 
+	/**
+	 * Get the deterministic ordering rank.
+	 *
+	 * @return int
+	 */
 	public function rank(): int {
 		return $this->rank;
 	}
 
+	/**
+	 * Get the optional source finding identifier.
+	 *
+	 * @return string
+	 */
 	public function finding_id(): string {
 		return $this->finding_id;
 	}

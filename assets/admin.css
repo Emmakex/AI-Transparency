@@ -125,75 +125,152 @@
 }
 
 .kat-dashboard {
-	max-width: 1280px;
+	--kat-ink: #10213f;
+	--kat-muted: #5b6b82;
+	--kat-border: #d9e3f1;
+	--kat-surface: #fff;
+	--kat-surface-soft: #f6f9fd;
+	--kat-blue: #155fbd;
+	--kat-blue-strong: #0e4b9a;
+	--kat-cyan: #17a6c5;
+	--kat-success: #14885f;
+	--kat-warning: #a55d00;
+	--kat-shadow: 0 8px 28px rgba(16, 33, 63, .07);
+	max-width: 1360px;
+}
+
+.kat-dashboard * {
+	box-sizing: border-box;
+}
+
+.kat-dashboard a:focus-visible,
+.kat-dashboard button:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
 }
 
 .kat-dashboard-hero {
 	display: flex;
-	align-items: center;
+	align-items: stretch;
 	justify-content: space-between;
-	gap: 24px;
-	margin: 20px 0 24px;
-	padding: 30px;
-	border: 1px solid #184fb1;
-	border-radius: 16px;
-	background: linear-gradient(135deg, #081a45 0%, #0b2c68 48%, #123b8d 100%);
-	box-shadow: 0 12px 32px rgba(8, 26, 69, 0.16);
+	gap: 32px;
+	margin: 20px 0 18px;
+	padding: 34px;
+	border: 1px solid #164b9d;
+	border-radius: 20px;
+	background:
+		radial-gradient(circle at 88% 20%, rgba(64, 201, 255, .24), transparent 24%),
+		linear-gradient(135deg, #07183e 0%, #0a2d69 52%, #0f4b9b 100%);
+	box-shadow: 0 16px 42px rgba(8, 26, 69, .18);
 	color: #fff;
 }
 
+.kat-dashboard-hero-copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	min-width: 0;
+}
+
 .kat-dashboard-hero h1 {
-	margin: 4px 0 8px;
+	margin: 4px 0 10px;
 	color: #fff;
-	font-size: clamp(28px, 4vw, 42px);
-	line-height: 1.08;
+	font-size: clamp(30px, 4vw, 46px);
+	font-weight: 650;
+	letter-spacing: -.025em;
+	line-height: 1.04;
 }
 
 .kat-dashboard-hero p {
 	max-width: 760px;
 	margin: 0;
-	color: #d9e8ff;
+	color: #dbe8ff;
 	font-size: 15px;
+	line-height: 1.6;
 }
 
-.kat-dashboard-kicker {
-	font-size: 12px !important;
+.kat-dashboard-kicker,
+.kat-dashboard-panel-kicker,
+.kat-dashboard-priority-label {
+	font-size: 11px !important;
 	font-weight: 700;
 	letter-spacing: .12em;
 	text-transform: uppercase;
-	color: #66e4ff !important;
+}
+
+.kat-dashboard-kicker {
+	color: #6ce5ff !important;
+}
+
+.kat-dashboard-hero-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 22px;
+}
+
+.kat-dashboard-hero-actions .button {
+	display: inline-flex;
+	align-items: center;
+	min-height: 40px;
+	padding: 5px 16px;
+	border-radius: 8px;
+}
+
+.kat-dashboard-hero-actions .button-primary {
+	border-color: #fff;
+	background: #fff;
+	color: #0d448c;
+}
+
+.kat-dashboard-hero-actions .button-primary:hover,
+.kat-dashboard-hero-actions .button-primary:focus {
+	border-color: #d7e7ff;
+	background: #eef6ff;
+	color: #092f67;
+}
+
+.kat-dashboard-hero-secondary {
+	border-color: rgba(255, 255, 255, .35) !important;
+	background: rgba(255, 255, 255, .08) !important;
+	color: #fff !important;
+}
+
+.kat-dashboard-hero-secondary:hover,
+.kat-dashboard-hero-secondary:focus {
+	border-color: rgba(255, 255, 255, .7) !important;
+	background: rgba(255, 255, 255, .14) !important;
 }
 
 .kat-dashboard-version {
-	min-width: 130px;
-	padding: 14px 16px;
+	display: flex;
+	align-items: center;
+	align-self: flex-start;
+	gap: 10px;
+	min-width: 126px;
+	padding: 13px 15px;
 	border: 1px solid rgba(255, 255, 255, .18);
-	border-radius: 12px;
+	border-radius: 13px;
 	background: rgba(255, 255, 255, .08);
-	text-align: center;
+	backdrop-filter: blur(5px);
 }
 
-.kat-dashboard-version span,
-.kat-dashboard-version strong {
-	display: block;
-}
-
-.kat-dashboard-version span {
-	margin-bottom: 4px;
-	font-size: 12px;
-	color: #bcd5ff;
+.kat-dashboard-version .dashicons {
+	color: #70e7ff;
 }
 
 .kat-dashboard-version strong {
-	font-size: 22px;
+	font-size: 15px;
+	font-weight: 650;
 	color: #fff;
 }
 
 .kat-dashboard-metrics {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 16px;
-	margin-bottom: 20px;
+	gap: 12px;
+	margin-bottom: 16px;
 }
 
 .kat-dashboard-metric {
@@ -201,22 +278,34 @@
 	align-items: center;
 	gap: 14px;
 	min-width: 0;
-	padding: 18px;
-	border: 1px solid #d8e3f5;
-	border-radius: 12px;
-	background: #fff;
-	box-shadow: 0 4px 14px rgba(17, 47, 95, .06);
+	padding: 17px 18px;
+	border: 1px solid var(--kat-border);
+	border-radius: 13px;
+	background: var(--kat-surface);
+	box-shadow: 0 3px 14px rgba(16, 33, 63, .045);
 }
 
-.kat-dashboard-metric > .dashicons {
+.kat-dashboard-metric-icon {
 	width: 42px;
 	height: 42px;
-	border-radius: 10px;
-	background: #eaf5ff;
-	color: #0f72cf;
-	font-size: 23px;
+	flex: 0 0 42px;
+	border-radius: 11px;
+	background: #eaf3ff;
+	color: var(--kat-blue);
+	font-size: 22px;
 	line-height: 42px;
 	text-align: center;
+}
+
+.kat-dashboard-metric--pending .kat-dashboard-metric-icon,
+.kat-dashboard-metric--review .kat-dashboard-metric-icon {
+	background: #fff4dd;
+	color: var(--kat-warning);
+}
+
+.kat-dashboard-metric--ready .kat-dashboard-metric-icon {
+	background: #e7f7f0;
+	color: var(--kat-success);
 }
 
 .kat-dashboard-metric strong,
@@ -225,112 +314,392 @@
 }
 
 .kat-dashboard-metric strong {
-	font-size: 26px;
+	font-size: 27px;
+	font-weight: 650;
 	line-height: 1;
-	color: #10213f;
+	color: var(--kat-ink);
 }
 
 .kat-dashboard-metric div > span {
 	margin-top: 5px;
-	color: #52637d;
+	color: var(--kat-muted);
 }
 
-.kat-dashboard-status {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 24px;
-	margin: 0 0 28px;
-	padding: 20px 22px;
-	border: 1px solid #cfe6ef;
-	border-left: 4px solid #16a6c9;
-	border-radius: 10px;
-	background: #f8fdff;
-}
-
-.kat-dashboard-status h2 {
-	margin: 0 0 8px;
-	font-size: 18px;
-}
-
-.kat-dashboard-status-list {
-	margin: 0;
-	padding-left: 20px;
-}
-
-.kat-dashboard-status-list li {
-	margin: 4px 0;
-}
-
-.kat-dashboard-section-title {
-	margin: 0 0 14px;
-	font-size: 20px;
-}
-
-.kat-dashboard-grid {
+.kat-dashboard-priority {
 	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 16px;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 18px;
+	margin: 0 0 18px;
+	padding: 20px 22px;
+	border: 1px solid #cfe0f6;
+	border-left: 4px solid var(--kat-blue);
+	border-radius: 13px;
+	background: #f8fbff;
 }
 
-.kat-dashboard-card {
+.kat-dashboard-priority--attention {
+	border-color: #eed7aa;
+	border-left-color: #d17b00;
+	background: #fffaf1;
+}
+
+.kat-dashboard-priority--ready {
+	border-color: #bfe1d4;
+	border-left-color: var(--kat-success);
+	background: #f4fbf8;
+}
+
+.kat-dashboard-priority-icon {
 	display: flex;
-	flex-direction: column;
-	min-width: 0;
-	min-height: 210px;
-	padding: 22px;
-	border: 1px solid #d7e2f1;
-	border-radius: 14px;
-	background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
-	box-shadow: 0 5px 18px rgba(17, 47, 95, .06);
-}
-
-.kat-dashboard-card-icon {
-	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 44px;
-	height: 44px;
-	margin-bottom: 14px;
-	border-radius: 11px;
-	background: linear-gradient(135deg, #e2f9ff, #eef0ff);
-	color: #176fd1;
+	width: 46px;
+	height: 46px;
+	border-radius: 12px;
+	background: #e9f2ff;
+	color: var(--kat-blue);
 }
 
-.kat-dashboard-card-icon .dashicons {
+.kat-dashboard-priority--attention .kat-dashboard-priority-icon {
+	background: #fff0d2;
+	color: var(--kat-warning);
+}
+
+.kat-dashboard-priority--ready .kat-dashboard-priority-icon {
+	background: #dcf3e9;
+	color: var(--kat-success);
+}
+
+.kat-dashboard-priority-icon .dashicons {
 	width: 24px;
 	height: 24px;
 	font-size: 24px;
 }
 
-.kat-dashboard-card h3 {
-	margin: 0 0 8px;
-	font-size: 17px;
-	color: #10213f;
+.kat-dashboard-priority-copy {
+	min-width: 0;
 }
 
-.kat-dashboard-card p {
-	flex: 1;
-	margin: 0 0 18px;
-	color: #52637d;
-	line-height: 1.55;
+.kat-dashboard-priority-label,
+.kat-dashboard-panel-kicker {
+	margin: 0 0 4px;
+	color: #71829a;
 }
 
-.kat-dashboard-card-link {
-	align-self: flex-start;
+.kat-dashboard-priority h2 {
+	margin: 0 0 5px;
+	font-size: 19px;
+	color: var(--kat-ink);
+}
+
+.kat-dashboard-priority p:not(.kat-dashboard-priority-label) {
+	margin: 0;
+	color: var(--kat-muted);
+	line-height: 1.5;
+}
+
+.kat-dashboard-priority > .button {
+	white-space: nowrap;
+}
+
+.kat-dashboard-main-grid {
+	display: grid;
+	grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+	gap: 16px;
+	margin-bottom: 18px;
+}
+
+.kat-dashboard-panel,
+.kat-dashboard-registry {
+	min-width: 0;
+	border: 1px solid var(--kat-border);
+	border-radius: 15px;
+	background: var(--kat-surface);
+	box-shadow: var(--kat-shadow);
+}
+
+.kat-dashboard-panel {
+	padding: 22px;
+}
+
+.kat-dashboard-panel-header,
+.kat-dashboard-registry-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 18px;
+}
+
+.kat-dashboard-panel-header h2,
+.kat-dashboard-registry-header h2 {
+	margin: 0;
+	font-size: 20px;
+	color: var(--kat-ink);
+}
+
+.kat-dashboard-panel-header > a {
 	font-weight: 600;
 	text-decoration: none;
 }
 
-.kat-dashboard-card-link:focus-visible {
-	outline: 2px solid currentColor;
-	outline-offset: 3px;
+.kat-dashboard-panel-intro {
+	margin: 12px 0 18px;
+	color: var(--kat-muted);
+	line-height: 1.55;
+}
+
+.kat-dashboard-actions {
+	display: grid;
+	gap: 9px;
+}
+
+.kat-dashboard-action {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 12px;
+	min-width: 0;
+	padding: 13px;
+	border: 1px solid #e2e9f2;
+	border-radius: 11px;
+	background: var(--kat-surface-soft);
+	color: inherit;
+	text-decoration: none;
+	transition: border-color .15s ease, transform .15s ease, background .15s ease;
+}
+
+.kat-dashboard-action:hover,
+.kat-dashboard-action:focus {
+	border-color: #b8cce8;
+	background: #f0f6fd;
+	color: inherit;
+}
+
+.kat-dashboard-action:hover {
+	transform: translateY(-1px);
+}
+
+.kat-dashboard-action-icon {
+	width: 34px;
+	height: 34px;
+	border-radius: 9px;
+	background: #e6f0fd;
+	color: var(--kat-blue);
+	font-size: 18px;
+	line-height: 34px;
+	text-align: center;
+}
+
+.kat-dashboard-action-copy {
+	display: block;
+	min-width: 0;
+	color: var(--kat-muted);
+	font-size: 12px;
+	line-height: 1.45;
+}
+
+.kat-dashboard-action-heading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 2px;
+}
+
+.kat-dashboard-action-heading strong {
+	color: var(--kat-ink);
+	font-size: 14px;
+}
+
+.kat-dashboard-action-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 23px;
+	height: 20px;
+	padding: 0 6px;
+	border-radius: 999px;
+	background: #dce9fa;
+	color: #245389;
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.kat-dashboard-action-arrow,
+.kat-dashboard-workflow-arrow {
+	color: #7890ad;
+	font-size: 18px;
+}
+
+.kat-dashboard-workflow {
+	display: grid;
+	gap: 8px;
+	margin-top: 14px;
+}
+
+.kat-dashboard-workflow-link {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 12px;
+	min-width: 0;
+	padding: 10px 11px;
+	border: 1px solid transparent;
+	border-radius: 10px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.kat-dashboard-workflow-link:hover,
+.kat-dashboard-workflow-link:focus {
+	border-color: #d6e2f2;
+	background: #f7faff;
+	color: inherit;
+}
+
+.kat-dashboard-workflow-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 9px;
+	background: linear-gradient(135deg, #e4f7fb, #e8efff);
+	color: var(--kat-blue);
+}
+
+.kat-dashboard-workflow-icon .dashicons {
+	width: 19px;
+	height: 19px;
+	font-size: 19px;
+}
+
+.kat-dashboard-workflow-copy {
+	display: block;
+	min-width: 0;
+}
+
+.kat-dashboard-workflow-copy strong,
+.kat-dashboard-workflow-copy span {
+	display: block;
+}
+
+.kat-dashboard-workflow-copy strong {
+	margin-bottom: 2px;
+	color: var(--kat-ink);
+	font-size: 14px;
+}
+
+.kat-dashboard-workflow-copy span {
+	overflow: hidden;
+	color: var(--kat-muted);
+	font-size: 12px;
+	line-height: 1.35;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.kat-dashboard-registry {
+	padding: 22px;
+}
+
+.kat-dashboard-registry-header {
+	margin-bottom: 16px;
+}
+
+.kat-dashboard-registry-header .button {
+	white-space: normal;
+}
+
+.kat-dashboard-table-wrap {
+	margin: 0 !important;
+	border: 1px solid #e1e8f1;
+	border-radius: 10px;
+}
+
+.kat-dashboard-table-wrap table {
+	border: 0;
+	box-shadow: none;
+}
+
+.kat-dashboard-table-wrap th {
+	background: #f5f8fc;
+	color: #52637d;
+	font-size: 12px;
+	font-weight: 650;
+	letter-spacing: .02em;
+}
+
+.kat-dashboard-table-wrap td,
+.kat-dashboard-table-wrap th {
+	padding: 12px 14px;
+	vertical-align: middle;
+}
+
+.kat-dashboard-table-wrap tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.kat-dashboard-badge {
+	display: inline-flex;
+	align-items: center;
+	min-height: 24px;
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: #eef2f6;
+	color: #52637d;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.kat-dashboard-badge--active,
+.kat-dashboard-badge--ready {
+	background: #e5f5ed;
+	color: #126e4f;
+}
+
+.kat-dashboard-badge--pending {
+	background: #fff1d7;
+	color: #8b5100;
+}
+
+.kat-dashboard-badge--archived {
+	background: #eef0f3;
+	color: #626d7a;
+}
+
+.kat-dashboard-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	min-height: 180px;
+	padding: 28px;
+	border: 1px dashed #cbd8e9;
+	border-radius: 12px;
+	background: #f8fbff;
+	text-align: center;
+}
+
+.kat-dashboard-empty > .dashicons {
+	width: 34px;
+	height: 34px;
+	color: #7894b8;
+	font-size: 34px;
+}
+
+.kat-dashboard-empty p {
+	margin: 0;
+	color: var(--kat-muted);
 }
 
 .kat-dashboard-boundary {
-	max-width: 920px;
-	margin: 24px 0 0;
-	color: #59677a;
+	max-width: 960px;
+	margin: 18px 2px 0;
+	color: #66768a;
+	font-size: 12px;
+	line-height: 1.55;
 }
 
 @media screen and (max-width: 1100px) {
@@ -338,8 +707,8 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
-	.kat-dashboard-grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+	.kat-dashboard-main-grid {
+		grid-template-columns: minmax(0, 1fr);
 	}
 }
 
@@ -394,22 +763,62 @@
 		min-height: 44px;
 	}
 
-	.kat-dashboard-hero,
-	.kat-dashboard-status {
+	.kat-dashboard-hero {
+		flex-direction: column;
+		gap: 22px;
+		padding: 24px;
+	}
+
+	.kat-dashboard-version {
+		align-self: flex-start;
+	}
+
+	.kat-dashboard-metrics {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kat-dashboard-priority {
+		grid-template-columns: auto minmax(0, 1fr);
+		align-items: start;
+	}
+
+	.kat-dashboard-priority > .button {
+		grid-column: 1 / -1;
+		justify-self: stretch;
+		min-height: 44px;
+		text-align: center;
+	}
+
+	.kat-dashboard-panel,
+	.kat-dashboard-registry {
+		padding: 17px;
+	}
+
+	.kat-dashboard-panel-header,
+	.kat-dashboard-registry-header {
 		align-items: flex-start;
 		flex-direction: column;
 	}
 
-	.kat-dashboard-version {
-		text-align: left;
+	.kat-dashboard-workflow-copy span {
+		white-space: normal;
 	}
 
-	.kat-dashboard-metrics,
-	.kat-dashboard-grid {
-		grid-template-columns: minmax(0, 1fr);
+	.kat-dashboard-action {
+		grid-template-columns: auto minmax(0, 1fr);
 	}
 
-	.kat-dashboard-card {
-		min-height: 0;
+	.kat-dashboard-action-arrow {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kat-dashboard-action {
+		transition: none;
+	}
+
+	.kat-dashboard-action:hover {
+		transform: none;
 	}
 }

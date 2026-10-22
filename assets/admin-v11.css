@@ -261,6 +261,32 @@
 	pointer-events: none;
 }
 
+/* Dashboard hero CTA uses a forced white-on-blue treatment so WordPress core
+ * button styles and the base dashboard stylesheet cannot reduce text contrast. */
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary,
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary:visited {
+	border-color: #176fd1 !important;
+	background: #176fd1 !important;
+	color: #fff !important;
+	text-shadow: none !important;
+	-webkit-text-fill-color: #fff;
+}
+
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary:hover,
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary:focus,
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary:focus-visible {
+	border-color: #0b4f97 !important;
+	background: #0f63bb !important;
+	color: #fff !important;
+	-webkit-text-fill-color: #fff;
+}
+
+/* The priority card already has a descriptive heading and action. Hiding the
+ * repeated eyebrow keeps the hierarchy quieter without removing information. */
+.kat-dashboard-priority-label {
+	display: none;
+}
+
 .kat-dashboard-metric,
 .kat-dashboard-card {
 	transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;

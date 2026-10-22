@@ -18,13 +18,29 @@ async function login(page) {
   ]);
 }
 
-test('v1.1 dashboard groups the plugin workflow under one accessible admin menu', async ({ page }) => {
+test('v1.3 dashboard acts as an accessible operational center for the plugin workflow', async ({ page }) => {
   await login(page);
   await page.goto('/wp-admin/admin.php?page=kairoseth-ai-transparency');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Kairoseth AI Transparency' })).toBeVisible();
+  // Assert the semantic marker, not formatting whitespace around the visible label.
+  await expect(page.locator('.kat-dashboard-version')).toHaveAttribute('aria-label', /^v\d+\.\d+\.\d+$/);
   await expect(page.locator('.kat-dashboard-metric')).toHaveCount(4);
-  await expect(page.locator('.kat-dashboard-card')).toHaveCount(6);
+  await expect(page.locator('.kat-dashboard-priority')).toHaveCount(1);
+  await expect(page.locator('.kat-dashboard-action')).toHaveCount(3);
+  await expect(page.locator('.kat-dashboard-workflow-link')).toHaveCount(6);
+
+  const heroPrimary = page.locator('.kat-dashboard-hero-actions .button-primary');
+  await expect(heroPrimary).toBeVisible();
+  await expect(heroPrimary).toHaveCSS('background-color', 'rgb(23, 111, 209)');
+  await expect(heroPrimary).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await heroPrimary.hover();
+  await expect(heroPrimary).toHaveCSS('background-color', 'rgb(15, 99, 187)');
+  await expect(heroPrimary).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await expect(page.locator('.kat-dashboard-priority-label')).toBeHidden();
+
+  await expect(page.getByRole('link', { name: 'Open AI Systems Registry' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'AI Discovery' }).first()).toBeVisible();
 
   const pluginMenu = page.locator('#toplevel_page_kairoseth-ai-transparency');
   await expect(pluginMenu).toBeVisible();
@@ -58,6 +74,7 @@ test('v1.1 dashboard groups the plugin workflow under one accessible admin menu'
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
+  await expect(page.locator('.kat-dashboard-priority > .button')).toBeVisible();
   const horizontalOverflow = await page.evaluate(() =>
     document.documentElement.scrollWidth - document.documentElement.clientWidth
   );

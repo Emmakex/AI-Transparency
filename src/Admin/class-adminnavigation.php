@@ -175,6 +175,10 @@ final class AdminNavigation {
 	/**
 	 * Ensure shared plugin assets load on the dashboard and submenu screens.
 	 *
+	 * Asset versions use the actual file modification time so replacing a
+	 * same-version release candidate cannot leave an administrator looking at a
+	 * stale CSS/JS response from the browser or an intermediate cache.
+	 *
 	 * @param string $hook_suffix Current admin hook suffix.
 	 * @return void
 	 */
@@ -187,23 +191,42 @@ final class AdminNavigation {
 			'ai-transparency-admin',
 			plugins_url( 'assets/admin.css', KAIROSETH_AI_TRANSPARENCY_FILE ),
 			array(),
-			KAIROSETH_AI_TRANSPARENCY_VERSION
+			$this->asset_version( 'assets/admin.css' )
 		);
 
 		wp_enqueue_style(
 			'ai-transparency-admin-v11',
 			plugins_url( 'assets/admin-v11.css', KAIROSETH_AI_TRANSPARENCY_FILE ),
 			array( 'ai-transparency-admin' ),
-			KAIROSETH_AI_TRANSPARENCY_VERSION
+			$this->asset_version( 'assets/admin-v11.css' )
 		);
 
 		wp_enqueue_script(
 			'ai-transparency-admin-v11',
 			plugins_url( 'assets/admin-v11.js', KAIROSETH_AI_TRANSPARENCY_FILE ),
 			array(),
-			KAIROSETH_AI_TRANSPARENCY_VERSION,
+			$this->asset_version( 'assets/admin-v11.js' ),
 			true
 		);
+	}
+
+	/**
+	 * Resolve a cache-busting asset version from the packaged file itself.
+	 *
+	 * @param string $relative_path Plugin-relative asset path.
+	 * @return string
+	 */
+	private function asset_version( string $relative_path ): string {
+		$path = KAIROSETH_AI_TRANSPARENCY_PATH . ltrim( $relative_path, '/' );
+
+		if ( is_file( $path ) ) {
+			$modified = filemtime( $path );
+			if ( false !== $modified ) {
+				return (string) $modified;
+			}
+		}
+
+		return KAIROSETH_AI_TRANSPARENCY_VERSION;
 	}
 
 	/**

@@ -129,8 +129,8 @@ final class ActionCenterPage {
 				</div>
 			<?php elseif ( empty( $actions ) ) : ?>
 				<div class="kat-action-center-healthy">
-					<span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>
-					<strong><?php echo esc_html__( 'Ready', 'kairoseth-ai-transparency' ); ?></strong>
+					<span class="dashicons dashicons-info-outline" aria-hidden="true"></span>
+					<strong><?php echo esc_html__( 'Information', 'kairoseth-ai-transparency' ); ?></strong>
 					<p><?php echo esc_html__( 'No readiness findings were generated from the current active registry records.', 'kairoseth-ai-transparency' ); ?></p>
 				</div>
 			<?php else : ?>

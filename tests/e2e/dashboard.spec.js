@@ -31,8 +31,11 @@ test('v1.3 dashboard acts as an accessible operational center for the plugin wor
 
   const heroPrimary = page.locator('.kat-dashboard-hero-actions .button-primary');
   await expect(heroPrimary).toBeVisible();
-  await expect(heroPrimary).toHaveCSS('background-color', 'rgb(255, 255, 255)');
-  await expect(heroPrimary).toHaveCSS('color', 'rgb(13, 68, 140)');
+  await expect(heroPrimary).toHaveCSS('background-color', 'rgb(23, 111, 209)');
+  await expect(heroPrimary).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await heroPrimary.hover();
+  await expect(heroPrimary).toHaveCSS('background-color', 'rgb(15, 99, 187)');
+  await expect(heroPrimary).toHaveCSS('color', 'rgb(255, 255, 255)');
   await expect(page.locator('.kat-dashboard-priority-label')).toBeHidden();
 
   await expect(page.getByRole('link', { name: 'Open AI Systems Registry' }).first()).toBeVisible();

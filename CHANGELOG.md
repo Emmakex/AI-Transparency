@@ -8,6 +8,29 @@ The project follows semantic versioning for public releases.
 
 No changes yet.
 
+## [1.4.0] - 2026-10-22
+
+### Added
+
+- Deterministic per-system Action Center that derives one highest-priority next action for each active AI system from current Registry, Readiness and Disclosure state.
+- Bounded `SystemAction` and `SystemActionEngine` domain layer with explicit action codes and deterministic urgency ordering.
+- Dedicated **Actions** admin surface with direct links to the exact Registry record, AI Readiness or AI Disclosure destination required for the current system state.
+- Unit coverage for pending review, missing interaction context, incomplete administrator context, disclosure configuration, disclosure placement, archived systems and deterministic ordering.
+- Browser acceptance for direct per-system action routing, admin navigation, accessibility and responsive behavior.
+
+### Changed
+
+- Administrators can move from a system-specific technical condition directly to the relevant review or configuration surface instead of interpreting aggregate dashboard counts first.
+- Action copy, icons and destinations are centralized in one shared presenter so the standalone Action Center and future dashboard summaries cannot diverge.
+- Registry-only or archived-only states remain informational and are not presented as compliance-ready conclusions.
+
+### Privacy and authority
+
+- Version 1.4.0 adds no new persistence, Registry schema migration, telemetry or external-service request.
+- Action Center state is derived at render time from existing authoritative local data and does not become a second source of truth.
+- Action guidance stays outside Evidence Export snapshot identity and does not alter deterministic evidence signatures.
+- Action Center guidance does not determine, certify or guarantee legal compliance.
+
 ## [1.3.0] - 2026-10-22
 
 ### Added

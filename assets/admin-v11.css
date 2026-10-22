@@ -261,6 +261,27 @@
 	pointer-events: none;
 }
 
+/* Dashboard hero buttons intentionally invert the generic primary action so the
+ * first action remains high-contrast on the dark product header. */
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary {
+	border-color: #fff;
+	background: #fff;
+	color: #0d448c;
+}
+
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary:hover,
+.ai-transparency-admin.kat-dashboard .kat-dashboard-hero-actions .button-primary:focus {
+	border-color: #d7e7ff;
+	background: #eef6ff;
+	color: #092f67;
+}
+
+/* The priority card already has a descriptive heading and action. Hiding the
+ * repeated eyebrow keeps the hierarchy quieter without removing information. */
+.kat-dashboard-priority-label {
+	display: none;
+}
+
 .kat-dashboard-metric,
 .kat-dashboard-card {
 	transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;

@@ -281,6 +281,17 @@
 	-webkit-text-fill-color: #fff;
 }
 
+/* Keep compact dashboard labels and the readiness boundary above WCAG AA
+ * contrast while preserving the existing visual hierarchy. */
+.ai-transparency-admin.kat-dashboard .kat-dashboard-panel-kicker {
+	color: #5b6b82;
+}
+
+.ai-transparency-admin.kat-dashboard .kat-dashboard-boundary,
+.ai-transparency-admin.kat-dashboard .kat-dashboard-boundary strong {
+	color: #59677a;
+}
+
 /* The priority card already has a descriptive heading and action. Hiding the
  * repeated eyebrow keeps the hierarchy quieter without removing information. */
 .kat-dashboard-priority-label {
